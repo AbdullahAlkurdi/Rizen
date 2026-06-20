@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
 import '../../data/dashboard_mock_data.dart';
@@ -60,8 +59,7 @@ class DailyScorePage extends StatelessWidget {
                           children: [
                             Text(
                               '${DashboardData.dailyScore}',
-                              style:
-                                  Theme.of(context).textTheme.displayMedium,
+                              style: Theme.of(context).textTheme.displayMedium,
                             ),
                             Text(
                               'Discipline',

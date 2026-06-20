@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -117,8 +117,10 @@ class _OnboardingSpiritualPageState extends State<OnboardingSpiritualPage> {
                 child: GlassCard(
                   onTap: () => setState(() => _calculationMethod = method),
                   borderColor: selected ? AppColors.accent : null,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 16,
+                  ),
                   child: Row(
                     children: [
                       Expanded(

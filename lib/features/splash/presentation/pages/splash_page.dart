@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
-import '../../../core/router/app_routes.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -28,9 +28,10 @@ class _SplashPageState extends State<SplashPage>
       duration: const Duration(milliseconds: 1800),
     );
     _fade = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
-    _scale = Tween<double>(begin: 0.85, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
+    _scale = Tween<double>(
+      begin: 0.85,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
     _controller.forward();
 
     unawaited(
@@ -54,10 +55,7 @@ class _SplashPageState extends State<SplashPage>
           gradient: RadialGradient(
             center: Alignment(0, -0.35),
             radius: 1.2,
-            colors: [
-              Color(0xFF243B55),
-              AppColors.primaryBackground,
-            ],
+            colors: [Color(0xFF243B55), AppColors.primaryBackground],
           ),
         ),
         child: Center(
@@ -99,9 +97,9 @@ class _SplashPageState extends State<SplashPage>
                   Text(
                     'RizenOS',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: AppColors.textMuted,
-                          letterSpacing: 4,
-                        ),
+                      color: AppColors.textMuted,
+                      letterSpacing: 4,
+                    ),
                   ),
                   const SizedBox(height: 48),
                   SizedBox(

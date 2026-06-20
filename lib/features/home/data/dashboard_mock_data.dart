@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 class TimeBlock extends Equatable {
   const TimeBlock({
@@ -18,8 +18,7 @@ class TimeBlock extends Equatable {
   final Color color;
 
   @override
-  List<Object?> get props =>
-      [title, domain, remainingMinutes, icon, color];
+  List<Object?> get props => [title, domain, remainingMinutes, icon, color];
 }
 
 class QuickAction extends Equatable {

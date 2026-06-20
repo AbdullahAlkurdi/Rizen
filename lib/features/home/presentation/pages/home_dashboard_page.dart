@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -25,7 +25,9 @@ class HomeDashboardPage extends StatelessWidget {
         onPressed: () {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Voice logging — Gemini integration coming in Phase 4'),
+              content: Text(
+                'Voice logging — Gemini integration coming in Phase 4',
+              ),
             ),
           );
         },
@@ -42,8 +44,8 @@ class HomeDashboardPage extends StatelessWidget {
                     Text(
                       greeting,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: AppColors.textMuted,
-                          ),
+                        color: AppColors.textMuted,
+                      ),
                     ),
                     Text(
                       'Abdul',
@@ -52,10 +54,7 @@ class HomeDashboardPage extends StatelessWidget {
                   ],
                 ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(PhosphorIconsBold.bell),
-              ),
+              IconButton(onPressed: () {}, icon: Icon(PhosphorIconsBold.bell)),
             ],
           ),
           const SizedBox(height: 20),
@@ -66,10 +65,7 @@ class HomeDashboardPage extends StatelessWidget {
             child: _DailyScorePreview(score: DashboardData.dailyScore),
           ),
           const SizedBox(height: 20),
-          Text(
-            'Quick Actions',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text('Quick Actions', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 12),
           GridView.count(
             crossAxisCount: 2,
@@ -123,7 +119,10 @@ class HomeDashboardPage extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: GlassCard(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 16,
+                ),
                 child: Row(
                   children: [
                     Container(
@@ -252,9 +251,9 @@ class _ActiveTimeBlockCard extends StatelessWidget {
               Text(
                 '${block.remainingMinutes}',
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      color: block.color,
-                      height: 1,
-                    ),
+                  color: block.color,
+                  height: 1,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 8, left: 6),
@@ -332,9 +331,9 @@ class _DailyScorePreview extends StatelessWidget {
                 ),
                 Text(
                   '${DashboardData.streakDays}-day resilient streak',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.success,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: AppColors.success),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -372,12 +371,15 @@ class _DomainProgressSection extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(item.$1, style: Theme.of(context).textTheme.bodyMedium),
+                      Text(
+                        item.$1,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                       Text(
                         '${(item.$2 * 100).round()}%',
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                              color: item.$3,
-                            ),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.labelMedium?.copyWith(color: item.$3),
                       ),
                     ],
                   ),

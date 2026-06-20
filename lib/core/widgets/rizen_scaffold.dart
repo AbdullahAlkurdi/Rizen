@@ -27,10 +27,7 @@ class RizenScaffold extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            AppColors.primaryBackground,
-            AppColors.secondaryBackground,
-          ],
+          colors: [AppColors.primaryBackground, AppColors.secondaryBackground],
         ),
       ),
       child: Scaffold(
@@ -40,10 +37,7 @@ class RizenScaffold extends StatelessWidget {
         bottomNavigationBar: bottomNavigationBar,
         floatingActionButton: floatingActionButton,
         body: SafeArea(
-          child: Padding(
-            padding: padding,
-            child: body,
-          ),
+          child: Padding(padding: padding, child: body),
         ),
       ),
     );

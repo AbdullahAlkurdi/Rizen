@@ -48,21 +48,23 @@ class RizenButton extends StatelessWidget {
 
     final button = switch (variant) {
       RizenButtonVariant.primary => ElevatedButton(
-          onPressed: isLoading ? null : onPressed,
-          child: child,
-        ),
+        onPressed: isLoading ? null : onPressed,
+        child: child,
+      ),
       RizenButtonVariant.secondary => OutlinedButton(
-          onPressed: isLoading ? null : onPressed,
-          child: child,
-        ),
+        onPressed: isLoading ? null : onPressed,
+        child: child,
+      ),
       RizenButtonVariant.ghost => TextButton(
-          onPressed: isLoading ? null : onPressed,
-          style: TextButton.styleFrom(
-            minimumSize: Size(expand ? double.infinity : 0, 56),
-            shape: const RoundedRectangleBorder(borderRadius: AppTheme.cardRadius),
+        onPressed: isLoading ? null : onPressed,
+        style: TextButton.styleFrom(
+          minimumSize: Size(expand ? double.infinity : 0, 56),
+          shape: const RoundedRectangleBorder(
+            borderRadius: AppTheme.cardRadius,
           ),
-          child: child,
         ),
+        child: child,
+      ),
     };
 
     return button;

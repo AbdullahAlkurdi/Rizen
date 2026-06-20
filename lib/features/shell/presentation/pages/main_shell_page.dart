@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -14,6 +14,8 @@ class MainShellPage extends StatelessWidget {
     final location = GoRouterState.of(context).uri.toString();
     if (location.startsWith(AppRoutes.dailyScore)) return 1;
     if (location.startsWith(AppRoutes.weeklyOverview)) return 2;
+    if (location.startsWith(AppRoutes.routines)) return 3;
+    if (location.startsWith(AppRoutes.more)) return 4;
     return 0;
   }
 
@@ -26,16 +28,10 @@ class MainShellPage extends StatelessWidget {
       case 2:
         context.go(AppRoutes.weeklyOverview);
       case 3:
-        _showComingSoon(context, 'Routines');
+        context.go(AppRoutes.routines);
       case 4:
-        _showComingSoon(context, 'More');
+        context.go(AppRoutes.more);
     }
-  }
-
-  void _showComingSoon(BuildContext context, String feature) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$feature — coming in Phase 1')),
-    );
   }
 
   @override
@@ -48,9 +44,7 @@ class MainShellPage extends StatelessWidget {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: AppColors.secondaryBackground.withValues(alpha: 0.95),
-          border: const Border(
-            top: BorderSide(color: AppColors.glassBorder),
-          ),
+          border: const Border(top: BorderSide(color: AppColors.glassBorder)),
         ),
         child: SafeArea(
           child: Padding(
@@ -126,7 +120,9 @@ class _NavItem extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               label,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(color: color),
+              style: Theme.of(
+                context,
+              ).textTheme.labelSmall?.copyWith(color: color),
             ),
           ],
         ),

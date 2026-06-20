@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -56,9 +56,7 @@ class WeeklyOverviewPage extends StatelessWidget {
                             children: [
                               Text(
                                 '$score',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
+                                style: Theme.of(context).textTheme.labelSmall
                                     ?.copyWith(
                                       color: isToday
                                           ? AppColors.accent
@@ -72,8 +70,9 @@ class WeeklyOverviewPage extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   color: isToday
                                       ? AppColors.accent
-                                      : AppColors.accent
-                                          .withValues(alpha: 0.45),
+                                      : AppColors.accent.withValues(
+                                          alpha: 0.45,
+                                        ),
                                   borderRadius: const BorderRadius.vertical(
                                     top: Radius.circular(8),
                                   ),
@@ -82,9 +81,7 @@ class WeeklyOverviewPage extends StatelessWidget {
                               const SizedBox(height: 8),
                               Text(
                                 _days[index],
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
+                                style: Theme.of(context).textTheme.labelSmall
                                     ?.copyWith(
                                       color: isToday
                                           ? AppColors.textPrimary
