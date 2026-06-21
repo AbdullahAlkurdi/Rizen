@@ -51,8 +51,8 @@ abstract final class AppRoutes {
 
   static const notes = '/notes';
   static const noteCreate = '/notes/create';
-  static const noteEdit = '/notes/edit';
-  static const noteDetail = '/notes/detail';
+  static String noteEdit(String noteId) => '/notes/edit/$noteId';
+  static String noteDetail(String noteId) => '/notes/detail/$noteId';
   static const dailyReflection = '/notes/reflection';
   static const notesSearch = '/notes/search';
 

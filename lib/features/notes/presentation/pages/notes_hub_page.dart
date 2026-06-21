@@ -56,7 +56,7 @@ class NotesHubPage extends StatelessWidget {
             (note) => Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: GlassCard(
-                onTap: () => context.push(AppRoutes.noteDetail),
+                onTap: () => context.push(AppRoutes.noteDetail('note_1')),
                 child: Row(
                   children: [
                     Container(

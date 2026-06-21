@@ -1,7 +1,9 @@
+// ignore_for_file: use_null_aware_elements
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 
+/// Analysis options for this file - using null-aware elements style
 class PageHeader extends StatelessWidget {
   const PageHeader({
     super.key,
@@ -31,7 +33,7 @@ class PageHeader extends StatelessWidget {
             ],
           ),
         ),
-        if (trailing != null) trailing,
+        if (trailing != null) trailing!,
       ],
     );
   }
@@ -52,7 +54,7 @@ class SectionTitle extends StatelessWidget {
           Expanded(
             child: Text(title, style: Theme.of(context).textTheme.titleLarge),
           ),
-          if (action != null) action,
+          if (action != null) action!,
         ],
       ),
     );

@@ -288,12 +288,16 @@ final appRouter = GoRouter(
           builder: (context, state) => const CreateNotePage(),
         ),
         GoRoute(
-          path: AppRoutes.noteEdit,
-          builder: (context, state) => const EditNotePage(),
+          path: '/notes/edit/:noteId',
+          builder: (context, state) => EditNotePage(
+            noteId: state.pathParameters['noteId']!,
+          ),
         ),
         GoRoute(
-          path: AppRoutes.noteDetail,
-          builder: (context, state) => const NoteDetailPage(),
+          path: '/notes/detail/:noteId',
+          builder: (context, state) => NoteDetailPage(
+            noteId: state.pathParameters['noteId']!,
+          ),
         ),
         GoRoute(
           path: AppRoutes.dailyReflection,

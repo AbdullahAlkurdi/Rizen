@@ -5,6 +5,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../data/notes_repository.dart';
 
 class CreateNotePage extends StatefulWidget {
   const CreateNotePage({super.key});
@@ -14,9 +15,17 @@ class CreateNotePage extends StatefulWidget {
 }
 
 class _CreateNotePageState extends State<CreateNotePage> {
+  late final NotesRepository _repository;
   final _titleController = TextEditingController();
   final _bodyController = TextEditingController();
   bool _isSaving = false;
+  String _error = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _repository = NotesRepository();
+  }
 
   @override
   void dispose() {
@@ -27,10 +36,20 @@ class _CreateNotePageState extends State<CreateNotePage> {
 
   Future<void> _save() async {
     setState(() => _isSaving = true);
-    await Future<void>.delayed(const Duration(milliseconds: 600));
-    if (!mounted) return;
-    setState(() => _isSaving = false);
-    context.pop();
+    try {
+      await _repository.createNote(
+        title: _titleController.text,
+        content: _bodyController.text,
+      );
+      if (!mounted) return;
+      context.pop();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.toString();
+        _isSaving = false;
+      });
+    }
   }
 
   @override
@@ -60,6 +79,14 @@ class _CreateNotePageState extends State<CreateNotePage> {
       ),
       body: ListView(
         children: [
+          if (_error.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Text(
+                _error,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+            ),
           TextField(
             controller: _titleController,
             decoration: const InputDecoration(
