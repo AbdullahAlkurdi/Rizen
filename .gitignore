@@ -45,3 +45,8 @@ app.*.map.json
 /android/app/release
 .aider*
 .env
+
+# Secrets
+.env
+.env.local
+.env.*.local
