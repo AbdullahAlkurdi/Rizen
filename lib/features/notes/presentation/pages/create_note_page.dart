@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
-import '../../data/notes_repository.dart';
+import '../cubit/notes_cubit.dart';
 
 class CreateNotePage extends StatefulWidget {
   const CreateNotePage({super.key});
@@ -15,49 +15,57 @@ class CreateNotePage extends StatefulWidget {
 }
 
 class _CreateNotePageState extends State<CreateNotePage> {
-  late final NotesRepository _repository;
   final _titleController = TextEditingController();
   final _bodyController = TextEditingController();
+  final _tagsController = TextEditingController();
   bool _isSaving = false;
-  String _error = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _repository = NotesRepository();
-  }
 
   @override
   void dispose() {
     _titleController.dispose();
     _bodyController.dispose();
+    _tagsController.dispose();
     super.dispose();
   }
 
   Future<void> _save() async {
+    final title = _titleController.text.trim();
+    final body = _bodyController.text.trim();
+    if (title.isEmpty && body.isEmpty) return;
+
     setState(() => _isSaving = true);
-    try {
-      await _repository.createNote(
-        title: _titleController.text,
-        content: _bodyController.text,
-      );
-      if (!mounted) return;
+
+    final tags = _tagsController.text
+        .split(',')
+        .map((t) => t.trim())
+        .where((t) => t.isNotEmpty)
+        .toList();
+
+    await context.read<NotesCubit>().createNote(
+          title: title,
+          body: body,
+          tags: tags,
+        );
+
+    if (!mounted) return;
+
+    final state = context.read<NotesCubit>().state;
+    if (state is NotesError) {
+      setState(() => _isSaving = false);
+    } else {
       context.pop();
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _error = e.toString();
-        _isSaving = false;
-      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<NotesCubit>().state;
+    final error = state is NotesError ? state.message : '';
+
     return RizenScaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(PhosphorIconsBold.arrowLeft),
+          icon: const Icon(PhosphorIconsBold.arrowLeft),
           onPressed: () => context.pop(),
         ),
         title: const Text('Create Note'),
@@ -68,10 +76,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
                 ? const SizedBox(
                     width: 18,
                     height: 18,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppColors.textPrimary,
-                    ),
+                    child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : const Text('Save'),
           ),
@@ -79,12 +84,14 @@ class _CreateNotePageState extends State<CreateNotePage> {
       ),
       body: ListView(
         children: [
-          if (_error.isNotEmpty)
+          if (error.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Text(
-                _error,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
+                error,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                ),
               ),
             ),
           TextField(
@@ -96,25 +103,19 @@ class _CreateNotePageState extends State<CreateNotePage> {
             ),
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              OutlinedButton.icon(
-                onPressed: () {},
-                icon: Icon(PhosphorIconsBold.microphone),
-                label: const Text('Voice Note'),
-              ),
-              const Spacer(),
-              TextButton.icon(
-                onPressed: () {},
-                icon: Icon(PhosphorIconsBold.image),
-                label: const Text('Attach'),
-              ),
-            ],
+          TextField(
+            controller: _tagsController,
+            decoration: const InputDecoration(
+              labelText: 'Tags',
+              hintText: 'comma, separated, tags',
+              prefixIcon: Icon(PhosphorIconsBold.tag),
+            ),
           ),
           const SizedBox(height: 16),
           TextField(
             controller: _bodyController,
             maxLines: null,
+            minLines: 8,
             decoration: const InputDecoration(
               hintText: 'Start writing... Markdown supported.',
               border: OutlineInputBorder(),

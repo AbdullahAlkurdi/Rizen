@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'note_model.dart';
+import '../models/note_model.dart';
 
 class NotesRepository {
   final FirebaseFirestore _firestore;
@@ -23,35 +23,36 @@ class NotesRepository {
     if (!doc.exists) return null;
 
     final note = Note.fromFirestore(doc);
-    if (note.uid != user.uid) return null;
+    if (note.id.isEmpty) return null;
 
     return note;
   }
 
   Future<void> createNote({
     required String title,
-    required String content,
+    required String body,
+    List<String> tags = const [],
   }) async {
     final user = _auth.currentUser;
     if (user == null) throw Exception('User not authenticated');
 
     final ref = _notesCollection.doc();
-    final now = FieldValue.serverTimestamp();
 
     await ref.set({
-      'noteId': ref.id,
       'uid': user.uid,
       'title': title,
-      'content': content,
-      'createdAt': now,
-      'updatedAt': null,
+      'body': body,
+      'tags': tags,
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
     });
   }
 
   Future<void> updateNote({
     required String noteId,
     required String title,
-    required String content,
+    required String body,
+    List<String> tags = const [],
   }) async {
     final user = _auth.currentUser;
     if (user == null) throw Exception('User not authenticated');
@@ -60,15 +61,15 @@ class NotesRepository {
     final doc = await noteRef.get();
 
     if (!doc.exists) throw Exception('Note not found');
-
-    final existingNote = Note.fromFirestore(doc);
-    if (existingNote.uid != user.uid) {
+    final data = doc.data() as Map<String, dynamic>;
+    if (data['uid'] != user.uid) {
       throw Exception('Unauthorized');
     }
 
     await noteRef.update({
       'title': title,
-      'content': content,
+      'body': body,
+      'tags': tags,
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }
@@ -81,9 +82,8 @@ class NotesRepository {
     final doc = await noteRef.get();
 
     if (!doc.exists) return;
-
-    final existingNote = Note.fromFirestore(doc);
-    if (existingNote.uid != user.uid) return;
+    final data = doc.data() as Map<String, dynamic>;
+    if (data['uid'] != user.uid) return;
 
     await noteRef.delete();
   }
@@ -94,7 +94,7 @@ class NotesRepository {
 
     final snapshot = await _notesCollection
         .where('uid', isEqualTo: user.uid)
-        .orderBy('updatedAt', descending: true)
+        .orderBy('createdAt', descending: true)
         .get();
 
     return snapshot.docs.map((doc) => Note.fromFirestore(doc)).toList();

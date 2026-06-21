@@ -35,6 +35,9 @@ import '../../features/home/presentation/pages/notifications_page.dart';
 import '../../features/home/presentation/pages/sleep_analytics_page.dart';
 import '../../features/home/presentation/pages/weekly_overview_page.dart';
 import '../../features/more/presentation/pages/more_hub_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../features/notes/presentation/cubit/notes_cubit.dart';
 import '../../features/notes/presentation/pages/create_note_page.dart';
 import '../../features/notes/presentation/pages/daily_reflection_page.dart';
 import '../../features/notes/presentation/pages/edit_note_page.dart';
@@ -281,22 +284,34 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.notes,
-          builder: (context, state) => const NotesHubPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => NotesCubit()..loadNotes(),
+            child: const NotesHubPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.noteCreate,
-          builder: (context, state) => const CreateNotePage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => NotesCubit(),
+            child: const CreateNotePage(),
+          ),
         ),
         GoRoute(
           path: '/notes/edit/:noteId',
-          builder: (context, state) => EditNotePage(
-            noteId: state.pathParameters['noteId']!,
+          builder: (context, state) => BlocProvider(
+            create: (_) => NotesCubit(),
+            child: EditNotePage(
+              noteId: state.pathParameters['noteId']!,
+            ),
           ),
         ),
         GoRoute(
           path: '/notes/detail/:noteId',
-          builder: (context, state) => NoteDetailPage(
-            noteId: state.pathParameters['noteId']!,
+          builder: (context, state) => BlocProvider(
+            create: (_) => NotesCubit(),
+            child: NoteDetailPage(
+              noteId: state.pathParameters['noteId']!,
+            ),
           ),
         ),
         GoRoute(

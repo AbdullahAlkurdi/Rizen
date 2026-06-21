@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../../data/models/note_model.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
-import '../../data/notes_repository.dart';
+import '../cubit/notes_cubit.dart';
 
 class EditNotePage extends StatefulWidget {
   const EditNotePage({super.key, required this.noteId});
@@ -17,70 +19,62 @@ class EditNotePage extends StatefulWidget {
 }
 
 class _EditNotePageState extends State<EditNotePage> {
-  late final NotesRepository _repository;
   final _titleController = TextEditingController();
-  final _contentController = TextEditingController();
+  final _bodyController = TextEditingController();
+  final _tagsController = TextEditingController();
   bool _isSaving = false;
-  bool _isLoading = true;
   bool _showPreview = false;
-  String _error = '';
+  bool _populated = false;
 
   @override
   void initState() {
     super.initState();
-    _repository = NotesRepository();
-    _loadNote();
+    context.read<NotesCubit>().loadNote(widget.noteId);
   }
 
   @override
   void dispose() {
     _titleController.dispose();
-    _contentController.dispose();
+    _bodyController.dispose();
+    _tagsController.dispose();
     super.dispose();
   }
 
-  Future<void> _loadNote() async {
-    try {
-      final note = await _repository.getNote(widget.noteId);
-      if (note == null) {
-        if (!mounted) return;
-        setState(() {
-          _error = 'Note not found';
-          _isLoading = false;
-        });
-        return;
-      }
-      if (!mounted) return;
-      setState(() {
-        _titleController.text = note.title;
-        _contentController.text = note.content;
-        _isLoading = false;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _error = e.toString();
-        _isLoading = false;
-      });
-    }
+  void _populateFromNote(Note note) {
+    if (_populated) return;
+    _populated = true;
+    _titleController.text = note.title;
+    _bodyController.text = note.body;
+    _tagsController.text = note.tags.join(', ');
   }
 
   Future<void> _save() async {
+    final title = _titleController.text.trim();
+    final body = _bodyController.text.trim();
+    if (title.isEmpty && body.isEmpty) return;
+
     setState(() => _isSaving = true);
-    try {
-      await _repository.updateNote(
-        noteId: widget.noteId,
-        title: _titleController.text,
-        content: _contentController.text,
-      );
-      if (!mounted) return;
+
+    final tags = _tagsController.text
+        .split(',')
+        .map((t) => t.trim())
+        .where((t) => t.isNotEmpty)
+        .toList();
+
+    await context.read<NotesCubit>().updateNote(
+          noteId: widget.noteId,
+          title: title,
+          body: body,
+          tags: tags,
+        );
+
+    if (!mounted) return;
+
+    final state = context.read<NotesCubit>().state;
+    if (state is NotesError) {
+      setState(() => _isSaving = false);
+    } else {
       context.pop();
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _error = e.toString();
-        _isSaving = false;
-      });
     }
   }
 
@@ -99,7 +93,7 @@ class _EditNotePageState extends State<EditNotePage> {
       var formattedLine = line;
       if (!inCodeBlock) {
         if (line.startsWith('# ')) {
-          formattedLine = '📌 ${line.substring(2)}';
+          formattedLine = line.substring(2);
         } else if (line.startsWith('## ')) {
           formattedLine = '   ${line.substring(3)}';
         } else if (line.startsWith('### ')) {
@@ -120,42 +114,56 @@ class _EditNotePageState extends State<EditNotePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
+    final state = context.watch<NotesCubit>().state;
+
+    if (state is NotesInitial || state is NotesLoading) {
       return RizenScaffold(
-        appBar: AppBar(
-          title: const Text('Edit Note'),
-        ),
+        appBar: AppBar(title: const Text('Edit Note')),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
-    if (_error.isNotEmpty) {
+    if (state is NotesError) {
       return RizenScaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(PhosphorIconsBold.arrowLeft),
+            icon: const Icon(PhosphorIconsBold.arrowLeft),
             onPressed: () => context.pop(),
           ),
           title: const Text('Edit Note'),
         ),
         body: Center(
-          child: Text(_error, style: TextStyle(color: AppColors.warning)),
+          child: Text(
+            state.message,
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
         ),
       );
     }
 
+    if (state is! NotesLoaded || state.selectedNote == null) {
+      return RizenScaffold(
+        appBar: AppBar(title: const Text('Edit Note')),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final note = state.selectedNote!;
+    _populateFromNote(note);
+
     return RizenScaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(PhosphorIconsBold.arrowLeft),
+          icon: const Icon(PhosphorIconsBold.arrowLeft),
           onPressed: () => context.pop(),
         ),
         title: const Text('Edit Note'),
         actions: [
           IconButton(
             icon: Icon(
-              _showPreview ? PhosphorIconsBold.pencilSimple : PhosphorIconsBold.eye,
-              color: _showPreview ? AppColors.accent : AppColors.textMuted,
+              _showPreview
+                  ? PhosphorIconsBold.pencilSimple
+                  : PhosphorIconsBold.eye,
             ),
             onPressed: () => setState(() => _showPreview = !_showPreview),
           ),
@@ -165,10 +173,7 @@ class _EditNotePageState extends State<EditNotePage> {
                 ? const SizedBox(
                     width: 18,
                     height: 18,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppColors.textPrimary,
-                    ),
+                    child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : const Text('Save'),
           ),
@@ -185,30 +190,38 @@ class _EditNotePageState extends State<EditNotePage> {
             ),
           ),
           const SizedBox(height: 16),
-          if (_showPreview) ...[
+          TextField(
+            controller: _tagsController,
+            decoration: const InputDecoration(
+              labelText: 'Tags',
+              hintText: 'comma, separated, tags',
+              prefixIcon: Icon(PhosphorIconsBold.tag),
+            ),
+          ),
+          const SizedBox(height: 16),
+          if (_showPreview)
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.cardBackground.withValues(alpha: 0.3),
+                color: AppColors.cardBackground.withAlpha(76),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.glassBorder),
               ),
               child: SelectableText(
-                _formatPreviewText(_contentController.text),
+                _formatPreviewText(_bodyController.text),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-            ),
-          ] else ...[
+            )
+          else
             TextField(
-              controller: _contentController,
+              controller: _bodyController,
               maxLines: null,
               minLines: 10,
               decoration: const InputDecoration(
-                hintText: 'Start writing... Markdown supported.\n\n# Headings\n**bold** _italic_ `code`\n- Lists\n',
+                hintText: 'Start writing... Markdown supported.',
                 border: OutlineInputBorder(),
               ),
             ),
-          ],
           const SizedBox(height: 20),
           RizenButton(
             label: 'Save Changes',
@@ -219,7 +232,9 @@ class _EditNotePageState extends State<EditNotePage> {
           const SizedBox(height: 12),
           RizenButton(
             label: _showPreview ? 'Back to Editor' : 'Preview Markdown',
-            icon: _showPreview ? PhosphorIconsBold.pencilSimple : PhosphorIconsBold.eye,
+            icon: _showPreview
+                ? PhosphorIconsBold.pencilSimple
+                : PhosphorIconsBold.eye,
             variant: RizenButtonVariant.secondary,
             onPressed: () => setState(() => _showPreview = !_showPreview),
           ),
