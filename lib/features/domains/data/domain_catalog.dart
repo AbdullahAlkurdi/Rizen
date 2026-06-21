@@ -15,6 +15,7 @@ class DomainInfo {
     required this.weeklyHours,
     required this.streak,
     required this.progress,
+    required this.metricLabel,
   });
 
   final LifeDomain id;
@@ -25,6 +26,7 @@ class DomainInfo {
   final double weeklyHours;
   final int streak;
   final double progress;
+  final String metricLabel;
 
   String get routeId => id.name;
 }
@@ -40,6 +42,7 @@ abstract final class DomainCatalog {
       weeklyHours: 4.5,
       streak: 8,
       progress: 0.65,
+      metricLabel: 'km run',
     ),
     DomainInfo(
       id: LifeDomain.study,
@@ -50,6 +53,7 @@ abstract final class DomainCatalog {
       weeklyHours: 6.0,
       streak: 5,
       progress: 0.40,
+      metricLabel: 'pages read',
     ),
     DomainInfo(
       id: LifeDomain.work,
@@ -60,6 +64,7 @@ abstract final class DomainCatalog {
       weeklyHours: 32.0,
       streak: 14,
       progress: 0.72,
+      metricLabel: 'focus sessions',
     ),
     DomainInfo(
       id: LifeDomain.coding,
@@ -70,6 +75,7 @@ abstract final class DomainCatalog {
       weeklyHours: 12.0,
       streak: 11,
       progress: 0.85,
+      metricLabel: 'commits',
     ),
     DomainInfo(
       id: LifeDomain.cooking,
@@ -80,6 +86,7 @@ abstract final class DomainCatalog {
       weeklyHours: 5.0,
       streak: 6,
       progress: 0.55,
+      metricLabel: 'meals cooked',
     ),
     DomainInfo(
       id: LifeDomain.spiritual,
@@ -90,6 +97,7 @@ abstract final class DomainCatalog {
       weeklyHours: 7.0,
       streak: 21,
       progress: 0.90,
+      metricLabel: 'Quran pages',
     ),
     DomainInfo(
       id: LifeDomain.custom,
@@ -100,6 +108,7 @@ abstract final class DomainCatalog {
       weeklyHours: 3.0,
       streak: 3,
       progress: 0.30,
+      metricLabel: 'custom unit',
     ),
   ];
 

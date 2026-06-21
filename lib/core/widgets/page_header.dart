@@ -31,7 +31,7 @@ class PageHeader extends StatelessWidget {
             ],
           ),
         ),
-        if (trailing != null) trailing!,
+        if (trailing != null) trailing,
       ],
     );
   }
@@ -52,7 +52,7 @@ class SectionTitle extends StatelessWidget {
           Expanded(
             child: Text(title, style: Theme.of(context).textTheme.titleLarge),
           ),
-          if (action != null) action!,
+          if (action != null) action,
         ],
       ),
     );

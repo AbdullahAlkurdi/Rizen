@@ -21,10 +21,6 @@ class DomainDashboardPage extends StatelessWidget {
 
     return RizenScaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(PhosphorIconsBold.arrowLeft),
-          onPressed: () => context.pop(),
-        ),
         title: Text(domain.name),
       ),
       body: ListView(

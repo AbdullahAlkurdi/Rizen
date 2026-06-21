@@ -6,9 +6,69 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
 import '../../data/domain_catalog.dart';
+import '../../data/domain_log_repository.dart';
 
-class DomainLogPage extends StatelessWidget {
+class DomainLogPage extends StatefulWidget {
   const DomainLogPage({super.key});
+
+  @override
+  State<DomainLogPage> createState() => _DomainLogPageState();
+}
+
+class _DomainLogPageState extends State<DomainLogPage> {
+  final _durationController = TextEditingController();
+  final _metricController = TextEditingController();
+  final _noteController = TextEditingController();
+  final _repository = DomainLogRepository();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _durationController.dispose();
+    _metricController.dispose();
+    _noteController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _saveLog(DomainInfo domain) async {
+    final duration = int.tryParse(_durationController.text) ?? 0;
+    final metric = num.tryParse(_metricController.text) ?? 0;
+    
+    if (duration <= 0 && metric <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter duration or metric value')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      await _repository.addLog(
+        domain: domain.routeId,
+        durationMinutes: duration,
+        metricLabel: domain.metricLabel,
+        metricValue: metric,
+        note: _noteController.text.trim().isEmpty ? null : _noteController.text.trim(),
+      );
+      if (mounted) {
+        context.pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${domain.name} session logged!')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +78,6 @@ class DomainLogPage extends StatelessWidget {
 
     return RizenScaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(PhosphorIconsBold.arrowLeft),
-          onPressed: () => context.pop(),
-        ),
         title: Text('Log ${domain.name}'),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -32,15 +88,27 @@ class DomainLogPage extends StatelessWidget {
       body: ListView(
         children: [
           TextField(
+            controller: _durationController,
             decoration: InputDecoration(
-              labelText: 'Duration',
-              hintText: 'e.g. 2h 30m',
+              labelText: 'Duration (Minutes)',
+              hintText: 'e.g. 60',
               prefixIcon: Icon(PhosphorIconsBold.clock),
             ),
             keyboardType: TextInputType.number,
           ),
           const SizedBox(height: 16),
           TextField(
+            controller: _metricController,
+            decoration: InputDecoration(
+              labelText: domain.metricLabel,
+              hintText: 'e.g. 10',
+              prefixIcon: Icon(PhosphorIconsBold.chartBar),
+            ),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _noteController,
             decoration: InputDecoration(
               labelText: 'Notes',
               hintText: 'How did the session go?',
@@ -70,11 +138,13 @@ class DomainLogPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          RizenButton(
-            label: 'Save Entry',
-            icon: PhosphorIconsBold.check,
-            onPressed: () => context.pop(),
-          ),
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : RizenButton(
+                  label: 'Save Entry',
+                  icon: PhosphorIconsBold.check,
+                  onPressed: () => _saveLog(domain),
+                ),
         ],
       ),
     );

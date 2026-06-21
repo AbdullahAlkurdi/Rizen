@@ -57,6 +57,7 @@ class DefaultFirebaseOptions {
     projectId: 'titan-rizen',
     storageBucket: 'titan-rizen.firebasestorage.app',
   );
+
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAXbsy70wC52SIa0oHoMsNYnxoyPNvUBJc',
     appId: '1:979363811566:ios:dbaf65c919cfc50707a3ff',
@@ -66,6 +67,7 @@ class DefaultFirebaseOptions {
     iosClientId: '979363811566-677e71jbj1o79qo4ufapcltmgn5ijpsc.apps.googleusercontent.com',
     iosBundleId: 'com.example.rizen',
   );
+
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyAXbsy70wC52SIa0oHoMsNYnxoyPNvUBJc',
     appId: '1:979363811566:ios:dbaf65c919cfc50707a3ff',

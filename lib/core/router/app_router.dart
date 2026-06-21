@@ -16,6 +16,8 @@ import '../../features/coach/presentation/pages/coach_insights_page.dart';
 import '../../features/coach/presentation/pages/coach_micro_goals_page.dart';
 import '../../features/coach/presentation/pages/coach_suggestions_page.dart';
 import '../../features/coach/presentation/pages/coach_weekly_page.dart';
+import '../../features/domains/presentation/pages/domain_dashboard_page.dart';
+import '../../features/domains/presentation/pages/domain_log_page.dart';
 import '../../features/domains/presentation/pages/domains_hub_page.dart';
 import '../../features/habits/presentation/pages/add_habit_page.dart';
 import '../../features/habits/presentation/pages/emergency_recovery_page.dart';
@@ -164,6 +166,14 @@ final appRouter = GoRouter(
         GoRoute(
           path: AppRoutes.domainsHub,
           builder: (context, state) => const DomainsHubPage(),
+        ),
+        GoRoute(
+          path: '/domains/dashboard/:id',
+          builder: (context, state) => const DomainDashboardPage(),
+        ),
+        GoRoute(
+          path: '/domains/log/:id',
+          builder: (context, state) => const DomainLogPage(),
         ),
         GoRoute(
           path: AppRoutes.profile,
