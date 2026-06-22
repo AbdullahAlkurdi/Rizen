@@ -1,4 +1,4 @@
-# RizenOS Agent Coordination and Technical Standards
+﻿# RizenOS Agent Coordination and Technical Standards
 
 Welcome to the RizenOS workspace! This document serves as the absolute authority on team collaboration guidelines, technological choices, and structural conventions for all AI developers, sub-agents, and automated systems participating in the development of RizenOS.
 
@@ -30,28 +30,28 @@ To maintain strict architectural consistency, avoid fragmentation, and ensure ma
 We employ a **feature-first** organization pattern under the `lib/` directory. This encapsulates cohesive domains rather than scattering related files (like UI, controllers, and data sources) across separate global directories.
 
 ### Root and General Structure
-- `lib/core/` — Shares global, reusable items (constants, widgets, theme, router, networks).
-- `lib/features/` — Contains self-contained, domain-specific modules.
+- `lib/core/` â€” Shares global, reusable items (constants, widgets, theme, router, networks).
+- `lib/features/` â€” Contains self-contained, domain-specific modules.
 
 ### Feature Subfolder Structure
 Each feature within `lib/features/<feature_name>/` must conform to a strict three-layer architectural separation:
 
 ```
 lib/features/<feature_name>/
-├── data/
-│   ├── datasources/        # Remote and local data sources (e.g., Firestore calls, local caches)
-│   ├── models/             # Data transfer objects, JSON serializers (Freezed/JsonSerializable)
-│   └── repositories/       # Repository implementations (concretizes the domain repository interface)
-│
-├── domain/
-│   ├── entities/           # Pure business logic models (free from dependency-specific code)
-│   ├── repositories/       # Abstract repository interfaces (defining data access contracts)
-│   └── usecases/           # Individual application-specific business logic executors
-│
-└── presentation/
-    ├── bloc/               # BLoC/Cubit files for managing the UI state of this feature
-    ├── pages/              # Primary fullscreen views / routing targets
-    └── widgets/            # Reusable sub-widgets private to this feature
+â”œâ”€â”€ data/
+â”‚   â”œâ”€â”€ datasources/        # Remote and local data sources (e.g., Firestore calls, local caches)
+â”‚   â”œâ”€â”€ models/             # Data transfer objects, JSON serializers (Freezed/JsonSerializable)
+â”‚   â””â”€â”€ repositories/       # Repository implementations (concretizes the domain repository interface)
+â”‚
+â”œâ”€â”€ domain/
+â”‚   â”œâ”€â”€ entities/           # Pure business logic models (free from dependency-specific code)
+â”‚   â”œâ”€â”€ repositories/       # Abstract repository interfaces (defining data access contracts)
+â”‚   â””â”€â”€ usecases/           # Individual application-specific business logic executors
+â”‚
+â””â”€â”€ presentation/
+    â”œâ”€â”€ bloc/               # BLoC/Cubit files for managing the UI state of this feature
+    â”œâ”€â”€ pages/              # Primary fullscreen views / routing targets
+    â””â”€â”€ widgets/            # Reusable sub-widgets private to this feature
 ```
 
 ---
@@ -84,3 +84,9 @@ Every implementation cycle must end in full verification:
 1. **Compilation Check:** The project must compile successfully after each feature addition.
 2. **Analysis/Linter Checks:** No compilation warnings or Dart analyzer violations.
 3. **Automated Testing:** Every modification must be validated by running related tests, and new features must be accompanied by relevant unit or widget tests.
+
+## 5. Required Specification Documents
+All agents must read before starting any task:
+- `MASTER_PRODUCT_SPEC.md`  
+- `MASTER_PRODUCT_SPEC_ADDENDUM_v1.md` (mandatory for: finance, learning, sports, cooking, onboarding features)
+
