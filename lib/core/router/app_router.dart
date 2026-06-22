@@ -16,6 +16,7 @@ import '../../features/coach/presentation/pages/coach_insights_page.dart';
 import '../../features/coach/presentation/pages/coach_micro_goals_page.dart';
 import '../../features/coach/presentation/pages/coach_suggestions_page.dart';
 import '../../features/coach/presentation/pages/coach_weekly_page.dart';
+import '../../features/domains/presentation/cubit/domain_logs_cubit.dart';
 import '../../features/domains/presentation/pages/domain_dashboard_page.dart';
 import '../../features/domains/presentation/pages/domain_log_page.dart';
 import '../../features/domains/presentation/pages/domains_hub_page.dart';
@@ -172,11 +173,17 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: '/domains/dashboard/:id',
-          builder: (context, state) => const DomainDashboardPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => DomainLogsCubit()..loadLogs(state.pathParameters['id']!),
+            child: DomainDashboardPage(domainId: state.pathParameters['id']!),
+          ),
         ),
         GoRoute(
           path: '/domains/log/:id',
-          builder: (context, state) => const DomainLogPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => DomainLogsCubit(),
+            child: DomainLogPage(domainId: state.pathParameters['id']!),
+          ),
         ),
         GoRoute(
           path: AppRoutes.profile,

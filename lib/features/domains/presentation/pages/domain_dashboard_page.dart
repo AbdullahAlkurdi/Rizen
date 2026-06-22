@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
@@ -8,21 +9,21 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../cubit/domain_logs_cubit.dart';
 import '../../data/domain_catalog.dart';
 
 class DomainDashboardPage extends StatelessWidget {
-  const DomainDashboardPage({super.key});
+  final String domainId;
+
+  const DomainDashboardPage({super.key, required this.domainId});
 
   @override
   Widget build(BuildContext context) {
-    final segments = GoRouterState.of(context).uri.pathSegments;
-    final domainId = segments.length >= 3 ? segments[2] : 'sports';
     final domain = DomainCatalog.byId(domainId);
+    final state = context.watch<DomainLogsCubit>().state;
 
     return RizenScaffold(
-      appBar: AppBar(
-        title: Text(domain.name),
-      ),
+      appBar: AppBar(title: Text(domain.name)),
       body: ListView(
         children: [
           GlassCard(
@@ -43,12 +44,12 @@ class DomainDashboardPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${domain.weeklyHours}h this week',
+                        '${state is DomainLogsLoaded ? state.summary.weeklyHours.toStringAsFixed(1) : '0.0'}h this week',
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${domain.streak}-day streak · ${(domain.progress * 100).round()}% of goal',
+                        '${state is DomainLogsLoaded ? state.summary.streak : 0}-day streak · ${(state is DomainLogsLoaded ? state.summary.progress : 0 * 100).round()}% of goal',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -59,7 +60,7 @@ class DomainDashboardPage extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           LinearProgressIndicator(
-            value: domain.progress,
+            value: state is DomainLogsLoaded ? state.summary.progress : 0,
             backgroundColor: AppColors.glassFill,
             color: domain.color,
             borderRadius: BorderRadius.circular(4),
@@ -74,6 +75,35 @@ class DomainDashboardPage extends StatelessWidget {
             onTap: () => context.push(AppRoutes.domainLog(domain.routeId)),
           ),
           const SizedBox(height: 10),
+          if (state is DomainLogsLoaded && state.logs.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                'Recent Logs',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            const SizedBox(height: 8),
+            ...state.logs.take(5).map((log) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                  child: GlassCard(
+                    child: ListTile(
+                      leading: Icon(PhosphorIconsBold.clock,
+                          color: domain.color, size: 20),
+                      title: Text('${log.duration} min'),
+                      subtitle: Text(
+                        '${log.loggedAt.day}/${log.loggedAt.month}/${log.loggedAt.year}',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      trailing: log.notes != null
+                          ? Icon(PhosphorIconsBold.notepad,
+                              color: AppColors.textMuted, size: 18)
+                          : null,
+                    ),
+                  ),
+                )),
+            const SizedBox(height: 10),
+          ],
           NavGlassTile(
             title: 'Weekly Breakdown',
             subtitle: 'Day-by-day activity analysis.',

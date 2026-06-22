@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../cubit/domain_logs_cubit.dart';
 import '../../data/domain_catalog.dart';
-import '../../data/domain_log_repository.dart';
 
 class DomainLogPage extends StatefulWidget {
-  const DomainLogPage({super.key});
+  final String domainId;
+
+  const DomainLogPage({super.key, required this.domainId});
 
   @override
   State<DomainLogPage> createState() => _DomainLogPageState();
@@ -19,7 +22,6 @@ class _DomainLogPageState extends State<DomainLogPage> {
   final _durationController = TextEditingController();
   final _metricController = TextEditingController();
   final _noteController = TextEditingController();
-  final _repository = DomainLogRepository();
   bool _isLoading = false;
 
   @override
@@ -33,7 +35,7 @@ class _DomainLogPageState extends State<DomainLogPage> {
   Future<void> _saveLog(DomainInfo domain) async {
     final duration = int.tryParse(_durationController.text) ?? 0;
     final metric = num.tryParse(_metricController.text) ?? 0;
-    
+
     if (duration <= 0 && metric <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter duration or metric value')),
@@ -44,13 +46,14 @@ class _DomainLogPageState extends State<DomainLogPage> {
     setState(() => _isLoading = true);
 
     try {
-      await _repository.addLog(
-        domain: domain.routeId,
-        durationMinutes: duration,
-        metricLabel: domain.metricLabel,
-        metricValue: metric,
-        note: _noteController.text.trim().isEmpty ? null : _noteController.text.trim(),
-      );
+      await context.read<DomainLogsCubit>().addLog(
+            domainId: domain.routeId,
+            duration: duration,
+            notes:
+                _noteController.text.trim().isEmpty ? null : _noteController.text.trim(),
+            metricLabel: domain.metricLabel,
+            metricValue: metric.toDouble(),
+          );
       if (mounted) {
         context.pop();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -72,18 +75,14 @@ class _DomainLogPageState extends State<DomainLogPage> {
 
   @override
   Widget build(BuildContext context) {
-    final segments = GoRouterState.of(context).uri.pathSegments;
-    final domainId = segments.length >= 3 ? segments[2] : 'sports';
-    final domain = DomainCatalog.byId(domainId);
+    final domain = DomainCatalog.byId(widget.domainId);
 
     return RizenScaffold(
-      appBar: AppBar(
-        title: Text('Log ${domain.name}'),
-      ),
+      appBar: AppBar(title: Text('Log ${domain.name}')),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
-        icon: Icon(PhosphorIconsBold.microphone),
-        label: Text('Voice Log'),
+        icon: const Icon(PhosphorIconsBold.microphone),
+        label: const Text('Voice Log'),
       ),
       body: ListView(
         children: [
@@ -92,7 +91,7 @@ class _DomainLogPageState extends State<DomainLogPage> {
             decoration: InputDecoration(
               labelText: 'Duration (Minutes)',
               hintText: 'e.g. 60',
-              prefixIcon: Icon(PhosphorIconsBold.clock),
+              prefixIcon: const Icon(PhosphorIconsBold.clock),
             ),
             keyboardType: TextInputType.number,
           ),
@@ -102,7 +101,7 @@ class _DomainLogPageState extends State<DomainLogPage> {
             decoration: InputDecoration(
               labelText: domain.metricLabel,
               hintText: 'e.g. 10',
-              prefixIcon: Icon(PhosphorIconsBold.chartBar),
+              prefixIcon: const Icon(PhosphorIconsBold.chartBar),
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
@@ -112,7 +111,7 @@ class _DomainLogPageState extends State<DomainLogPage> {
             decoration: InputDecoration(
               labelText: 'Notes',
               hintText: 'How did the session go?',
-              prefixIcon: Icon(PhosphorIconsBold.notepad),
+              prefixIcon: const Icon(PhosphorIconsBold.notepad),
             ),
             maxLines: 3,
           ),
