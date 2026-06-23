@@ -88,5 +88,5 @@ Every implementation cycle must end in full verification:
 ## 5. Required Specification Documents
 All agents must read before starting any task:
 - `MASTER_PRODUCT_SPEC.md`  
-- `MASTER_PRODUCT_SPEC_ADDENDUM_v1.md` (mandatory for: finance, learning, sports, cooking, onboarding features)
+- `MASTER_PRODUCT_SPEC_ADDENDUM_v1.md` (Required reading for any agent touching `lib/features/finance`, `lib/features/learning`, or `lib/features/domains/`, `lib/features/onboarding`)
 

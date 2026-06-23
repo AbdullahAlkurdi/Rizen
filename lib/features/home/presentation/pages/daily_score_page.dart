@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
-import '../../data/dashboard_mock_data.dart';
+import '../../../routines/presentation/bloc/routines_bloc.dart';
 
 class DailyScorePage extends StatelessWidget {
   const DailyScorePage({super.key});
@@ -19,6 +20,7 @@ class DailyScorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<RoutineCubit>().state;
     return RizenScaffold(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
       body: ListView(
@@ -48,7 +50,7 @@ class DailyScorePage extends StatelessWidget {
                           width: 140,
                           height: 140,
                           child: CircularProgressIndicator(
-                            value: DashboardData.dailyScore / 100,
+                            value: (state.routines.isNotEmpty ? 78 : 0) / 100,
                             strokeWidth: 10,
                             backgroundColor: AppColors.glassFill,
                             color: AppColors.accent,
@@ -58,7 +60,7 @@ class DailyScorePage extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              '${DashboardData.dailyScore}',
+                              '${(state.routines.isNotEmpty ? 78 : 0)}',
                               style: Theme.of(context).textTheme.displayMedium,
                             ),
                             Text(
@@ -81,7 +83,7 @@ class DailyScorePage extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        '${DashboardData.streakDays}-day resilient streak',
+                        '12-day resilient streak',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],

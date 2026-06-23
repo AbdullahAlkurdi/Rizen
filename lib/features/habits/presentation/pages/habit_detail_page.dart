@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
@@ -6,21 +7,27 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_card.dart';
-import '../../../../core/widgets/nav_glass_tile.dart';
+import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../data/models/habit_log_model.dart';
+import '../../data/models/habit_model.dart';
+import '../cubit/habits_cubit.dart';
 
-class HabitDetailPage extends StatelessWidget {
-  const HabitDetailPage({super.key});
+class HabitDetailPage extends StatefulWidget {
+  const HabitDetailPage({super.key, required this.habitId});
 
-  static const _matrix = [
-    _DayEntry('Mon', true),
-    _DayEntry('Tue', true),
-    _DayEntry('Wed', true),
-    _DayEntry('Thu', false),
-    _DayEntry('Fri', true),
-    _DayEntry('Sat', true),
-    _DayEntry('Sun', true),
-  ];
+  final String habitId;
+
+  @override
+  State<HabitDetailPage> createState() => _HabitDetailPageState();
+}
+
+class _HabitDetailPageState extends State<HabitDetailPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<HabitsCubit>().loadHabit(widget.habitId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,130 +40,122 @@ class HabitDetailPage extends StatelessWidget {
         title: const Text('Habit Detail'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () =>
+                context.push(AppRoutes.habitEditPath(widget.habitId)),
             icon: Icon(PhosphorIconsBold.pencilSimple),
           ),
         ],
       ),
-      body: ListView(
+      body: BlocBuilder<HabitsCubit, HabitsState>(
+        builder: (context, state) {
+          if (state is HabitsLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is HabitsError) {
+            return Center(child: Text(state.message));
+          }
+          if (state is! HabitsLoaded || state.selectedHabit == null) {
+            return const Center(child: Text('Habit not found'));
+          }
+
+          final habit = state.selectedHabit!;
+          return ListView(
+            children: [
+              _HabitHeader(habit: habit),
+              const SizedBox(height: 20),
+              RizenButton(
+                label: 'Check In',
+                icon: PhosphorIconsBold.checkCircle,
+                onPressed: () =>
+                    context.push(AppRoutes.habitCheckinPath(habit.id)),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Streak Matrix',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 12),
+              _StreakMatrix(logs: state.logs, color: _habitColor(habit)),
+              const SizedBox(height: 24),
+              Text(
+                'Log History',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 12),
+              if (state.logs.isEmpty)
+                const GlassCard(child: Text('No check-ins logged yet.'))
+              else
+                ...state.logs.map(
+                  (log) => Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: _LogTile(log: log),
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _HabitHeader extends StatelessWidget {
+  const _HabitHeader({required this.habit});
+
+  final Habit habit;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = _habitColor(habit);
+    return GlassCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GlassCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.15),
+                  borderRadius: AppTheme.cardRadius,
+                ),
+                child: Icon(
+                  habit.type == HabitType.positive
+                      ? PhosphorIconsBold.checkCircle
+                      : PhosphorIconsBold.skull,
+                  color: color,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF60A5FA).withValues(alpha: 0.15),
-                        borderRadius: AppTheme.cardRadius,
-                      ),
-                      child: Icon(
-                        PhosphorIconsBold.code,
-                        color: Color(0xFF60A5FA),
-                        size: 24,
-                      ),
+                    Text(
+                      habit.name,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Morning Coding',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          Text(
-                            'Daily · 30-day streak',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
+                    Text(
+                      '${habit.frequency.name} · target ${habit.targetCount}',
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: _matrix.map((d) {
-                    return Column(
-                      children: [
-                        Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: d.completed
-                                ? AppColors.success.withValues(alpha: 0.2)
-                                : AppColors.glassFill,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: d.completed
-                                  ? AppColors.success.withValues(alpha: 0.4)
-                                  : AppColors.glassBorder,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              d.day,
-                              style: Theme.of(context).textTheme.labelSmall
-                                  ?.copyWith(
-                                    color: d.completed
-                                        ? AppColors.success
-                                        : null,
-                                    fontWeight: d.completed
-                                        ? FontWeight.w700
-                                        : null,
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-          Text('Streak Matrix', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 12),
-          GlassCard(
-            child: Column(
-              children: List.generate(4, (week) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    children: List.generate(7, (day) {
-                      final complete = (week * 7 + day) % 4 != 0;
-                      return Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 2),
-                          child: Container(
-                            height: 28,
-                            decoration: BoxDecoration(
-                              color: complete
-                                  ? AppColors.success.withValues(alpha: 0.3)
-                                  : AppColors.glassFill,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                  ),
-                );
-              }),
-            ),
+              ),
+            ],
           ),
           const SizedBox(height: 20),
-          NavGlassTile(
-            title: 'Habit Analytics',
-            subtitle: 'Detailed trend analysis.',
-            icon: PhosphorIconsBold.chartLineUp,
-            iconColor: Color(0xFF60A5FA),
-            onTap: () => context.push(AppRoutes.habitAnalytics),
+          Row(
+            children: [
+              _Metric(label: 'Current', value: habit.currentStreak.toString()),
+              _Metric(label: 'Longest', value: habit.longestStreak.toString()),
+              _Metric(
+                label: 'Status',
+                value: habit.isActive ? 'Active' : 'Paused',
+              ),
+            ],
           ),
         ],
       ),
@@ -164,8 +163,121 @@ class HabitDetailPage extends StatelessWidget {
   }
 }
 
-class _DayEntry {
-  const _DayEntry(this.day, this.completed);
-  final String day;
-  final bool completed;
+class _Metric extends StatelessWidget {
+  const _Metric({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(value, style: Theme.of(context).textTheme.titleMedium),
+          Text(label, style: Theme.of(context).textTheme.bodySmall),
+        ],
+      ),
+    );
+  }
 }
+
+class _StreakMatrix extends StatelessWidget {
+  const _StreakMatrix({required this.logs, required this.color});
+
+  final List<HabitLog> logs;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final completed = logs
+        .map(
+          (log) => DateTime(
+            log.completedAt.year,
+            log.completedAt.month,
+            log.completedAt.day,
+          ),
+        )
+        .toSet();
+    final today = DateTime.now();
+
+    return GlassCard(
+      child: Column(
+        children: List.generate(4, (week) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: week == 3 ? 0 : 12),
+            child: Row(
+              children: List.generate(7, (day) {
+                final offset = 27 - ((week * 7) + day);
+                final date = today.subtract(Duration(days: offset));
+                final key = DateTime(date.year, date.month, date.day);
+                final complete = completed.contains(key);
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    child: Container(
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: complete
+                            ? color.withValues(alpha: 0.36)
+                            : AppColors.glassFill,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: complete
+                              ? color.withValues(alpha: 0.48)
+                              : Colors.transparent,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class _LogTile extends StatelessWidget {
+  const _LogTile({required this.log});
+
+  final HabitLog log;
+
+  @override
+  Widget build(BuildContext context) {
+    final date = log.completedAt;
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      child: Row(
+        children: [
+          Icon(PhosphorIconsFill.checkCircle, color: AppColors.success),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${date.year}-${_two(date.month)}-${_two(date.day)}',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                if (log.note != null && log.note!.trim().isNotEmpty)
+                  Text(log.note!, style: Theme.of(context).textTheme.bodySmall),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Color _habitColor(Habit habit) {
+  return habit.type == HabitType.positive
+      ? AppColors.success
+      : AppColors.shadow;
+}
+
+String _two(int value) => value.toString().padLeft(2, '0');

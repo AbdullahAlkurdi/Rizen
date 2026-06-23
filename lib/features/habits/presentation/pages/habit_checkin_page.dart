@@ -1,21 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/feature_scaffold.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_button.dart';
+import '../../data/models/habit_model.dart';
+import '../cubit/habits_cubit.dart';
 
-class HabitCheckinPage extends StatelessWidget {
-  const HabitCheckinPage({super.key});
+class HabitCheckinPage extends StatefulWidget {
+  const HabitCheckinPage({super.key, this.habitId});
 
-  static const _habits = [
-    _HabitItem('Morning Coding', true, Color(0xFF60A5FA)),
-    _HabitItem('Read 10 Pages', true, Color(0xFF818CF8)),
-    _HabitItem('No Social Media After 10 PM', false, AppColors.warning),
-    _HabitItem('Evening Workout', false, Color(0xFF4ADE80)),
-    _HabitItem('Prayer on Time', true, AppColors.warning),
-  ];
+  final String? habitId;
+
+  @override
+  State<HabitCheckinPage> createState() => _HabitCheckinPageState();
+}
+
+class _HabitCheckinPageState extends State<HabitCheckinPage> {
+  final _noteController = TextEditingController();
+  String? _selectedHabitId;
+  bool _submitted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedHabitId = widget.habitId;
+    if (widget.habitId == null) {
+      context.read<HabitsCubit>().loadHabits();
+    } else {
+      context.read<HabitsCubit>().loadHabit(widget.habitId!);
+    }
+  }
+
+  @override
+  void dispose() {
+    _noteController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,61 +49,129 @@ class HabitCheckinPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
         icon: Icon(PhosphorIconsFill.microphone),
-        label: Text('Voice Log'),
+        label: const Text('Voice Log'),
       ),
-      body: ListView(
-        children: [
-          ..._habits.map(
-            (h) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: GlassCard(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        color: h.color,
-                        shape: BoxShape.circle,
-                      ),
+      body: BlocConsumer<HabitsCubit, HabitsState>(
+        listener: (context, state) {
+          if (_submitted && state is HabitsLoaded) {
+            context.pop();
+          }
+          if (state is HabitsError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
+        builder: (context, state) {
+          if (state is HabitsLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is HabitsError) {
+            return Center(child: Text(state.message));
+          }
+
+          final habits = state is HabitsLoaded ? state.all : <Habit>[];
+          final selectedHabit = widget.habitId != null && state is HabitsLoaded
+              ? state.selectedHabit
+              : null;
+          final choices = selectedHabit == null ? habits : [selectedHabit];
+
+          return ListView(
+            children: [
+              if (choices.isEmpty)
+                const GlassCard(child: Text('No habits available to check in.'))
+              else
+                ...choices.map(
+                  (habit) => Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: _HabitChoice(
+                      habit: habit,
+                      selected: _selectedHabitId == habit.id,
+                      onTap: () => setState(() => _selectedHabitId = habit.id),
                     ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Text(
-                        h.title,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
-                    Icon(
-                      h.completed
-                          ? PhosphorIconsFill.checkCircle
-                          : PhosphorIconsBold.circle,
-                      color: h.completed
-                          ? AppColors.success
-                          : AppColors.textMuted,
-                      size: 22,
-                    ),
-                  ],
+                  ),
+                ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _noteController,
+                minLines: 2,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  labelText: 'Note',
+                  hintText: 'Optional context for this check-in',
                 ),
               ),
+              const SizedBox(height: 24),
+              RizenButton(
+                label: 'Mark Done',
+                icon: PhosphorIconsBold.check,
+                onPressed: _selectedHabitId == null ? null : _checkIn,
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> _checkIn() async {
+    _submitted = true;
+    await context.read<HabitsCubit>().checkIn(
+      habitId: _selectedHabitId!,
+      note: _noteController.text.trim().isEmpty
+          ? null
+          : _noteController.text.trim(),
+    );
+  }
+}
+
+class _HabitChoice extends StatelessWidget {
+  const _HabitChoice({
+    required this.habit,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final Habit habit;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = habit.type == HabitType.positive
+        ? AppColors.success
+        : AppColors.shadow;
+
+    return GlassCard(
+      onTap: onTap,
+      borderColor: selected ? color : null,
+      child: Row(
+        children: [
+          Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(habit.name, style: Theme.of(context).textTheme.bodyLarge),
+                Text(
+                  '${habit.currentStreak}-day streak',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 24),
-          RizenButton(
-            label: 'Save Check-in',
-            icon: PhosphorIconsBold.check,
-            onPressed: () {},
+          Icon(
+            selected ? PhosphorIconsFill.checkCircle : PhosphorIconsBold.circle,
+            color: selected ? color : AppColors.textMuted,
+            size: 22,
           ),
         ],
       ),
     );
   }
-}
-
-class _HabitItem {
-  const _HabitItem(this.title, this.completed, this.color);
-  final String title;
-  final bool completed;
-  final Color color;
 }

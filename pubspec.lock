@@ -441,7 +441,7 @@ packages:
     source: sdk
     version: "0.0.0"
   freezed:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: freezed
       sha256: "59a584c24b3acdc5250bb856d0d3e9c0b798ed14a4af1ddb7dc1c7b41df91c9c"
@@ -792,6 +792,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
+  sensors_plus:
+    dependency: "direct main"
+    description:
+      name: sensors_plus
+      sha256: "6898cd4490ffc27fea4de5976585e92fae55355175d46c6c3b3d719d42f9e230"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.1"
+  sensors_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: sensors_plus_platform_interface
+      sha256: bc472d6cfd622acb4f020e726433ee31788b038056691ba433fec80e448a094f
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   shelf:
     dependency: transitive
     description:

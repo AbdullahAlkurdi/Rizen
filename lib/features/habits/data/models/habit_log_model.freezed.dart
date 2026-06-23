@@ -1,0 +1,267 @@
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'habit_log_model.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
+
+HabitLog _$HabitLogFromJson(Map<String, dynamic> json) {
+  return _HabitLog.fromJson(json);
+}
+
+/// @nodoc
+mixin _$HabitLog {
+  String get id => throw _privateConstructorUsedError;
+  String get uid => throw _privateConstructorUsedError;
+  String get habitId => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
+  DateTime get completedAt => throw _privateConstructorUsedError;
+  String? get note => throw _privateConstructorUsedError;
+
+  /// Serializes this HabitLog to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of HabitLog
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $HabitLogCopyWith<HabitLog> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $HabitLogCopyWith<$Res> {
+  factory $HabitLogCopyWith(HabitLog value, $Res Function(HabitLog) then) =
+      _$HabitLogCopyWithImpl<$Res, HabitLog>;
+  @useResult
+  $Res call({
+    String id,
+    String uid,
+    String habitId,
+    @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
+    DateTime completedAt,
+    String? note,
+  });
+}
+
+/// @nodoc
+class _$HabitLogCopyWithImpl<$Res, $Val extends HabitLog>
+    implements $HabitLogCopyWith<$Res> {
+  _$HabitLogCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of HabitLog
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? uid = null,
+    Object? habitId = null,
+    Object? completedAt = null,
+    Object? note = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            uid: null == uid
+                ? _value.uid
+                : uid // ignore: cast_nullable_to_non_nullable
+                      as String,
+            habitId: null == habitId
+                ? _value.habitId
+                : habitId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            completedAt: null == completedAt
+                ? _value.completedAt
+                : completedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            note: freezed == note
+                ? _value.note
+                : note // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$HabitLogImplCopyWith<$Res>
+    implements $HabitLogCopyWith<$Res> {
+  factory _$$HabitLogImplCopyWith(
+    _$HabitLogImpl value,
+    $Res Function(_$HabitLogImpl) then,
+  ) = __$$HabitLogImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String id,
+    String uid,
+    String habitId,
+    @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
+    DateTime completedAt,
+    String? note,
+  });
+}
+
+/// @nodoc
+class __$$HabitLogImplCopyWithImpl<$Res>
+    extends _$HabitLogCopyWithImpl<$Res, _$HabitLogImpl>
+    implements _$$HabitLogImplCopyWith<$Res> {
+  __$$HabitLogImplCopyWithImpl(
+    _$HabitLogImpl _value,
+    $Res Function(_$HabitLogImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of HabitLog
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? uid = null,
+    Object? habitId = null,
+    Object? completedAt = null,
+    Object? note = freezed,
+  }) {
+    return _then(
+      _$HabitLogImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        uid: null == uid
+            ? _value.uid
+            : uid // ignore: cast_nullable_to_non_nullable
+                  as String,
+        habitId: null == habitId
+            ? _value.habitId
+            : habitId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        completedAt: null == completedAt
+            ? _value.completedAt
+            : completedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        note: freezed == note
+            ? _value.note
+            : note // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$HabitLogImpl extends _HabitLog {
+  const _$HabitLogImpl({
+    required this.id,
+    required this.uid,
+    required this.habitId,
+    @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
+    required this.completedAt,
+    this.note,
+  }) : super._();
+
+  factory _$HabitLogImpl.fromJson(Map<String, dynamic> json) =>
+      _$$HabitLogImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String uid;
+  @override
+  final String habitId;
+  @override
+  @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
+  final DateTime completedAt;
+  @override
+  final String? note;
+
+  @override
+  String toString() {
+    return 'HabitLog(id: $id, uid: $uid, habitId: $habitId, completedAt: $completedAt, note: $note)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HabitLogImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.uid, uid) || other.uid == uid) &&
+            (identical(other.habitId, habitId) || other.habitId == habitId) &&
+            (identical(other.completedAt, completedAt) ||
+                other.completedAt == completedAt) &&
+            (identical(other.note, note) || other.note == note));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, uid, habitId, completedAt, note);
+
+  /// Create a copy of HabitLog
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$HabitLogImplCopyWith<_$HabitLogImpl> get copyWith =>
+      __$$HabitLogImplCopyWithImpl<_$HabitLogImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$HabitLogImplToJson(this);
+  }
+}
+
+abstract class _HabitLog extends HabitLog {
+  const factory _HabitLog({
+    required final String id,
+    required final String uid,
+    required final String habitId,
+    @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
+    required final DateTime completedAt,
+    final String? note,
+  }) = _$HabitLogImpl;
+  const _HabitLog._() : super._();
+
+  factory _HabitLog.fromJson(Map<String, dynamic> json) =
+      _$HabitLogImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get uid;
+  @override
+  String get habitId;
+  @override
+  @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
+  DateTime get completedAt;
+  @override
+  String? get note;
+
+  /// Create a copy of HabitLog
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$HabitLogImplCopyWith<_$HabitLogImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

@@ -1,5 +1,11 @@
 import 'package:go_router/go_router.dart';
 
+import '../../features/islamic/presentation/cubit/prayer_times_cubit.dart';
+import '../../features/islamic/presentation/pages/hijri_calendar_page.dart';
+import '../../features/islamic/presentation/pages/islamic_hub_page.dart';
+import '../../features/islamic/presentation/pages/prayer_detail_page.dart';
+import '../../features/islamic/presentation/pages/prayer_settings_page.dart';
+import '../../features/islamic/presentation/pages/qibla_page.dart';
 import '../../features/analytics/presentation/pages/analytics_hub_page.dart';
 import '../../features/analytics/presentation/pages/data_export_page.dart';
 import '../../features/analytics/presentation/pages/domain_correlation_page.dart';
@@ -20,6 +26,16 @@ import '../../features/domains/presentation/cubit/domain_logs_cubit.dart';
 import '../../features/domains/presentation/pages/domain_dashboard_page.dart';
 import '../../features/domains/presentation/pages/domain_log_page.dart';
 import '../../features/domains/presentation/pages/domains_hub_page.dart';
+import '../../features/finance/presentation/cubit/finance_cubit.dart';
+import '../../features/finance/presentation/pages/commitments_page.dart';
+import '../../features/finance/presentation/pages/daily_review_page.dart';
+import '../../features/finance/presentation/pages/emergency_expense_page.dart';
+import '../../features/finance/presentation/pages/finance_hub_page.dart';
+import '../../features/finance/presentation/pages/finance_settings_page.dart';
+import '../../features/finance/presentation/pages/manual_transaction_page.dart';
+import '../../features/finance/presentation/pages/monthly_report_page.dart';
+import '../../features/finance/presentation/pages/quick_expense_entry_page.dart';
+import '../../features/habits/presentation/cubit/habits_cubit.dart';
 import '../../features/habits/presentation/pages/add_habit_page.dart';
 import '../../features/habits/presentation/pages/emergency_recovery_page.dart';
 import '../../features/habits/presentation/pages/habit_analytics_page.dart';
@@ -48,6 +64,8 @@ import '../../features/notes/presentation/pages/notes_search_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_ai_prompt_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_language_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_spiritual_page.dart';
+import '../../features/routines/presentation/bloc/routines_bloc.dart';
+import '../../features/routines/data/repositories/routine_repository.dart';
 import '../../features/routines/presentation/pages/ai_routine_generator_page.dart';
 import '../../features/routines/presentation/pages/create_routine_page.dart';
 import '../../features/routines/presentation/pages/edit_routine_page.dart';
@@ -109,7 +127,10 @@ final appRouter = GoRouter(
       routes: [
         GoRoute(
           path: AppRoutes.home,
-          builder: (context, state) => const HomeDashboardPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => RoutineCubit(RoutineRepository()),
+            child: const HomeDashboardPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.dailyScore,
@@ -133,7 +154,10 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.routines,
-          builder: (context, state) => const RoutinesHubPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => RoutineCubit(RoutineRepository()),
+            child: const RoutinesHubPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.routineCreate,
@@ -168,13 +192,72 @@ final appRouter = GoRouter(
           builder: (context, state) => const MoreHubPage(),
         ),
         GoRoute(
+          path: AppRoutes.finance,
+          builder: (context, state) => BlocProvider(
+            create: (_) => FinanceCubit(),
+            child: const FinanceHubPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.financeQuickEntry,
+          builder: (context, state) => BlocProvider(
+            create: (_) => FinanceCubit(),
+            child: const QuickExpenseEntryPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.financeManual,
+          builder: (context, state) => BlocProvider(
+            create: (_) => FinanceCubit(),
+            child: ManualTransactionPage(
+              initialDescription: state.extra as String?,
+            ),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.financeCommitments,
+          builder: (context, state) => BlocProvider(
+            create: (_) => FinanceCubit(),
+            child: const CommitmentsPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.financeDailyReview,
+          builder: (context, state) => BlocProvider(
+            create: (_) => FinanceCubit(),
+            child: const DailyReviewPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.financeMonthlyReport,
+          builder: (context, state) => BlocProvider(
+            create: (_) => FinanceCubit(),
+            child: const MonthlyReportPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.financeEmergencyExpense,
+          builder: (context, state) => BlocProvider(
+            create: (_) => FinanceCubit(),
+            child: const EmergencyExpensePage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.financeSettings,
+          builder: (context, state) => BlocProvider(
+            create: (_) => FinanceCubit(),
+            child: const FinanceSettingsPage(),
+          ),
+        ),
+        GoRoute(
           path: AppRoutes.domainsHub,
           builder: (context, state) => const DomainsHubPage(),
         ),
         GoRoute(
           path: '/domains/dashboard/:id',
           builder: (context, state) => BlocProvider(
-            create: (_) => DomainLogsCubit()..loadLogs(state.pathParameters['id']!),
+            create: (_) =>
+                DomainLogsCubit()..loadLogs(state.pathParameters['id']!),
             child: DomainDashboardPage(domainId: state.pathParameters['id']!),
           ),
         ),
@@ -223,19 +306,31 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.habits,
-          builder: (context, state) => const HabitsHubPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => HabitsCubit(),
+            child: const HabitsHubPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.habitAdd,
-          builder: (context, state) => const AddHabitPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => HabitsCubit(),
+            child: const AddHabitPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.habitEdit,
-          builder: (context, state) => const AddHabitPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => HabitsCubit(),
+            child: AddHabitPage(habitId: state.pathParameters['habitId']!),
+          ),
         ),
         GoRoute(
           path: AppRoutes.habitDetail,
-          builder: (context, state) => const HabitDetailPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => HabitsCubit(),
+            child: HabitDetailPage(habitId: state.pathParameters['habitId']!),
+          ),
         ),
         GoRoute(
           path: AppRoutes.habitAnalytics,
@@ -243,7 +338,17 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.habitCheckin,
-          builder: (context, state) => const HabitCheckinPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => HabitsCubit(),
+            child: const HabitCheckinPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.habitCheckinDetail,
+          builder: (context, state) => BlocProvider(
+            create: (_) => HabitsCubit(),
+            child: HabitCheckinPage(habitId: state.pathParameters['habitId']!),
+          ),
         ),
         GoRoute(
           path: AppRoutes.shadowTracker,
@@ -307,18 +412,14 @@ final appRouter = GoRouter(
           path: '/notes/edit/:noteId',
           builder: (context, state) => BlocProvider(
             create: (_) => NotesCubit(),
-            child: EditNotePage(
-              noteId: state.pathParameters['noteId']!,
-            ),
+            child: EditNotePage(noteId: state.pathParameters['noteId']!),
           ),
         ),
         GoRoute(
           path: '/notes/detail/:noteId',
           builder: (context, state) => BlocProvider(
             create: (_) => NotesCubit(),
-            child: NoteDetailPage(
-              noteId: state.pathParameters['noteId']!,
-            ),
+            child: NoteDetailPage(noteId: state.pathParameters['noteId']!),
           ),
         ),
         GoRoute(
@@ -332,6 +433,31 @@ final appRouter = GoRouter(
         GoRoute(
           path: AppRoutes.analytics,
           builder: (context, state) => const AnalyticsHubPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.islamicHub,
+          builder: (context, state) => BlocProvider(
+            create: (_) => PrayerTimesCubit(),
+            child: const IslamicHubPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.qibla,
+          builder: (context, state) => const QiblaPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.prayerDetail,
+          builder: (context, state) => PrayerDetailPage(
+            prayerName: state.uri.queryParameters['name'] ?? 'Fajr',
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.prayerSettings,
+          builder: (context, state) => const PrayerSettingsPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.hijriCalendar,
+          builder: (context, state) => const HijriCalendarPage(),
         ),
         GoRoute(
           path: AppRoutes.domainCorrelation,

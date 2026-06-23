@@ -24,5 +24,17 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.uid == resource.data.uid;
       allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
     }
+    match /transactions/{transactionId} {
+      allow read, update, delete: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
+    }
+    match /financial_commitments/{commitmentId} {
+      allow read, update, delete: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
+    }
+    match /budget_cycles/{cycleId} {
+      allow read, update, delete: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
+    }
   }
 }

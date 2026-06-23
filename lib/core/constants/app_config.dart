@@ -4,5 +4,5 @@ class AppConfig {
   AppConfig._();
 
   static String get geminiApiKey =>
-      dotenv.get('GEMINI_API_KEY');
+      dotenv.maybeGet('GEMINI_API_KEY') ?? '';
 }
