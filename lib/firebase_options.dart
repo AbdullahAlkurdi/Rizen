@@ -64,7 +64,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '979363811566',
     projectId: 'titan-rizen',
     storageBucket: 'titan-rizen.firebasestorage.app',
-    iosClientId: '979363811566-677e71jbj1o79qo4ufapcltmgn5ijpsc.apps.googleusercontent.com',
+    iosClientId:
+        '979363811566-677e71jbj1o79qo4ufapcltmgn5ijpsc.apps.googleusercontent.com',
     iosBundleId: 'com.example.rizen',
   );
 
@@ -74,7 +75,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '979363811566',
     projectId: 'titan-rizen',
     storageBucket: 'titan-rizen.firebasestorage.app',
-    iosClientId: '979363811566-677e71jbj1o79qo4ufapcltmgn5ijpsc.apps.googleusercontent.com',
+    iosClientId:
+        '979363811566-677e71jbj1o79qo4ufapcltmgn5ijpsc.apps.googleusercontent.com',
     iosBundleId: 'com.example.rizen',
   );
 

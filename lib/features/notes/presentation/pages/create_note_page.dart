@@ -42,10 +42,10 @@ class _CreateNotePageState extends State<CreateNotePage> {
         .toList();
 
     await context.read<NotesCubit>().createNote(
-          title: title,
-          body: body,
-          tags: tags,
-        );
+      title: title,
+      body: body,
+      tags: tags,
+    );
 
     if (!mounted) return;
 
@@ -89,9 +89,7 @@ class _CreateNotePageState extends State<CreateNotePage> {
               padding: const EdgeInsets.only(bottom: 12),
               child: Text(
                 error,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                ),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ),
           TextField(

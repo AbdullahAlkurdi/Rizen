@@ -7,11 +7,9 @@ class WorkoutSessionRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
 
-  WorkoutSessionRepository({
-    FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  })  : _firestore = firestore ?? FirebaseFirestore.instance,
-        _auth = auth ?? FirebaseAuth.instance;
+  WorkoutSessionRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
+    : _firestore = firestore ?? FirebaseFirestore.instance,
+      _auth = auth ?? FirebaseAuth.instance;
 
   String get _userId {
     final user = _auth.currentUser;
@@ -25,7 +23,9 @@ class WorkoutSessionRepository {
         .where('uid', isEqualTo: _userId)
         .orderBy('generatedAt', descending: true)
         .get();
-    return snapshot.docs.map((doc) => WorkoutSession.fromFirestore(doc)).toList();
+    return snapshot.docs
+        .map((doc) => WorkoutSession.fromFirestore(doc))
+        .toList();
   }
 
   Stream<List<WorkoutSession>> watchUserWorkouts() {
@@ -34,8 +34,11 @@ class WorkoutSessionRepository {
         .where('uid', isEqualTo: _userId)
         .orderBy('generatedAt', descending: true)
         .snapshots()
-        .map((snapshot) => 
-            snapshot.docs.map((doc) => WorkoutSession.fromFirestore(doc)).toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => WorkoutSession.fromFirestore(doc))
+              .toList(),
+        );
   }
 
   Future<String> createWorkout({

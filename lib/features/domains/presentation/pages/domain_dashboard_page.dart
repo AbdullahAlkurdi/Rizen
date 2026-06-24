@@ -84,24 +84,37 @@ class DomainDashboardPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            ...state.logs.take(5).map((log) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-                  child: GlassCard(
-                    child: ListTile(
-                      leading: Icon(PhosphorIconsBold.clock,
-                          color: domain.color, size: 20),
-                      title: Text('${log.duration} min'),
-                      subtitle: Text(
-                        '${log.loggedAt.day}/${log.loggedAt.month}/${log.loggedAt.year}',
-                        style: const TextStyle(fontSize: 12),
+            ...state.logs
+                .take(5)
+                .map(
+                  (log) => Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 4,
+                    ),
+                    child: GlassCard(
+                      child: ListTile(
+                        leading: Icon(
+                          PhosphorIconsBold.clock,
+                          color: domain.color,
+                          size: 20,
+                        ),
+                        title: Text('${log.duration} min'),
+                        subtitle: Text(
+                          '${log.loggedAt.day}/${log.loggedAt.month}/${log.loggedAt.year}',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        trailing: log.notes != null
+                            ? Icon(
+                                PhosphorIconsBold.notepad,
+                                color: AppColors.textMuted,
+                                size: 18,
+                              )
+                            : null,
                       ),
-                      trailing: log.notes != null
-                          ? Icon(PhosphorIconsBold.notepad,
-                              color: AppColors.textMuted, size: 18)
-                          : null,
                     ),
                   ),
-                )),
+                ),
             const SizedBox(height: 10),
           ],
           NavGlassTile(

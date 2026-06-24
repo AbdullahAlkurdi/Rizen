@@ -78,7 +78,10 @@ class _CreateRoutinePageState extends State<CreateRoutinePage> {
                 ),
               ),
               const SizedBox(height: 24),
-              Text('Trigger Mode', style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                'Trigger Mode',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 12),
               ..._triggers.map((t) {
                 final selected = _trigger == t.$1;
@@ -94,10 +97,10 @@ class _CreateRoutinePageState extends State<CreateRoutinePage> {
                     child: Row(
                       children: [
                         Icon(
-                          selected
-                              ? PhosphorIconsFill.checkCircle
-                              : t.$3,
-                          color: selected ? AppColors.accent : AppColors.textMuted,
+                          selected ? PhosphorIconsFill.checkCircle : t.$3,
+                          color: selected
+                              ? AppColors.accent
+                              : AppColors.textMuted,
                         ),
                         const SizedBox(width: 14),
                         Expanded(
@@ -141,7 +144,9 @@ class _CreateRoutinePageState extends State<CreateRoutinePage> {
                   );
                 },
               ),
-              if (context.select<RoutineCubit, bool>((c) => c.state.error != null))
+              if (context.select<RoutineCubit, bool>(
+                (c) => c.state.error != null,
+              ))
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
                   child: Text(
@@ -162,9 +167,9 @@ class _CreateRoutinePageState extends State<CreateRoutinePage> {
     setState(() => _isSubmitting = true);
     try {
       await context.read<RoutineCubit>().createRoutine(
-            _nameController.text,
-            _descriptionController.text,
-          );
+        _nameController.text,
+        _descriptionController.text,
+      );
       if (mounted) {
         context.pop();
       }

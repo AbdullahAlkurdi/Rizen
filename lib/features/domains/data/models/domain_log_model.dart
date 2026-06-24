@@ -16,16 +16,22 @@ class DomainLog with _$DomainLog {
     double? metricValue,
   }) = _DomainLog;
 
-  factory DomainLog.fromJson(Map<String, dynamic> json) => _$DomainLogFromJson(json);
+  factory DomainLog.fromJson(Map<String, dynamic> json) =>
+      _$DomainLogFromJson(json);
 
   factory DomainLog.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return DomainLog.fromJson({
       'id': doc.id,
-      'domainId': data['domainId'] as String? ?? data['domain'] as String? ?? '',
-      'duration': data['duration'] as int? ?? data['durationMinutes'] as int? ?? 0,
+      'domainId':
+          data['domainId'] as String? ?? data['domain'] as String? ?? '',
+      'duration':
+          data['duration'] as int? ?? data['durationMinutes'] as int? ?? 0,
       'notes': data['notes'] as String? ?? data['note'] as String?,
-      'loggedAt': (data['loggedAt'] as Timestamp?)?.toDate() ?? (data['timestamp'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      'loggedAt':
+          (data['loggedAt'] as Timestamp?)?.toDate() ??
+          (data['timestamp'] as Timestamp?)?.toDate() ??
+          DateTime.now(),
       'metricLabel': data['metricLabel'] as String?,
       'metricValue': (data['metricValue'] as num?)?.toDouble(),
     });

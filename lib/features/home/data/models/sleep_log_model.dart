@@ -37,7 +37,8 @@ class SleepLog with _$SleepLog {
     String? analysisNotes,
   }) = _SleepLog;
 
-  factory SleepLog.fromJson(Map<String, dynamic> json) => _$SleepLogFromJson(json);
+  factory SleepLog.fromJson(Map<String, dynamic> json) =>
+      _$SleepLogFromJson(json);
 
   factory SleepLog.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -45,7 +46,8 @@ class SleepLog with _$SleepLog {
     return SleepLog(
       id: doc.id,
       uid: data['uid'] as String? ?? '',
-      sleepStart: (data['sleepStart'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      sleepStart:
+          (data['sleepStart'] as Timestamp?)?.toDate() ?? DateTime.now(),
       sleepEnd: (data['sleepEnd'] as Timestamp?)?.toDate() ?? DateTime.now(),
       wakeTimeTarget: (data['wakeTimeTarget'] as Timestamp?)?.toDate(),
       confirmed: data['confirmed'] as bool?,

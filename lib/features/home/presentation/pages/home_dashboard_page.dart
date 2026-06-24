@@ -45,15 +45,22 @@ class HomeDashboardPage extends StatelessWidget {
           body: ListView(
             children: [
               if (state.isLoading)
-                const Center(child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: CircularProgressIndicator(),
-                )),
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
               if (state.error != null)
-                Center(child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text('Error: ${state.error}', style: TextStyle(color: Colors.red)),
-                )),
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text(
+                      'Error: ${state.error}',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
               Row(
                 children: [
                   Expanded(
@@ -62,9 +69,8 @@ class HomeDashboardPage extends StatelessWidget {
                       children: [
                         Text(
                           greeting,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: AppColors.textMuted,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(color: AppColors.textMuted),
                         ),
                         Text(
                           'Abdul',
@@ -73,14 +79,15 @@ class HomeDashboardPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  IconButton(onPressed: () {}, icon: Icon(PhosphorIconsBold.bell)),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(PhosphorIconsBold.bell),
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
-              if (activeBlock != null)
-                _ActiveTimeBlockCard(block: activeBlock),
-              if (activeBlock != null)
-                const SizedBox(height: 16),
+              if (activeBlock != null) _ActiveTimeBlockCard(block: activeBlock),
+              if (activeBlock != null) const SizedBox(height: 16),
               if (activeBlock == null && !state.isLoading)
                 GlassCard(
                   child: Padding(
@@ -92,7 +99,10 @@ class HomeDashboardPage extends StatelessWidget {
                   ),
                 ),
               const SizedBox(height: 20),
-              Text('Quick Actions', style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                'Quick Actions',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 12),
               GridView.count(
                 crossAxisCount: 2,
@@ -167,7 +177,7 @@ class HomeDashboardPage extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-Text(
+                              Text(
                                 block.title,
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
@@ -243,8 +253,9 @@ class _ActiveTimeBlockCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final remainingMinutes = block.endTime - (DateTime.now().hour * 60 + DateTime.now().minute);
-    
+    final remainingMinutes =
+        block.endTime - (DateTime.now().hour * 60 + DateTime.now().minute);
+
     return GlassCard(
       gradient: LinearGradient(
         begin: Alignment.topLeft,
@@ -358,10 +369,7 @@ class _QuickActionTile extends StatelessWidget {
             child: Icon(icon, color: color, size: 22),
           ),
           const Spacer(),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          Text(label, style: Theme.of(context).textTheme.titleMedium),
         ],
       ),
     );

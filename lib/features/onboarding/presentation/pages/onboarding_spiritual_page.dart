@@ -72,92 +72,96 @@ class _OnboardingSpiritualPageState extends State<OnboardingSpiritualPage> {
             ),
           ),
           const SizedBox(height: 20),
-GlassCard(
-             child: Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 Row(
-                   children: [
-                     Icon(
-                       PhosphorIconsBold.mapPin,
-                       color: AppColors.accent,
-                       size: 20,
-                     ),
-                     const SizedBox(width: 10),
-                     Text(
-                       'Location for Prayer Times',
-                       style: Theme.of(context).textTheme.titleMedium,
-                     ),
-                   ],
-                 ),
-                 const SizedBox(height: 8),
-                 Text(
-                   'Uses Aladhan API with your device location for accurate daily recalculation.',
-                   style: Theme.of(context).textTheme.bodySmall,
-                 ),
-                 const SizedBox(height: 16),
-                 OutlinedButton.icon(
-                   onPressed: () {},
-                   icon: Icon(PhosphorIconsBold.crosshair),
-                   label: const Text('Enable Location Access'),
-                 ),
-               ],
-             ),
-           ),
-           const SizedBox(height: 20),
-           if (!_spiritualEnabled) ...[
-             GlassCard(
-               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [
-                   Row(
-                     children: [
-                       Icon(
-                         PhosphorIconsBold.clock,
-                         color: AppColors.warning,
-                         size: 20,
-                       ),
-                       const SizedBox(width: 10),
-                       Text(
-                         'Daily Start Time',
-                         style: Theme.of(context).textTheme.titleMedium,
-                       ),
-                     ],
-                   ),
-                   const SizedBox(height: 8),
-                   Text(
-                     'What time does your day usually start? This anchors your time blocks.',
-                     style: Theme.of(context).textTheme.bodySmall,
-                   ),
-                   const SizedBox(height: 16),
-                   InkWell(
-                     onTap: () async {
-                       final time = await showTimePicker(
-                         context: context,
-                         initialTime: const TimeOfDay(hour: 6, minute: 0),
-                       );
-                       if (time != null) {
-                         setState(() {
-                           _wakeTime = '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
-                         });
-                       }
-                     },
-                     child: InputDecorator(
-                       decoration: const InputDecoration(
-                         border: OutlineInputBorder(),
-                         contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                       ),
-                       child: Text(
-                         _wakeTime ?? 'Select wake time',
-                         style: Theme.of(context).textTheme.bodyLarge,
-                       ),
-                     ),
-                   ),
-                 ],
-               ),
-             ),
-           ],
-           if (_spiritualEnabled) ...[
+          GlassCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      PhosphorIconsBold.mapPin,
+                      color: AppColors.accent,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      'Location for Prayer Times',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Uses Aladhan API with your device location for accurate daily recalculation.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 16),
+                OutlinedButton.icon(
+                  onPressed: () {},
+                  icon: Icon(PhosphorIconsBold.crosshair),
+                  label: const Text('Enable Location Access'),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          if (!_spiritualEnabled) ...[
+            GlassCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        PhosphorIconsBold.clock,
+                        color: AppColors.warning,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Daily Start Time',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'What time does your day usually start? This anchors your time blocks.',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  InkWell(
+                    onTap: () async {
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: const TimeOfDay(hour: 6, minute: 0),
+                      );
+                      if (time != null) {
+                        setState(() {
+                          _wakeTime =
+                              '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+                        });
+                      }
+                    },
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 14,
+                        ),
+                      ),
+                      child: Text(
+                        _wakeTime ?? 'Select wake time',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          if (_spiritualEnabled) ...[
             const SizedBox(height: 24),
             Text(
               'Calculation Method',

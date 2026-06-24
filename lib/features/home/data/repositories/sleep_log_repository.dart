@@ -7,11 +7,9 @@ class SleepLogRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
 
-  SleepLogRepository({
-    FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  })  : _firestore = firestore ?? FirebaseFirestore.instance,
-        _auth = auth ?? FirebaseAuth.instance;
+  SleepLogRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
+    : _firestore = firestore ?? FirebaseFirestore.instance,
+      _auth = auth ?? FirebaseAuth.instance;
 
   String get _userId {
     final user = _auth.currentUser;
@@ -36,12 +34,18 @@ class SleepLogRepository {
         .orderBy('sleepStart', descending: true)
         .limit(limit)
         .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => SleepLog.fromFirestore(doc)).toList());
+        .map(
+          (snapshot) =>
+              snapshot.docs.map((doc) => SleepLog.fromFirestore(doc)).toList(),
+        );
   }
 
   Future<SleepLog?> getTodaySleepLog() async {
-    final startOfDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    final startOfDay = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
     final startOfNextDay = startOfDay.add(const Duration(days: 1));
 
     final snapshot = await _firestore
@@ -66,7 +70,9 @@ class SleepLogRepository {
       'uid': _userId,
       'sleepStart': Timestamp.fromDate(sleepStart),
       'sleepEnd': sleepEnd != null ? Timestamp.fromDate(sleepEnd) : null,
-      'wakeTimeTarget': wakeTimeTarget != null ? Timestamp.fromDate(wakeTimeTarget) : null,
+      'wakeTimeTarget': wakeTimeTarget != null
+          ? Timestamp.fromDate(wakeTimeTarget)
+          : null,
       'source': 'detected',
       'isAnalysisReady': false,
       'createdAt': FieldValue.serverTimestamp(),
@@ -94,12 +100,14 @@ class SleepLogRepository {
 
     if (sleepEnd != null && wakeTimeTarget != null) {
       final delayMinutes = wakeTimeTarget.difference(sleepEnd).inMinutes;
-      final metric = delayMinutes > 0 ? (delayMinutes / 120).clamp(0.0, 1.0) : 0.0;
-      
+      final metric = delayMinutes > 0
+          ? (delayMinutes / 120).clamp(0.0, 1.0)
+          : 0.0;
+
       await _firestore.collection('sleep_logs').doc(logId).update({
         'bedResistanceMetric': metric,
         'isAnalysisReady': true,
-        'analysisNotes': metric > 0.5 
+        'analysisNotes': metric > 0.5
             ? 'Rizen downgraded today\'s payload to prevent cognitive fatigue.'
             : 'On track with target wake time.',
       });

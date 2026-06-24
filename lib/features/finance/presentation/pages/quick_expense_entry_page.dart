@@ -40,7 +40,11 @@ class _QuickExpenseEntryPageState extends State<QuickExpenseEntryPage> {
           }
           if (state is FinanceLoaded && state.manualFallbackInput != null) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.manualFallbackReason ?? 'Use manual entry.')),
+              SnackBar(
+                content: Text(
+                  state.manualFallbackReason ?? 'Use manual entry.',
+                ),
+              ),
             );
             context.push(
               AppRoutes.financeManual,

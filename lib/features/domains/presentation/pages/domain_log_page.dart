@@ -47,13 +47,14 @@ class _DomainLogPageState extends State<DomainLogPage> {
 
     try {
       await context.read<DomainLogsCubit>().addLog(
-            domainId: domain.routeId,
-            duration: duration,
-            notes:
-                _noteController.text.trim().isEmpty ? null : _noteController.text.trim(),
-            metricLabel: domain.metricLabel,
-            metricValue: metric.toDouble(),
-          );
+        domainId: domain.routeId,
+        duration: duration,
+        notes: _noteController.text.trim().isEmpty
+            ? null
+            : _noteController.text.trim(),
+        metricLabel: domain.metricLabel,
+        metricValue: metric.toDouble(),
+      );
       if (mounted) {
         context.pop();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -62,9 +63,9 @@ class _DomainLogPageState extends State<DomainLogPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: $e')));
       }
     } finally {
       if (mounted) {

@@ -24,8 +24,8 @@ class DomainLogsCubit extends Cubit<DomainLogsState> {
   final DomainLogsRepository _repository;
 
   DomainLogsCubit({DomainLogsRepository? repository})
-      : _repository = repository ?? DomainLogsRepository(),
-        super(DomainLogsInitial());
+    : _repository = repository ?? DomainLogsRepository(),
+      super(DomainLogsInitial());
 
   Future<void> loadLogs(String domainId) async {
     emit(DomainLogsLoading());
@@ -81,21 +81,28 @@ class DomainLogsCubit extends Cubit<DomainLogsState> {
   }
 
   ({double weeklyHours, int streak, double progress}) _computeSummary(
-      List<DomainLog> logs) {
+    List<DomainLog> logs,
+  ) {
     final now = DateTime.now();
     final weekStart = now.subtract(Duration(days: now.weekday));
 
-    final weekLogs = logs.where((log) => log.loggedAt.isAfter(weekStart)).toList();
-    final weeklyHours =
-        weekLogs.fold<double>(0, (sum, log) => sum + log.duration / 60);
+    final weekLogs = logs
+        .where((log) => log.loggedAt.isAfter(weekStart))
+        .toList();
+    final weeklyHours = weekLogs.fold<double>(
+      0,
+      (sum, log) => sum + log.duration / 60,
+    );
 
     int streak = 0;
     var checkDate = DateTime(now.year, now.month, now.day);
     while (true) {
-      final hasLog = logs.any((log) =>
-          log.loggedAt.year == checkDate.year &&
-          log.loggedAt.month == checkDate.month &&
-          log.loggedAt.day == checkDate.day);
+      final hasLog = logs.any(
+        (log) =>
+            log.loggedAt.year == checkDate.year &&
+            log.loggedAt.month == checkDate.month &&
+            log.loggedAt.day == checkDate.day,
+      );
       if (!hasLog) break;
       streak++;
       checkDate = checkDate.subtract(const Duration(days: 1));

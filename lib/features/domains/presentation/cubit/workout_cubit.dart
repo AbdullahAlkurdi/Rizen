@@ -24,8 +24,8 @@ class WorkoutCubit extends Cubit<WorkoutState> {
   final WorkoutSessionRepository repository;
 
   WorkoutCubit({WorkoutSessionRepository? repository})
-      : repository = repository ?? WorkoutSessionRepository(),
-        super(WorkoutInitial());
+    : repository = repository ?? WorkoutSessionRepository(),
+      super(WorkoutInitial());
 
   Future<void> loadWorkouts() async {
     emit(WorkoutLoading());
@@ -58,51 +58,48 @@ class WorkoutCubit extends Cubit<WorkoutState> {
     }
   }
 
-  List<WorkoutExercise> _generateExercises(String goal, int durationMinutes, String? injuryNote) {
+  List<WorkoutExercise> _generateExercises(
+    String goal,
+    int durationMinutes,
+    String? injuryNote,
+  ) {
     final exercises = <WorkoutExercise>[];
     final numExercises = (durationMinutes / 5).round();
-    
-    final warmup = [
-      'Jumping Jacks',
-      'Arm Circles',
-      'Leg Swings',
-    ];
-    
-    final main = [
-      'Push-ups',
-      'Squats',
-      'Lunges',
-      'Plank',
-      'Burpees',
-    ];
-    
-    final cooldown = [
-      'Stretching',
-      'Deep Breathing',
-    ];
 
-    exercises.add(WorkoutExercise(
-      name: warmup[0],
-      phase: 'warmup',
-      durationSeconds: 120,
-      restSeconds: 30,
-    ));
+    final warmup = ['Jumping Jacks', 'Arm Circles', 'Leg Swings'];
+
+    final main = ['Push-ups', 'Squats', 'Lunges', 'Plank', 'Burpees'];
+
+    final cooldown = ['Stretching', 'Deep Breathing'];
+
+    exercises.add(
+      WorkoutExercise(
+        name: warmup[0],
+        phase: 'warmup',
+        durationSeconds: 120,
+        restSeconds: 30,
+      ),
+    );
 
     for (var i = 0; i < numExercises - 2; i++) {
-      exercises.add(WorkoutExercise(
-        name: main[i % main.length],
-        phase: 'main',
-        sets: 3,
-        reps: 10,
-        restSeconds: 60,
-      ));
+      exercises.add(
+        WorkoutExercise(
+          name: main[i % main.length],
+          phase: 'main',
+          sets: 3,
+          reps: 10,
+          restSeconds: 60,
+        ),
+      );
     }
 
-    exercises.add(WorkoutExercise(
-      name: cooldown[0],
-      phase: 'cooldown',
-      durationSeconds: 180,
-    ));
+    exercises.add(
+      WorkoutExercise(
+        name: cooldown[0],
+        phase: 'cooldown',
+        durationSeconds: 180,
+      ),
+    );
 
     return exercises;
   }

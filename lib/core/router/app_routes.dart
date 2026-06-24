@@ -5,6 +5,7 @@ abstract final class AppRoutes {
   static const signUp = '/sign-up';
   static const forgotPassword = '/forgot-password';
   static const onboardingLanguage = '/onboarding/language';
+  static const onboardingFinance = '/onboarding/finance';
   static const onboardingSpiritual = '/onboarding/spiritual';
   static const onboardingAiPrompt = '/onboarding/ai-prompt';
 
@@ -17,9 +18,9 @@ abstract final class AppRoutes {
 
   static const routines = '/routines';
   static const routineCreate = '/routines/create';
-  static const routineEdit = '/routines/edit';
-  static const routineDetail = '/routines/detail';
-  static const routineTimeBlocks = '/routines/time-blocks';
+  static const routineEdit = '/routines/edit/:routineId';
+  static const routineDetail = '/routines/detail/:routineId';
+  static const routineTimeBlocks = '/routines/time-blocks/:routineId';
   static const routineAiGenerator = '/routines/ai-generator';
   static const routineTemplates = '/routines/templates';
   static const routineHistory = '/routines/history';
@@ -93,6 +94,7 @@ abstract final class AppRoutes {
   static const privacySettings = '/settings/privacy';
   static const cliAccess = '/settings/cli';
   static const support = '/settings/support';
+  static const settings = '/settings';
 
   static const mainTabRoutes = {
     home,

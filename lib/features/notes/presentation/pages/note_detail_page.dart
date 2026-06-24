@@ -91,8 +91,18 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
 
   String _formatDate(DateTime date) {
     final months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     final hour = date.hour > 12
         ? date.hour - 12
@@ -127,15 +137,17 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(PhosphorIconsBold.warningCircle,
-                  color: AppColors.warning, size: 48),
+              Icon(
+                PhosphorIconsBold.warningCircle,
+                color: AppColors.warning,
+                size: 48,
+              ),
               const SizedBox(height: 16),
               Text(
                 state.message,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: AppColors.warning),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: AppColors.warning),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -178,10 +190,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 12),
         children: [
-          Text(
-            note.title,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
+          Text(note.title, style: Theme.of(context).textTheme.headlineSmall),
           if (note.tags.isNotEmpty) ...[
             const SizedBox(height: 12),
             Wrap(
@@ -189,21 +198,20 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               runSpacing: 4,
               children: note.tags.map((tag) {
                 return Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.accent.withAlpha(30),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: AppColors.accent.withAlpha(76),
-                    ),
+                    border: Border.all(color: AppColors.accent.withAlpha(76)),
                   ),
                   child: Text(
                     tag,
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelSmall
-                        ?.copyWith(color: AppColors.accent),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.labelSmall?.copyWith(color: AppColors.accent),
                   ),
                 );
               }).toList(),
@@ -212,20 +220,18 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           const SizedBox(height: 12),
           Text(
             _formatDate(note.createdAt),
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: AppColors.textMuted),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
           ),
           if (note.updatedAt != null &&
               note.updatedAt!.difference(note.createdAt).inMinutes > 1) ...[
             const SizedBox(height: 4),
             Text(
               'Updated ${_formatDate(note.updatedAt!)}',
-              style: Theme.of(context)
-                  .textTheme
-                  .labelSmall
-                  ?.copyWith(color: AppColors.textMuted),
+              style: Theme.of(
+                context,
+              ).textTheme.labelSmall?.copyWith(color: AppColors.textMuted),
             ),
           ],
           const SizedBox(height: 16),

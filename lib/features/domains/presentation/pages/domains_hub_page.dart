@@ -27,26 +27,34 @@ class DomainsHubPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               if (state is DomainLogsLoading)
-                const Center(child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: CircularProgressIndicator(),
-                )),
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
               if (state is DomainLogsError)
-                Center(child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text('Error: ${state.message}', style: TextStyle(color: Colors.red)),
-                )),
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text(
+                      'Error: ${state.message}',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
               ...DomainCatalog.all.map(
                 (domain) => Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: NavGlassTile(
                     title: domain.name,
-                    subtitle: state is DomainLogsLoaded 
+                    subtitle: state is DomainLogsLoaded
                         ? '${state.summary.weeklyHours.toStringAsFixed(1)}h this week · ${state.summary.streak}d streak'
                         : '${domain.weeklyHours}h this week · ${domain.streak}d streak',
                     icon: domain.icon,
                     iconColor: domain.color,
-                    onTap: () => context.push(AppRoutes.domainDashboard(domain.routeId)),
+                    onTap: () =>
+                        context.push(AppRoutes.domainDashboard(domain.routeId)),
                   ),
                 ),
               ),

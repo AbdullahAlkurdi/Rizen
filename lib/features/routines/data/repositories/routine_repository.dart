@@ -7,11 +7,9 @@ class RoutineRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
 
-  RoutineRepository({
-    FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  })  : _firestore = firestore ?? FirebaseFirestore.instance,
-        _auth = auth ?? FirebaseAuth.instance;
+  RoutineRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
+    : _firestore = firestore ?? FirebaseFirestore.instance,
+      _auth = auth ?? FirebaseAuth.instance;
 
   String get _userId {
     final user = _auth.currentUser;
@@ -36,8 +34,10 @@ class RoutineRepository {
         .collection('routines')
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((snapshot) => 
-            snapshot.docs.map((doc) => Routine.fromFirestore(doc)).toList());
+        .map(
+          (snapshot) =>
+              snapshot.docs.map((doc) => Routine.fromFirestore(doc)).toList(),
+        );
   }
 
   Future<Routine> getRoutineById(String routineId) async {
@@ -115,8 +115,10 @@ class RoutineRepository {
         .collection('time_blocks')
         .orderBy('startTime')
         .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => TimeBlock.fromFirestore(doc)).toList());
+        .map(
+          (snapshot) =>
+              snapshot.docs.map((doc) => TimeBlock.fromFirestore(doc)).toList(),
+        );
   }
 
   Future<String> createTimeBlock({
@@ -208,12 +210,12 @@ class RoutineRepository {
         .collection('settings')
         .doc('schedule_anchor')
         .set({
-      'type': prayerTimesEnabled ? 'prayer' : 'wake_time',
-      'wakeTime': wakeTime,
-      'prayerTimesEnabled': prayerTimesEnabled,
-      'calculationMethod': calculationMethod,
-      'latitude': latitude,
-      'longitude': longitude,
-    }, SetOptions(merge: true));
+          'type': prayerTimesEnabled ? 'prayer' : 'wake_time',
+          'wakeTime': wakeTime,
+          'prayerTimesEnabled': prayerTimesEnabled,
+          'calculationMethod': calculationMethod,
+          'latitude': latitude,
+          'longitude': longitude,
+        }, SetOptions(merge: true));
   }
 }

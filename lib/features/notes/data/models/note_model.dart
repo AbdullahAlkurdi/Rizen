@@ -23,7 +23,8 @@ class Note with _$Note {
       'id': doc.id,
       'title': data['title'] as String? ?? '',
       'body': data['body'] as String? ?? '',
-      'createdAt': (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      'createdAt':
+          (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       'updatedAt': (data['updatedAt'] as Timestamp?)?.toDate(),
       'tags': (data['tags'] as List<dynamic>?)?.cast<String>() ?? [],
     });

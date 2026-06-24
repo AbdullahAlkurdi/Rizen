@@ -62,7 +62,8 @@ class NotesSearchPage extends StatelessWidget {
             (r) => Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: GlassCard(
-                onTap: () => context.push(AppRoutes.noteDetail('search_note_1')),
+                onTap: () =>
+                    context.push(AppRoutes.noteDetail('search_note_1')),
                 child: Row(
                   children: [
                     Container(

@@ -19,7 +19,8 @@ class TimeBlock with _$TimeBlock {
     @Default([]) List<String> linkedHabitIds,
   }) = _TimeBlock;
 
-  factory TimeBlock.fromJson(Map<String, dynamic> json) => _$TimeBlockFromJson(json);
+  factory TimeBlock.fromJson(Map<String, dynamic> json) =>
+      _$TimeBlockFromJson(json);
 
   factory TimeBlock.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -36,17 +37,13 @@ class TimeBlock with _$TimeBlock {
       'durationMinutes': (data['durationMinutes'] as num?)?.toInt(),
       'description': data['description'] as String?,
       'isCompleted': data['isCompleted'] as bool? ?? false,
-      'linkedHabitIds': (data['linkedHabitIds'] as List<dynamic>?)?.cast<String>() ?? [],
+      'linkedHabitIds':
+          (data['linkedHabitIds'] as List<dynamic>?)?.cast<String>() ?? [],
     });
   }
 }
 
-enum TimeBlockAnchor {
-  exact,
-  prayerBefore,
-  prayerAfter,
-  wakeTimeAfter,
-}
+enum TimeBlockAnchor { exact, prayerBefore, prayerAfter, wakeTimeAfter }
 
 extension TimeBlockAnchorX on TimeBlockAnchor {
   String get label {
@@ -80,7 +77,8 @@ class Routine with _$Routine {
     DateTime? updatedAt,
   }) = _Routine;
 
-  factory Routine.fromJson(Map<String, dynamic> json) => _$RoutineFromJson(json);
+  factory Routine.fromJson(Map<String, dynamic> json) =>
+      _$RoutineFromJson(json);
 
   factory Routine.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -89,13 +87,15 @@ class Routine with _$Routine {
       'title': data['title'] as String? ?? '',
       'description': data['description'] as String? ?? '',
       'isEnabled': data['isEnabled'] as bool? ?? true,
-      'timeBlockIds': (data['timeBlockIds'] as List<dynamic>?)?.cast<String>() ?? [],
+      'timeBlockIds':
+          (data['timeBlockIds'] as List<dynamic>?)?.cast<String>() ?? [],
       'frequency': data['frequency'] as String? ?? 'daily',
       'scheduleAnchorId': data['scheduleAnchorId'] as String?,
       'nextScheduledAt': (data['nextScheduledAt'] as Timestamp?)?.toDate(),
       'streak': (data['streak'] as num?)?.toInt() ?? 0,
       'lastCompletedAt': (data['lastCompletedAt'] as Timestamp?)?.toDate(),
-      'createdAt': (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      'createdAt':
+          (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       'updatedAt': (data['updatedAt'] as Timestamp?)?.toDate(),
     });
   }
@@ -113,7 +113,8 @@ class ScheduleAnchor with _$ScheduleAnchor {
     double? longitude,
   }) = _ScheduleAnchor;
 
-  factory ScheduleAnchor.fromJson(Map<String, dynamic> json) => _$ScheduleAnchorFromJson(json);
+  factory ScheduleAnchor.fromJson(Map<String, dynamic> json) =>
+      _$ScheduleAnchorFromJson(json);
 
   factory ScheduleAnchor.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;

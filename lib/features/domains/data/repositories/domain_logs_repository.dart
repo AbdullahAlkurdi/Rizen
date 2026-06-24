@@ -7,11 +7,9 @@ class DomainLogsRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
 
-  DomainLogsRepository({
-    FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  })  : _firestore = firestore ?? FirebaseFirestore.instance,
-        _auth = auth ?? FirebaseAuth.instance;
+  DomainLogsRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
+    : _firestore = firestore ?? FirebaseFirestore.instance,
+      _auth = auth ?? FirebaseAuth.instance;
 
   CollectionReference<Map<String, dynamic>> get _logsRef =>
       _firestore.collection('domain_logs');
@@ -40,9 +38,10 @@ class DomainLogsRepository {
         .where('domainId', isEqualTo: domainId)
         .orderBy('loggedAt', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => DomainLog.fromFirestore(doc))
-            .toList());
+        .map(
+          (snapshot) =>
+              snapshot.docs.map((doc) => DomainLog.fromFirestore(doc)).toList(),
+        );
   }
 
   Future<void> addLog({

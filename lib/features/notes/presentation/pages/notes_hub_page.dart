@@ -43,20 +43,23 @@ class NotesHubPage extends StatelessWidget {
                   padding: const EdgeInsets.all(40),
                   child: Column(
                     children: [
-                      Icon(PhosphorIconsBold.warningCircle,
-                          color: AppColors.warning, size: 40),
+                      Icon(
+                        PhosphorIconsBold.warningCircle,
+                        color: AppColors.warning,
+                        size: 40,
+                      ),
                       const SizedBox(height: 12),
-                      Text(message,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(color: AppColors.warning)),
+                      Text(
+                        message,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.warning,
+                        ),
+                      ),
                       const SizedBox(height: 16),
                       RizenButton(
                         label: 'Retry',
                         variant: RizenButtonVariant.secondary,
-                        onPressed: () =>
-                            context.read<NotesCubit>().loadNotes(),
+                        onPressed: () => context.read<NotesCubit>().loadNotes(),
                       ),
                     ],
                   ),
@@ -69,20 +72,21 @@ class NotesHubPage extends StatelessWidget {
                       padding: const EdgeInsets.all(40),
                       child: Column(
                         children: [
-                          Icon(PhosphorIconsBold.notebook,
-                              color: AppColors.textMuted, size: 48),
+                          Icon(
+                            PhosphorIconsBold.notebook,
+                            color: AppColors.textMuted,
+                            size: 48,
+                          ),
                           const SizedBox(height: 12),
-                          Text('No notes yet',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(color: AppColors.textMuted)),
+                          Text(
+                            'No notes yet',
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(color: AppColors.textMuted),
+                          ),
                           const SizedBox(height: 4),
                           Text(
                             'Tap the button below to create your first note.',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
+                            style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(color: AppColors.textMuted),
                           ),
                         ],
@@ -115,16 +119,16 @@ class NotesHubPage extends StatelessWidget {
                                   children: [
                                     Text(
                                       note.title,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium,
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
                                       note.body,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodySmall,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -134,9 +138,7 @@ class NotesHubPage extends StatelessWidget {
                               const SizedBox(width: 8),
                               Text(
                                 _formatDate(note.createdAt),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
+                                style: Theme.of(context).textTheme.labelSmall
                                     ?.copyWith(color: AppColors.textMuted),
                               ),
                             ],

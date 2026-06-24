@@ -18,7 +18,8 @@ class WorkoutSession with _$WorkoutSession {
     @Default([]) List<WorkoutExercise> exercises,
   }) = _WorkoutSession;
 
-  factory WorkoutSession.fromJson(Map<String, dynamic> json) => _$WorkoutSessionFromJson(json);
+  factory WorkoutSession.fromJson(Map<String, dynamic> json) =>
+      _$WorkoutSessionFromJson(json);
 
   factory WorkoutSession.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -27,7 +28,8 @@ class WorkoutSession with _$WorkoutSession {
       uid: data['uid'] as String? ?? '',
       title: data['title'] as String? ?? '',
       goal: data['goal'] as String? ?? '',
-      totalEstimatedMinutes: (data['totalEstimatedMinutes'] as num?)?.toInt() ?? 0,
+      totalEstimatedMinutes:
+          (data['totalEstimatedMinutes'] as num?)?.toInt() ?? 0,
       generatedAt: (data['generatedAt'] as Timestamp?)?.toDate(),
       completedAt: (data['completedAt'] as Timestamp?)?.toDate(),
       generatedBy: data['generatedBy'] as String? ?? 'ai',
@@ -49,5 +51,6 @@ class WorkoutExercise with _$WorkoutExercise {
     int? restSeconds,
   }) = _WorkoutExercise;
 
-  factory WorkoutExercise.fromJson(Map<String, dynamic> json) => _$WorkoutExerciseFromJson(json);
+  factory WorkoutExercise.fromJson(Map<String, dynamic> json) =>
+      _$WorkoutExerciseFromJson(json);
 }

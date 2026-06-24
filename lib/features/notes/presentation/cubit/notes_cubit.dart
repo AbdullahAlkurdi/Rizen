@@ -24,8 +24,8 @@ class NotesCubit extends Cubit<NotesState> {
   final NotesRepository _repository;
 
   NotesCubit({NotesRepository? repository})
-      : _repository = repository ?? NotesRepository(),
-        super(NotesInitial());
+    : _repository = repository ?? NotesRepository(),
+      super(NotesInitial());
 
   Future<void> loadNotes() async {
     emit(NotesLoading());

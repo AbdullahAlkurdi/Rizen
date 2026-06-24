@@ -1,146 +1,151 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/feature_scaffold.dart';
 import '../../../../core/widgets/glass_card.dart';
+import '../../data/models/daily_score_model.dart';
+import '../cubit/home_cubit.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
 
-  static const _alerts = [
-    _Alert(
-      title: 'Asr in 15 minutes',
-      body: 'Coding block shifts to after Maghrib automatically.',
-      time: '2h ago',
-      icon: PhosphorIconsBold.moonStars,
-      color: AppColors.warning,
-      isImportant: true,
-    ),
-    _Alert(
-      title: 'Burnout risk detected',
-      body: 'Sleep drift + habit deceleration over 3 days.',
-      time: '5h ago',
-      icon: PhosphorIconsBold.firstAid,
-      color: AppColors.accent,
-      isImportant: true,
-    ),
-    _Alert(
-      title: 'Morning briefing ready',
-      body: 'Your AI Coach prepared today\'s adaptive roadmap.',
-      time: '8h ago',
-      icon: PhosphorIconsBold.robot,
-      color: Color(0xFF9333EA),
-      isImportant: false,
-    ),
-    _Alert(
-      title: 'Shadow habit warning',
-      body: 'Doom scrolling exceeded 45 minutes today.',
-      time: 'Yesterday',
-      icon: PhosphorIconsBold.skull,
-      color: AppColors.shadow,
-      isImportant: false,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return FeatureScaffold(
-      title: 'Notifications',
-      subtitle: 'Filtered systemic logs and contextual alerts.',
-      actions: [
-        TextButton(onPressed: () {}, child: const Text('Mark all read')),
-      ],
-      body: ListView(
-        children: [
-          Wrap(
-            spacing: 8,
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        final notifications = state is HomeLoaded
+            ? state.notifications
+            : <NotificationItem>[];
+
+        return FeatureScaffold(
+          title: 'Notifications',
+          subtitle: 'Filtered systemic logs and contextual alerts.',
+          actions: [
+            TextButton(onPressed: () {}, child: const Text('Mark all read')),
+          ],
+          body: ListView(
             children: [
-              FilterChip(
-                label: const Text('All'),
-                selected: true,
-                onSelected: (_) {},
-                selectedColor: AppColors.accent.withValues(alpha: 0.2),
+              Wrap(
+                spacing: 8,
+                children: [
+                  FilterChip(
+                    label: const Text('All'),
+                    selected: true,
+                    onSelected: (_) {},
+                    selectedColor: AppColors.accent.withValues(alpha: 0.2),
+                  ),
+                  FilterChip(
+                    label: const Text('Important'),
+                    onSelected: (_) {},
+                  ),
+                  FilterChip(label: const Text('AI Coach'), onSelected: (_) {}),
+                  FilterChip(
+                    label: const Text('Spiritual'),
+                    onSelected: (_) {},
+                  ),
+                ],
               ),
-              FilterChip(label: const Text('Important'), onSelected: (_) {}),
-              FilterChip(label: const Text('AI Coach'), onSelected: (_) {}),
-              FilterChip(label: const Text('Spiritual'), onSelected: (_) {}),
-            ],
-          ),
-          const SizedBox(height: 20),
-          ..._alerts.map(
-            (alert) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: GlassCard(
-                borderColor: alert.isImportant
-                    ? alert.color.withValues(alpha: 0.5)
-                    : null,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: alert.color.withValues(alpha: 0.15),
-                        borderRadius: AppTheme.cardRadius,
-                      ),
-                      child: Icon(alert.icon, color: alert.color, size: 20),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+              const SizedBox(height: 20),
+              ...notifications.map((notification) {
+                final icon = _iconForCategory(notification.category);
+                final color = _colorForCategory(notification.category);
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: GlassCard(
+                    borderColor: notification.isImportant
+                        ? color.withValues(alpha: 0.5)
+                        : null,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: color.withValues(alpha: 0.15),
+                            borderRadius: AppTheme.cardRadius,
+                          ),
+                          child: Icon(icon, color: color, size: 20),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: Text(
-                                  alert.title,
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.titleMedium,
-                                ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      notification.title,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium,
+                                    ),
+                                  ),
+                                  Text(
+                                    _timeAgo(notification.timestamp),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelSmall,
+                                  ),
+                                ],
                               ),
+                              const SizedBox(height: 4),
                               Text(
-                                alert.time,
-                                style: Theme.of(context).textTheme.labelSmall,
+                                notification.body,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            alert.body,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            ),
+                  ),
+                );
+              }),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
-}
 
-class _Alert {
-  const _Alert({
-    required this.title,
-    required this.body,
-    required this.time,
-    required this.icon,
-    required this.color,
-    required this.isImportant,
-  });
+  IconData _iconForCategory(NotificationCategory category) {
+    switch (category) {
+      case NotificationCategory.system:
+        return PhosphorIconsBold.gear;
+      case NotificationCategory.aiCoach:
+        return PhosphorIconsBold.robot;
+      case NotificationCategory.spiritual:
+        return PhosphorIconsBold.moonStars;
+      case NotificationCategory.habit:
+        return PhosphorIconsBold.checkCircle;
+    }
+  }
 
-  final String title;
-  final String body;
-  final String time;
-  final IconData icon;
-  final Color color;
-  final bool isImportant;
+  Color _colorForCategory(NotificationCategory category) {
+    switch (category) {
+      case NotificationCategory.system:
+        return AppColors.success;
+      case NotificationCategory.aiCoach:
+        return Color(0xFF9333EA);
+      case NotificationCategory.spiritual:
+        return AppColors.warning;
+      case NotificationCategory.habit:
+        return AppColors.accent;
+    }
+  }
+
+  String _timeAgo(DateTime timestamp) {
+    final now = DateTime.now();
+    final diff = now.difference(timestamp);
+
+    if (diff.inMinutes < 1) return 'Just now';
+    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
+    if (diff.inHours < 24) return '${diff.inHours}h ago';
+    if (diff.inDays < 7) return '${diff.inDays}d ago';
+    return '${timestamp.day}/${timestamp.month}';
+  }
 }

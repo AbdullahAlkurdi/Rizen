@@ -1,129 +1,205 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
-import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/glass_card.dart';
-import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../bloc/routines_bloc.dart';
 
-class EditRoutinePage extends StatelessWidget {
-  const EditRoutinePage({super.key});
+class EditRoutinePage extends StatefulWidget {
+  final String routineId;
 
-  static const _blocks = [
-    _BlockItem(
-      '6:00 AM',
-      'Fajr + Reflection',
-      PhosphorIconsBold.sunHorizon,
-      Color(0xFFFBBF24),
-    ),
-    _BlockItem(
-      '6:30 AM',
-      'Deep Coding Session',
-      PhosphorIconsBold.code,
-      Color(0xFF60A5FA),
-    ),
-    _BlockItem(
-      '8:00 AM',
-      'Breakfast & Planning',
-      PhosphorIconsBold.bowlFood,
-      Color(0xFFFB923C),
-    ),
-    _BlockItem(
-      '8:45 AM',
-      'Professional Work Blocks',
-      PhosphorIconsBold.briefcase,
-      Color(0xFF38BDF8),
-    ),
+  const EditRoutinePage({super.key, required this.routineId});
+
+  @override
+  State<EditRoutinePage> createState() => _EditRoutinePageState();
+}
+
+class _EditRoutinePageState extends State<EditRoutinePage> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  String _frequency = 'daily';
+  bool _isSubmitting = false;
+
+  static const _frequencyOptions = [
+    _FrequencyOption('daily', 'Daily', PhosphorIconsBold.sun),
+    _FrequencyOption('weekly', 'Weekly', PhosphorIconsBold.calendar),
+    _FrequencyOption('custom', 'Custom', PhosphorIconsBold.gear),
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _loadRoutine();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadRoutine() async {
+    await context.read<RoutineCubit>().loadRoutineDetail(widget.routineId);
+    if (!mounted) return;
+    final routine = context.read<RoutineCubit>().state.selectedRoutine;
+    if (routine != null) {
+      setState(() {
+        _nameController.text = routine.title;
+        _descriptionController.text = routine.description;
+        _frequency = routine.frequency;
+      });
+    }
+  }
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isSubmitting = true);
+    try {
+      await context.read<RoutineCubit>().updateRoutineDetails(
+        routineId: widget.routineId,
+        title: _nameController.text,
+        description: _descriptionController.text,
+        frequency: _frequency,
+      );
+      if (mounted) {
+        context.pop();
+      }
+    } catch (_) {
+      // handled in cubit
+    } finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return RizenScaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(PhosphorIconsBold.arrowLeft),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text('Edit Routine'),
-        actions: [TextButton(onPressed: () {}, child: const Text('Save'))],
-      ),
-      body: ListView(
-        children: [
-          TextField(
-            decoration: const InputDecoration(
-              labelText: 'Routine Name',
-              hintText: 'Morning Power Routine',
-              prefixIcon: Icon(Icons.edit_outlined),
+    return BlocBuilder<RoutineCubit, RoutineState>(
+      buildWhen: (prev, curr) =>
+          curr.selectedRoutine != null || curr.isLoading || curr.error != null,
+      builder: (context, state) {
+        final routine = state.selectedRoutine;
+        final isLoaded = routine != null;
+        return RizenScaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(PhosphorIconsBold.arrowLeft),
+              onPressed: () => context.pop(),
             ),
+            title: const Text('Edit Routine'),
           ),
-          const SizedBox(height: 24),
-          Text('Time Blocks', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 12),
-          ..._blocks.map(
-            (block) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: GlassCard(
-                onTap: () {},
-                child: Row(
+          body: state.isLoading && !isLoaded
+              ? const Center(child: CircularProgressIndicator())
+              : !isLoaded
+              ? const Center(child: Text('Routine not found'))
+              : ListView(
+                  padding: const EdgeInsets.all(20),
                   children: [
-                    Container(
-                      width: 4,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: block.color,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
+                    Form(
+                      key: _formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            block.time,
-                            style: Theme.of(context).textTheme.labelSmall,
+                          TextFormField(
+                            controller: _nameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Routine Name',
+                              prefixIcon: Icon(PhosphorIconsBold.pen),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Routine name is required';
+                              }
+                              return null;
+                            },
                           ),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            controller: _descriptionController,
+                            maxLines: 3,
+                            decoration: const InputDecoration(
+                              labelText: 'Description',
+                              prefixIcon: Icon(PhosphorIconsBold.textAa),
+                            ),
+                          ),
+                          const SizedBox(height: 24),
                           Text(
-                            block.title,
+                            'Frequency',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
+                          const SizedBox(height: 12),
+                          ..._frequencyOptions.map((opt) {
+                            final selected = _frequency == opt.value;
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: GlassCard(
+                                onTap: () =>
+                                    setState(() => _frequency = opt.value),
+                                borderColor: selected ? AppColors.accent : null,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 18,
+                                  vertical: 14,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      selected
+                                          ? PhosphorIconsFill.checkCircle
+                                          : opt.icon,
+                                      color: selected
+                                          ? AppColors.accent
+                                          : AppColors.textMuted,
+                                    ),
+                                    const SizedBox(width: 14),
+                                    Expanded(
+                                      child: Text(
+                                        opt.label,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyLarge,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                          const SizedBox(height: 32),
+                          RizenButton(
+                            label: 'Save Changes',
+                            icon: PhosphorIconsBold.floppyDisk,
+                            isLoading: state.isLoading,
+                            onPressed: _isSubmitting ? null : _submit,
+                          ),
+                          if (state.error != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: Text(
+                                state.error!,
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            ),
                         ],
                       ),
                     ),
-                    Icon(block.icon, color: block.color, size: 18),
                   ],
                 ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          RizenButton(
-            label: 'Add Time Block',
-            variant: RizenButtonVariant.secondary,
-            icon: PhosphorIconsBold.plus,
-            onPressed: () {},
-          ),
-          const SizedBox(height: 12),
-          NavGlassTile(
-            title: 'Visual Time-Block Editor',
-            subtitle: 'Drag and drop chronological timeline grid.',
-            icon: PhosphorIconsBold.listDashes,
-            iconColor: Color(0xFF818CF8),
-            onTap: () => context.push(AppRoutes.routineTimeBlocks),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
-class _BlockItem {
-  const _BlockItem(this.time, this.title, this.icon, this.color);
-
-  final String time;
-  final String title;
+class _FrequencyOption {
+  const _FrequencyOption(this.value, this.label, this.icon);
+  final String value;
+  final String label;
   final IconData icon;
-  final Color color;
 }

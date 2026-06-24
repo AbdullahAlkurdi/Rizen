@@ -7,11 +7,9 @@ class NotesRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
 
-  NotesRepository({
-    FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  })  : _firestore = firestore ?? FirebaseFirestore.instance,
-        _auth = auth ?? FirebaseAuth.instance;
+  NotesRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
+    : _firestore = firestore ?? FirebaseFirestore.instance,
+      _auth = auth ?? FirebaseAuth.instance;
 
   CollectionReference get _notesCollection => _firestore.collection('notes');
 

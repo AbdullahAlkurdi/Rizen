@@ -171,9 +171,18 @@ class _SummaryCard extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             children: [
-              _Metric(label: 'Income', value: _money(state.income, state.currency)),
-              _Metric(label: 'Spent', value: _money(state.spent, state.currency)),
-              _Metric(label: 'Remaining', value: _money(state.remaining, state.currency)),
+              _Metric(
+                label: 'Income',
+                value: _money(state.income, state.currency),
+              ),
+              _Metric(
+                label: 'Spent',
+                value: _money(state.spent, state.currency),
+              ),
+              _Metric(
+                label: 'Remaining',
+                value: _money(state.remaining, state.currency),
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -182,7 +191,9 @@ class _SummaryCard extends StatelessWidget {
                 ? '${state.budgetUsedPercent.toStringAsFixed(0)}% of this cycle budget used'
                 : '${state.budgetUsedPercent.toStringAsFixed(0)}% used',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: state.isOverBudget ? AppColors.accent : AppColors.textSecondary,
+              color: state.isOverBudget
+                  ? AppColors.accent
+                  : AppColors.textSecondary,
             ),
           ),
           const SizedBox(height: 8),

@@ -47,10 +47,26 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _ReportRow(label: 'Income', value: state.income, currency: state.currency),
-                    _ReportRow(label: 'Spent', value: state.spent, currency: state.currency),
-                    _ReportRow(label: 'Committed', value: state.committed, currency: state.currency),
-                    _ReportRow(label: 'Remaining', value: state.remaining, currency: state.currency),
+                    _ReportRow(
+                      label: 'Income',
+                      value: state.income,
+                      currency: state.currency,
+                    ),
+                    _ReportRow(
+                      label: 'Spent',
+                      value: state.spent,
+                      currency: state.currency,
+                    ),
+                    _ReportRow(
+                      label: 'Committed',
+                      value: state.committed,
+                      currency: state.currency,
+                    ),
+                    _ReportRow(
+                      label: 'Remaining',
+                      value: state.remaining,
+                      currency: state.currency,
+                    ),
                     _ReportRow(
                       label: 'Budget used',
                       value: state.budgetUsedPercent,
@@ -79,7 +95,9 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
                           Row(
                             children: [
                               Expanded(child: Text(entry.key)),
-                              Text('${entry.value.toStringAsFixed(2)} ${state.currency}'),
+                              Text(
+                                '${entry.value.toStringAsFixed(2)} ${state.currency}',
+                              ),
                             ],
                           ),
                           const SizedBox(height: 8),
@@ -125,9 +143,11 @@ class _ReportRow extends StatelessWidget {
       child: Row(
         children: [
           Expanded(child: Text(label)),
-          Text(suffix == null
-              ? '${value.toStringAsFixed(decimals)} $currency'
-              : '${value.toStringAsFixed(decimals)}$suffix'),
+          Text(
+            suffix == null
+                ? '${value.toStringAsFixed(decimals)} $currency'
+                : '${value.toStringAsFixed(decimals)}$suffix',
+          ),
         ],
       ),
     );

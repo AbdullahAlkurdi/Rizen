@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../features/islamic/presentation/cubit/prayer_times_cubit.dart';
 import '../../features/islamic/presentation/pages/hijri_calendar_page.dart';
@@ -11,9 +13,10 @@ import '../../features/analytics/presentation/pages/data_export_page.dart';
 import '../../features/analytics/presentation/pages/domain_correlation_page.dart';
 import '../../features/analytics/presentation/pages/growth_index_page.dart';
 import '../../features/analytics/presentation/pages/habit_trends_page.dart';
+import '../../features/auth/presentation/cubit/auth_cubit.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
-import '../../features/auth/presentation/pages/sign_in_page.dart';
-import '../../features/auth/presentation/pages/sign_up_page.dart';
+import '../../features/auth/presentation/pages/login_page.dart';
+import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/pages/welcome_page.dart';
 import '../../features/coach/presentation/pages/coach_briefing_page.dart';
 import '../../features/coach/presentation/pages/coach_chat_page.dart';
@@ -45,15 +48,18 @@ import '../../features/habits/presentation/pages/habits_hub_page.dart';
 import '../../features/habits/presentation/pages/reward_store_page.dart';
 import '../../features/habits/presentation/pages/shadow_score_page.dart';
 import '../../features/habits/presentation/pages/shadow_tracker_page.dart';
+import '../../features/home/presentation/cubit/home_cubit.dart';
 import '../../features/home/presentation/pages/daily_score_page.dart';
 import '../../features/home/presentation/pages/home_dashboard_page.dart';
 import '../../features/home/presentation/pages/monthly_calendar_page.dart';
 import '../../features/home/presentation/pages/notifications_page.dart';
 import '../../features/home/presentation/pages/sleep_analytics_page.dart';
 import '../../features/home/presentation/pages/weekly_overview_page.dart';
+import '../../features/routines/data/repositories/routine_repository.dart';
+import '../../features/habits/data/repositories/habits_repository.dart';
+import '../../features/domains/data/repositories/domain_logs_repository.dart';
+import '../../features/home/data/repositories/sleep_log_repository.dart';
 import '../../features/more/presentation/pages/more_hub_page.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../features/notes/presentation/cubit/notes_cubit.dart';
 import '../../features/notes/presentation/pages/create_note_page.dart';
 import '../../features/notes/presentation/pages/daily_reflection_page.dart';
@@ -62,10 +68,10 @@ import '../../features/notes/presentation/pages/note_detail_page.dart';
 import '../../features/notes/presentation/pages/notes_hub_page.dart';
 import '../../features/notes/presentation/pages/notes_search_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_ai_prompt_page.dart';
+import '../../features/onboarding/presentation/pages/onboarding_finance_setup_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_language_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_spiritual_page.dart';
 import '../../features/routines/presentation/bloc/routines_bloc.dart';
-import '../../features/routines/data/repositories/routine_repository.dart';
 import '../../features/routines/presentation/pages/ai_routine_generator_page.dart';
 import '../../features/routines/presentation/pages/create_routine_page.dart';
 import '../../features/routines/presentation/pages/edit_routine_page.dart';
@@ -74,6 +80,7 @@ import '../../features/routines/presentation/pages/routine_history_page.dart';
 import '../../features/routines/presentation/pages/routine_templates_page.dart';
 import '../../features/routines/presentation/pages/routine_time_block_editor_page.dart';
 import '../../features/routines/presentation/pages/routines_hub_page.dart';
+import '../../features/settings/presentation/cubit/settings_cubit.dart';
 import '../../features/settings/presentation/pages/app_settings_page.dart';
 import '../../features/settings/presentation/pages/cli_access_page.dart';
 import '../../features/settings/presentation/pages/edit_profile_page.dart';
@@ -81,14 +88,46 @@ import '../../features/settings/presentation/pages/language_settings_page.dart';
 import '../../features/settings/presentation/pages/notification_settings_page.dart';
 import '../../features/settings/presentation/pages/privacy_settings_page.dart';
 import '../../features/settings/presentation/pages/profile_page.dart';
+import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/spiritual_settings_page.dart';
 import '../../features/settings/presentation/pages/support_page.dart';
 import '../../features/shell/presentation/pages/main_shell_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import 'app_routes.dart';
 
+AuthState _getAuthState(BuildContext context) {
+  try {
+    return context.read<AuthCubit>().state;
+  } catch (_) {
+    return AuthInitial();
+  }
+}
+
+String? _authRedirect(BuildContext context, GoRouterState state) {
+  final authState = _getAuthState(context);
+  final isUnauthenticated =
+      authState is AuthUnauthenticated || authState is AuthInitial;
+  final location = state.uri.path;
+  final isOnboardingOrAuth =
+      location == AppRoutes.splash ||
+      location == AppRoutes.welcome ||
+      location == AppRoutes.signIn ||
+      location == AppRoutes.signUp ||
+      location == AppRoutes.forgotPassword ||
+      location.startsWith('/onboarding/');
+
+  if (isUnauthenticated && !isOnboardingOrAuth) {
+    return AppRoutes.signIn;
+  }
+  if (!isUnauthenticated && isOnboardingOrAuth) {
+    return AppRoutes.home;
+  }
+  return null;
+}
+
 final appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
+  redirect: _authRedirect,
   routes: [
     GoRoute(
       path: AppRoutes.splash,
@@ -100,19 +139,31 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.signIn,
-      builder: (context, state) => const SignInPage(),
+      builder: (context, state) =>
+          BlocProvider(create: (_) => AuthCubit(), child: const LoginPage()),
     ),
     GoRoute(
       path: AppRoutes.signUp,
-      builder: (context, state) => const SignUpPage(),
+      builder: (context, state) =>
+          BlocProvider(create: (_) => AuthCubit(), child: const RegisterPage()),
     ),
     GoRoute(
       path: AppRoutes.forgotPassword,
-      builder: (context, state) => const ForgotPasswordPage(),
+      builder: (context, state) => BlocProvider(
+        create: (_) => AuthCubit(),
+        child: const ForgotPasswordPage(),
+      ),
     ),
     GoRoute(
       path: AppRoutes.onboardingLanguage,
       builder: (context, state) => const OnboardingLanguagePage(),
+    ),
+    GoRoute(
+      path: AppRoutes.onboardingFinance,
+      builder: (context, state) => BlocProvider(
+        create: (_) => FinanceCubit(),
+        child: const OnboardingFinanceSetupPage(),
+      ),
     ),
     GoRoute(
       path: AppRoutes.onboardingSpiritual,
@@ -134,23 +185,63 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.dailyScore,
-          builder: (context, state) => const DailyScorePage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => HomeCubit(
+              routineRepository: RoutineRepository(),
+              habitsRepository: HabitsRepository(),
+              domainLogsRepository: DomainLogsRepository(),
+              sleepLogRepository: SleepLogRepository(),
+            )..loadHome(),
+            child: const DailyScorePage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.weeklyOverview,
-          builder: (context, state) => const WeeklyOverviewPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => HomeCubit(
+              routineRepository: RoutineRepository(),
+              habitsRepository: HabitsRepository(),
+              domainLogsRepository: DomainLogsRepository(),
+              sleepLogRepository: SleepLogRepository(),
+            )..loadHome(),
+            child: const WeeklyOverviewPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.monthlyCalendar,
-          builder: (context, state) => const MonthlyCalendarPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => HomeCubit(
+              routineRepository: RoutineRepository(),
+              habitsRepository: HabitsRepository(),
+              domainLogsRepository: DomainLogsRepository(),
+              sleepLogRepository: SleepLogRepository(),
+            )..loadHome(),
+            child: const MonthlyCalendarPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.notifications,
-          builder: (context, state) => const NotificationsPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => HomeCubit(
+              routineRepository: RoutineRepository(),
+              habitsRepository: HabitsRepository(),
+              domainLogsRepository: DomainLogsRepository(),
+              sleepLogRepository: SleepLogRepository(),
+            )..loadHome(),
+            child: const NotificationsPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.sleepAnalytics,
-          builder: (context, state) => const SleepAnalyticsPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => HomeCubit(
+              routineRepository: RoutineRepository(),
+              habitsRepository: HabitsRepository(),
+              domainLogsRepository: DomainLogsRepository(),
+              sleepLogRepository: SleepLogRepository(),
+            )..loadHome(),
+            child: const SleepAnalyticsPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.routines,
@@ -161,31 +252,58 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.routineCreate,
-          builder: (context, state) => const CreateRoutinePage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => RoutineCubit(RoutineRepository()),
+            child: const CreateRoutinePage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.routineEdit,
-          builder: (context, state) => const EditRoutinePage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => RoutineCubit(RoutineRepository()),
+            child: EditRoutinePage(
+              routineId: state.pathParameters['routineId']!,
+            ),
+          ),
         ),
         GoRoute(
           path: AppRoutes.routineDetail,
-          builder: (context, state) => const RoutineDetailPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => RoutineCubit(RoutineRepository()),
+            child: RoutineDetailPage(
+              routineId: state.pathParameters['routineId']!,
+            ),
+          ),
         ),
         GoRoute(
           path: AppRoutes.routineTimeBlocks,
-          builder: (context, state) => const RoutineTimeBlockEditorPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => RoutineCubit(RoutineRepository()),
+            child: RoutineTimeBlockEditorPage(
+              routineId: state.pathParameters['routineId']!,
+            ),
+          ),
         ),
         GoRoute(
           path: AppRoutes.routineAiGenerator,
-          builder: (context, state) => const AiRoutineGeneratorPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => RoutineCubit(RoutineRepository()),
+            child: const AiRoutineGeneratorPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.routineTemplates,
-          builder: (context, state) => const RoutineTemplatesPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => RoutineCubit(RoutineRepository()),
+            child: const RoutineTemplatesPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.routineHistory,
-          builder: (context, state) => const RoutineHistoryPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => RoutineCubit(RoutineRepository()),
+            child: const RoutineHistoryPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.more,
@@ -303,6 +421,13 @@ final appRouter = GoRouter(
         GoRoute(
           path: AppRoutes.support,
           builder: (context, state) => const SupportPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settings,
+          builder: (context, state) => BlocProvider(
+            create: (_) => SettingsCubit(),
+            child: const SettingsPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.habits,

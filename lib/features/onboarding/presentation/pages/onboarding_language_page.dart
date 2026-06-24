@@ -71,7 +71,9 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
                   onSelected: (_) => setState(() => _language = language),
                   selectedColor: AppColors.accent.withValues(alpha: 0.25),
                   labelStyle: TextStyle(
-                    color: selected ? AppColors.accent : AppColors.textSecondary,
+                    color: selected
+                        ? AppColors.accent
+                        : AppColors.textSecondary,
                   ),
                   side: BorderSide(
                     color: selected ? AppColors.accent : AppColors.glassBorder,
@@ -97,7 +99,9 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
                     children: [
                       Icon(
                         PhosphorIconsBold.globeHemisphereWest,
-                        color: selected ? AppColors.accent : AppColors.textMuted,
+                        color: selected
+                            ? AppColors.accent
+                            : AppColors.textMuted,
                       ),
                       const SizedBox(width: 14),
                       Expanded(
@@ -120,7 +124,7 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
             RizenButton(
               label: 'Continue',
               icon: PhosphorIconsBold.arrowRight,
-              onPressed: () => context.go(AppRoutes.onboardingSpiritual),
+              onPressed: () => context.go(AppRoutes.onboardingFinance),
             ),
           ],
         ),

@@ -5,11 +5,9 @@ class DomainLogRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
 
-  DomainLogRepository({
-    FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  })  : _firestore = firestore ?? FirebaseFirestore.instance,
-        _auth = auth ?? FirebaseAuth.instance;
+  DomainLogRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
+    : _firestore = firestore ?? FirebaseFirestore.instance,
+      _auth = auth ?? FirebaseAuth.instance;
 
   Future<void> addLog({
     required String domain,
@@ -22,7 +20,7 @@ class DomainLogRepository {
     if (user == null) throw Exception('User not authenticated');
 
     final ref = _firestore.collection('domain_logs').doc();
-    
+
     await ref.set({
       'logId': ref.id,
       'uid': user.uid,

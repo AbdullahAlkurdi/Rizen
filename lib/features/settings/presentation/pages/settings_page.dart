@@ -1,0 +1,312 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/glass_card.dart';
+import '../../../../core/widgets/rizen_scaffold.dart';
+import '../cubit/settings_cubit.dart';
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, state) {
+        final settings = state is SettingsLoaded ? state : SettingsLoaded();
+
+        return RizenScaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => context.pop(),
+            ),
+            title: const Text('Settings'),
+          ),
+          body: ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              Text(
+                'Appearance',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 12),
+              GlassCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Theme', style: Theme.of(context).textTheme.bodyLarge),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        _ThemeButton(
+                          label: 'Dark',
+                          isSelected: settings.theme == 'dark',
+                          onTap: () =>
+                              context.read<SettingsCubit>().setTheme('dark'),
+                        ),
+                        const SizedBox(width: 8),
+                        _ThemeButton(
+                          label: 'Light',
+                          isSelected: settings.theme == 'light',
+                          onTap: () =>
+                              context.read<SettingsCubit>().setTheme('light'),
+                        ),
+                        const SizedBox(width: 8),
+                        _ThemeButton(
+                          label: 'System',
+                          isSelected: settings.theme == 'system',
+                          onTap: () =>
+                              context.read<SettingsCubit>().setTheme('system'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text('Language', style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 12),
+              GlassCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'App Language',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        _LanguageButton(
+                          label: 'EN',
+                          isSelected: settings.language == 'en',
+                          onTap: () =>
+                              context.read<SettingsCubit>().setLanguage('en'),
+                        ),
+                        const SizedBox(width: 8),
+                        _LanguageButton(
+                          label: 'AR',
+                          isSelected: settings.language == 'ar',
+                          onTap: () =>
+                              context.read<SettingsCubit>().setLanguage('ar'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Notifications',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 12),
+              GlassCard(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Enable Notifications',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Switch(
+                      value: settings.notificationsEnabled,
+                      activeThumbColor: AppColors.accent,
+                      onChanged: (v) => context
+                          .read<SettingsCubit>()
+                          .setNotificationsEnabled(v),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text('Currency', style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 12),
+              GlassCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Preferred Currency',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      children: [
+                        _CurrencyButton(
+                          label: 'USD',
+                          isSelected: settings.currency == 'USD',
+                          onTap: () =>
+                              context.read<SettingsCubit>().setCurrency('USD'),
+                        ),
+                        _CurrencyButton(
+                          label: 'EUR',
+                          isSelected: settings.currency == 'EUR',
+                          onTap: () =>
+                              context.read<SettingsCubit>().setCurrency('EUR'),
+                        ),
+                        _CurrencyButton(
+                          label: 'GBP',
+                          isSelected: settings.currency == 'GBP',
+                          onTap: () =>
+                              context.read<SettingsCubit>().setCurrency('GBP'),
+                        ),
+                        _CurrencyButton(
+                          label: 'SAR',
+                          isSelected: settings.currency == 'SAR',
+                          onTap: () =>
+                              context.read<SettingsCubit>().setCurrency('SAR'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              GlassCard(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'App Version',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      '1.0.0',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ThemeButton extends StatelessWidget {
+  const _ThemeButton({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppColors.accent.withValues(alpha: 0.2)
+                : Colors.transparent,
+            border: Border.all(
+              color: isSelected ? AppColors.accent : AppColors.glassBorder,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? AppColors.accent : AppColors.textPrimary,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LanguageButton extends StatelessWidget {
+  const _LanguageButton({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppColors.accent.withValues(alpha: 0.2)
+                : Colors.transparent,
+            border: Border.all(
+              color: isSelected ? AppColors.accent : AppColors.glassBorder,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? AppColors.accent : AppColors.textPrimary,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CurrencyButton extends StatelessWidget {
+  const _CurrencyButton({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColors.accent.withValues(alpha: 0.2)
+              : AppColors.glassFill,
+          border: Border.all(
+            color: isSelected ? AppColors.accent : AppColors.glassBorder,
+          ),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? AppColors.accent : AppColors.textPrimary,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ),
+    );
+  }
+}

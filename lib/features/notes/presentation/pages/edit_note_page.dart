@@ -62,11 +62,11 @@ class _EditNotePageState extends State<EditNotePage> {
         .toList();
 
     await context.read<NotesCubit>().updateNote(
-          noteId: widget.noteId,
-          title: title,
-          body: body,
-          tags: tags,
-        );
+      noteId: widget.noteId,
+      title: title,
+      body: body,
+      tags: tags,
+    );
 
     if (!mounted) return;
 
