@@ -93,10 +93,10 @@ class _OnboardingSpiritualPageState extends State<OnboardingSpiritualPage> {
     return RizenScaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(PhosphorIconsBold.arrowLeft),
+          icon: Icon(PhosphorIconsBold.arrowLeft, color: AppColors.textPrimary),
           onPressed: () => context.go(AppRoutes.onboardingLanguage),
         ),
-        title: const Text('Setup'),
+        title: Text('Setup', style: TextStyle(color: AppColors.textPrimary)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -106,12 +106,12 @@ class _OnboardingSpiritualPageState extends State<OnboardingSpiritualPage> {
             const SizedBox(height: 24),
             Text(
               'Spiritual Layer',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.textPrimary),
             ),
             const SizedBox(height: 8),
             Text(
               'Anchor your daily routine to prayer times with dynamic scheduling.',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
             ),
             const SizedBox(height: 28),
             GlassCard(
@@ -119,11 +119,11 @@ class _OnboardingSpiritualPageState extends State<OnboardingSpiritualPage> {
                 contentPadding: EdgeInsets.zero,
                 title: Text(
                   'Enable Spiritual Layer',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textPrimary),
                 ),
                 subtitle: Text(
                   'Schedule tasks relative to Fajr, Dhuhr, Asr, Maghrib, and Isha.',
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
                 ),
                 value: _spiritualEnabled,
                 activeTrackColor: AppColors.accent.withValues(alpha: 0.5),
@@ -146,14 +146,14 @@ class _OnboardingSpiritualPageState extends State<OnboardingSpiritualPage> {
                       const SizedBox(width: 10),
                       Text(
                         'Location for Prayer Times',
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textPrimary),
                       ),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Uses Aladhan API with your device location for accurate daily recalculation.',
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 16),
                   OutlinedButton.icon(
@@ -174,6 +174,7 @@ class _OnboardingSpiritualPageState extends State<OnboardingSpiritualPage> {
                           : _currentPosition != null
                               ? 'Location Enabled (${_currentPosition!.latitude.toStringAsFixed(2)}, ${_currentPosition!.longitude.toStringAsFixed(2)})'
                               : 'Enable Location Access',
+                      style: const TextStyle(color: AppColors.textPrimary),
                     ),
                   ),
                   if (_locationError != null) ...[
@@ -205,14 +206,14 @@ class _OnboardingSpiritualPageState extends State<OnboardingSpiritualPage> {
                         const SizedBox(width: 10),
                         Text(
                           'Daily Start Time',
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textPrimary),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Text(
                       'What time does your day usually start? This anchors your time blocks.',
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
                     ),
                     const SizedBox(height: 16),
                     InkWell(
@@ -238,7 +239,7 @@ class _OnboardingSpiritualPageState extends State<OnboardingSpiritualPage> {
                         ),
                         child: Text(
                           _wakeTime ?? 'Select wake time',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textPrimary),
                         ),
                       ),
                     ),
@@ -250,7 +251,7 @@ class _OnboardingSpiritualPageState extends State<OnboardingSpiritualPage> {
               const SizedBox(height: 24),
               Text(
                 'Calculation Method',
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textPrimary),
               ),
               const SizedBox(height: 12),
               ..._methods.map((method) {
@@ -269,7 +270,7 @@ class _OnboardingSpiritualPageState extends State<OnboardingSpiritualPage> {
                         Expanded(
                           child: Text(
                             method,
-                            style: Theme.of(context).textTheme.bodyLarge,
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textPrimary),
                           ),
                         ),
                         if (selected)

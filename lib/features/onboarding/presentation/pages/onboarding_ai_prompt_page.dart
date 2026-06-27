@@ -52,10 +52,10 @@ class _OnboardingAiPromptPageState extends State<OnboardingAiPromptPage> {
     return RizenScaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(PhosphorIconsBold.arrowLeft),
+          icon: Icon(PhosphorIconsBold.arrowLeft, color: AppColors.textPrimary),
           onPressed: () => context.go(AppRoutes.onboardingSpiritual),
         ),
-title: const Text('Setup'),
+        title: Text('Setup', style: TextStyle(color: AppColors.textPrimary)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -69,44 +69,45 @@ title: const Text('Setup'),
                 const SizedBox(width: 10),
                 Text(
                   'The "Aha!" Moment',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.textPrimary),
                 ),
               ],
             ),
             const SizedBox(height: 8),
             Text(
               'Describe your life in your own words. Gemini will build your initial RizenOS.',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
             ),
             const SizedBox(height: 24),
             TextField(
               controller: _promptController,
               maxLines: 6,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText:
                     'Tell Rizen what you struggle with and what you want to achieve...',
+                hintStyle: TextStyle(color: AppColors.textMuted),
                 alignLabelWithHint: true,
               ),
             ),
             const SizedBox(height: 16),
-Row(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-                 OutlinedButton.icon(
-                   onPressed: _isProcessing ? null : () {},
-                   icon: Icon(PhosphorIconsBold.microphone),
-                   label: const Text('Voice Input'),
-                 ),
-                 const SizedBox(width: 12),
-                 RizenButton(
-                   label: _isProcessing ? 'Analyzing...' : 'Analyze',
-                   expand: false,
-                   isLoading: _isProcessing,
-                   icon: PhosphorIconsBold.magicWand,
-                   onPressed: _processWithAi,
-                 ),
-               ],
-             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButton.icon(
+                  onPressed: _isProcessing ? null : () {},
+                  icon: Icon(PhosphorIconsBold.microphone),
+                  label: const Text('Voice Input'),
+                ),
+                const SizedBox(width: 12),
+                RizenButton(
+                  label: _isProcessing ? 'Analyzing...' : 'Analyze',
+                  expand: false,
+                  isLoading: _isProcessing,
+                  icon: PhosphorIconsBold.magicWand,
+                  onPressed: _processWithAi,
+                ),
+              ],
+            ),
             if (_showAiResponse) ...[
               const SizedBox(height: 24),
               GlassCard(
@@ -128,14 +129,14 @@ Row(
                         const SizedBox(width: 10),
                         Text(
                           'AI Coach Brief',
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.textPrimary),
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
                     Text(
                       'I hear you. Let\'s start with balance — not perfection.',
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textPrimary),
                     ),
                     const SizedBox(height: 16),
                     _AiResultChip(
@@ -188,7 +189,7 @@ class _AiResultChip extends StatelessWidget {
           Icon(icon, size: 18, color: AppColors.success),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(label, style: Theme.of(context).textTheme.bodyMedium),
+            child: Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)),
           ),
         ],
       ),

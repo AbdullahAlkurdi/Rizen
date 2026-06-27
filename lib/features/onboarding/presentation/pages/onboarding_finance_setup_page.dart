@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
 import '../../../finance/presentation/cubit/finance_cubit.dart';
@@ -33,10 +34,10 @@ class _OnboardingFinanceSetupPageState
     return RizenScaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: AppColors.textPrimary),
           onPressed: () => context.go(AppRoutes.onboardingLanguage),
         ),
-        title: const Text('Setup'),
+        title: Text('Setup', style: TextStyle(color: AppColors.textPrimary)),
       ),
       body: BlocConsumer<FinanceCubit, FinanceState>(
         listener: (context, state) {
@@ -54,33 +55,39 @@ class _OnboardingFinanceSetupPageState
               const SizedBox(height: 24),
               Text(
                 'Finance Setup',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.textPrimary),
               ),
               const SizedBox(height: 8),
               Text(
                 'Set your monthly income and preferred currency. '
                 'Budget tracking starts now.',
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
               ),
               const SizedBox(height: 32),
               TextField(
                 controller: _incomeController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Monthly income'),
+                decoration: InputDecoration(
+                  labelText: 'Monthly income',
+                  labelStyle: TextStyle(color: AppColors.textSecondary),
+                ),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 initialValue: _currency,
                 items: _currencies
-                    .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                    .map((c) => DropdownMenuItem(value: c, child: Text(c, style: const TextStyle(color: AppColors.textPrimary))))
                     .toList(),
                 onChanged: (v) => setState(() => _currency = v ?? _currency),
-                decoration: const InputDecoration(labelText: 'Currency'),
+                decoration: const InputDecoration(
+                  labelText: 'Currency',
+                ),
               ),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 'Your budget resets on the day you set it. '
                 'You can adjust later in Settings.',
+                style: TextStyle(color: AppColors.textSecondary),
               ),
               const SizedBox(height: 32),
               RizenButton(

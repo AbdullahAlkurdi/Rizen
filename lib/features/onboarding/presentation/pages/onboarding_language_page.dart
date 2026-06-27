@@ -66,11 +66,11 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
   Widget build(BuildContext context) {
     return RizenScaffold(
       appBar: AppBar(
-        title: const Text('Setup'),
+        title: Text('Setup', style: TextStyle(color: AppColors.textPrimary)),
         actions: [
           TextButton(
             onPressed: () => context.go(AppRoutes.onboardingSpiritual),
-            child: const Text('Skip'),
+            child: Text('Skip', style: TextStyle(color: AppColors.textPrimary)),
           ),
         ],
       ),
@@ -82,15 +82,15 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
             const SizedBox(height: 24),
             Text(
               'Language & Region',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.textPrimary),
             ),
             const SizedBox(height: 8),
             Text(
               'RizenOS supports Arabic-first layouts with full RTL support.',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
             ),
             const SizedBox(height: 28),
-            Text('Language', style: Theme.of(context).textTheme.titleMedium),
+            Text('Language', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textPrimary)),
             const SizedBox(height: 12),
             Wrap(
               spacing: 12,
@@ -122,7 +122,7 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
               }).toList(),
             ),
             const SizedBox(height: 28),
-            Text('Region', style: Theme.of(context).textTheme.titleMedium),
+            Text('Region', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textPrimary)),
             const SizedBox(height: 12),
             ..._availableRegions.map((region) {
               final selected = _region == region;
@@ -147,7 +147,7 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
                       Expanded(
                         child: Text(
                           region,
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textPrimary),
                         ),
                       ),
                       if (selected)

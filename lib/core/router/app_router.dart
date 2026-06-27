@@ -19,6 +19,7 @@ import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/pages/welcome_page.dart';
+import '../../features/coach/presentation/cubit/coach_cubit.dart';
 import '../../features/coach/presentation/pages/coach_briefing_page.dart';
 import '../../features/coach/presentation/pages/coach_chat_page.dart';
 import '../../features/coach/presentation/pages/coach_hub_page.dart';
@@ -498,31 +499,52 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.coach,
-          builder: (context, state) => const CoachHubPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => CoachCubit()..loadHistory(),
+            child: const CoachHubPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.coachBriefing,
-          builder: (context, state) => const CoachBriefingPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => CoachCubit()..loadHistory(),
+            child: const CoachBriefingPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.coachChat,
-          builder: (context, state) => const CoachChatPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => CoachCubit()..loadHistory(),
+            child: const CoachChatPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.coachWeekly,
-          builder: (context, state) => const CoachWeeklyPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => CoachCubit()..loadHistory(),
+            child: const CoachWeeklyPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.coachSuggestions,
-          builder: (context, state) => const CoachSuggestionsPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => CoachCubit()..loadHistory(),
+            child: const CoachSuggestionsPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.coachMicroGoals,
-          builder: (context, state) => const CoachMicroGoalsPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => CoachCubit()..loadHistory(),
+            child: const CoachMicroGoalsPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.coachInsights,
-          builder: (context, state) => const CoachInsightsPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => CoachCubit()..loadHistory(),
+            child: const CoachInsightsPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.notes,
