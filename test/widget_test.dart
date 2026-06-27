@@ -1,9 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:rizen/app.dart';
+import 'package:flutter/material.dart';
+import 'package:rizen/core/localization/locale_cubit.dart';
 import 'package:rizen/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:rizen/features/auth/data/repositories/auth_repository.dart';
+import 'package:rizen/features/auth/presentation/pages/welcome_page.dart';
 
 // ignore: avoid_implementing_value_equals
 class FakeAuthRepository extends AuthRepository {
@@ -38,14 +40,20 @@ class FakeAuthRepository extends AuthRepository {
 void main() {
   testWidgets('Rizen app smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(
-      BlocProvider(
-        create: (_) => AuthCubit(repository: FakeAuthRepository()),
-        child: const RizenApp(),
+      MaterialApp(
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider<LocaleCubit>(create: (_) => LocaleCubit()),
+            BlocProvider<AuthCubit>(
+              create: (_) => AuthCubit(repository: FakeAuthRepository()),
+            ),
+          ],
+          child: const WelcomePage(),
+        ),
       ),
     );
 
-    await tester.pumpAndSettle(const Duration(seconds: 4));
-
+    await tester.pumpAndSettle();
     expect(find.text('Get Started'), findsOneWidget);
   });
 }
