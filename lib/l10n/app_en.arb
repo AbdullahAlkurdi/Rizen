@@ -1,0 +1,1036 @@
+{
+  "@@locale": "en",
+  "appTitle": "RizenOS",
+  "@appTitle": {
+    "description": "Application title shown in the app bar and system."
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Page title for the Settings screen."
+  },
+  "appearance": "Appearance",
+  "@appearance": {
+    "description": "Section label for appearance settings."
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Label for theme selection."
+  },
+  "dark": "Dark",
+  "@dark": {
+    "description": "Theme option label."
+  },
+  "light": "Light",
+  "@light": {
+    "description": "Theme option label."
+  },
+  "system": "System",
+  "@system": {
+    "description": "Theme option label."
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Section label for language settings."
+  },
+  "appLanguage": "App Language",
+  "@appLanguage": {
+    "description": "Label for app language selection."
+  },
+  "languageAndPrayer": "Language & Prayer",
+  "@languageAndPrayer": {
+    "description": "Title for the language and prayer settings page."
+  },
+  "prayerCalculation": "Prayer Calculation",
+  "@prayerCalculation": {
+    "description": "Section title for prayer calculation settings."
+  },
+  "locationMethod": "Location Method",
+  "@locationMethod": {
+    "description": "Label for the location method used for prayer times."
+  },
+  "gpsBasedRiyadh": "GPS-based · Riyadh, Saudi Arabia",
+  "@gpsBasedRiyadh": {
+    "description": "Current GPS-based location display."
+  },
+  "updateLocation": "Update Location",
+  "@updateLocation": {
+    "description": "Button text to update location."
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Section label for notification settings."
+  },
+  "enableNotifications": "Enable Notifications",
+  "@enableNotifications": {
+    "description": "Label for notification toggle."
+  },
+  "currency": "Currency",
+  "@currency": {
+    "description": "Section label for currency settings."
+  },
+  "preferredCurrency": "Preferred Currency",
+  "@preferredCurrency": {
+    "description": "Label for currency selection."
+  },
+  "appVersion": "App Version",
+  "@appVersion": {
+    "description": "Label showing the current app version."
+  },
+  "appSettings": "App Settings",
+  "@appSettings": {
+    "description": "Title for the app settings page."
+  },
+  "cliAccess": "CLI Access",
+  "@cliAccess": {
+    "description": "Title for the CLI access page."
+  },
+  "developerCli": "Developer CLI",
+  "@developerCli": {
+    "description": "Section title for developer CLI."
+  },
+  "generateApiCredentials": "Generate API credentials to build powerful automations.",
+  "@generateApiCredentials": {
+    "description": "Description for API credentials generator."
+  },
+  "usageExamples": "Usage Examples",
+  "@usageExamples": {
+    "description": "Section title for CLI usage examples."
+  },
+  "generateNewToken": "Generate New Token",
+  "@generateNewToken": {
+    "description": "Button text to generate a new API token."
+  },
+  "editProfile": "Edit Profile",
+  "@editProfile": {
+    "description": "Title for the edit profile page."
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Title for the profile page."
+  },
+  "privacyAndSecurity": "Privacy & Security",
+  "@privacyAndSecurity": {
+    "description": "Title for the privacy and security settings page."
+  },
+  "notificationSettings": "Notifications",
+  "@notificationSettings": {
+    "description": "Title for notification settings page."
+  },
+  "spiritualFramework": "Spiritual Framework",
+  "@spiritualFramework": {
+    "description": "Title for spiritual framework settings."
+  },
+  "supportAndFeedback": "Support & Feedback",
+  "@supportAndFeedback": {
+    "description": "Title for support and feedback page."
+  },
+
+  "login": "Login",
+  "@login": {
+    "description": "Page title for the login screen."
+  },
+  "welcomeBack": "Welcome back",
+  "@welcomeBack": {
+    "description": "Greeting on the login screen."
+  },
+  "continueDiscipline": "Continue your discipline journey with RizenOS.",
+  "@continueDiscipline": {
+    "description": "Subtitle on the login screen."
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Form field label for email."
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Form field label for password."
+  },
+  "enterYourEmail": "Enter your email",
+  "@enterYourEmail": {
+    "description": "Validation message for empty email."
+  },
+  "enterValidEmail": "Enter a valid email",
+  "@enterValidEmail": {
+    "description": "Validation message for invalid email format."
+  },
+  "passwordMinLength": "Password must be at least 6 characters",
+  "@passwordMinLength": {
+    "description": "Validation message for short password."
+  },
+  "forgotPassword": "Forgot password?",
+  "@forgotPassword": {
+    "description": "Link text for forgot password."
+  },
+  "signIn": "Sign In",
+  "@signIn": {
+    "description": "Button label for sign in."
+  },
+  "continueWithGoogle": "Continue with Google",
+  "@continueWithGoogle": {
+    "description": "Button label for Google sign-in."
+  },
+  "createAnAccount": "Create an account",
+  "@createAnAccount": {
+    "description": "Button text for creating a new account."
+  },
+  "register": "Register",
+  "@register": {
+    "description": "Page title for the register screen."
+  },
+  "fullName": "Full name",
+  "@fullName": {
+    "description": "Form field label for full name."
+  },
+  "enterYourName": "Enter your name",
+  "@enterYourName": {
+    "description": "Validation message for empty name."
+  },
+  "createAccount": "Create Account",
+  "@createAccount": {
+    "description": "Button label for account creation."
+  },
+  "alreadyHaveAccount": "Already have an account?",
+  "@alreadyHaveAccount": {
+    "description": "Prompt text on register screen."
+  },
+  "backToSignIn": "Back to Sign In",
+  "@backToSignIn": {
+    "description": "Button text to return to sign in."
+  },
+  "resetPassword": "Reset Password",
+  "@resetPassword": {
+    "description": "Page title for password reset."
+  },
+  "sendResetLink": "Send Reset Link",
+  "@sendResetLink": {
+    "description": "Button label for sending reset link."
+  },
+  "getStarted": "Get Started",
+  "@getStarted": {
+    "description": "Primary action button on the welcome/onboarding pages."
+  },
+  "alreadyHaveAnAccount": "I already have an account",
+  "@alreadyHaveAnAccount": {
+    "description": "Secondary action on welcome page."
+  },
+
+  "setup": "Setup",
+  "@setup": {
+    "description": "App bar title for onboarding setup pages."
+  },
+  "skip": "Skip",
+  "@skip": {
+    "description": "Button text to skip onboarding step."
+  },
+  "continueAction": "Continue",
+  "@continue": {
+    "description": "Button text to continue to the next step."
+  },
+  "languageAndRegion": "Language & Region",
+  "@languageAndRegion": {
+    "description": "Section title on onboarding language page."
+  },
+  "arabicFirstLayouts": "RizenOS supports Arabic-first layouts with full RTL support.",
+  "@arabicFirstLayouts": {
+    "description": "Description text about Arabic support."
+  },
+  "region": "Region",
+  "@region": {
+    "description": "Section title for region selection."
+  },
+
+  "spiritualLayer": "Spiritual Layer",
+  "@spiritualLayer": {
+    "description": "Section title for spiritual layer onboarding."
+  },
+  "enableSpiritualLayer": "Enable Spiritual Layer",
+  "@enableSpiritualLayer": {
+    "description": "Label to enable the spiritual layer."
+  },
+  "locationForPrayerTimes": "Location for Prayer Times",
+  "@locationForPrayerTimes": {
+    "description": "Label for prayer time location setting."
+  },
+  "dailyStartTime": "Daily Start Time",
+  "@dailyStartTime": {
+    "description": "Label for the daily start time setting."
+  },
+  "calculationMethod": "Calculation Method",
+  "@calculationMethod": {
+    "description": "Label for prayer time calculation method."
+  },
+  "locationAccessEnabled": "Location access enabled",
+  "@locationAccessEnabled": {
+    "description": "Snackbar message for enabling location access."
+  },
+
+  "theAhaMoment": "The \"Aha!\" Moment",
+  "@theAhaMoment": {
+    "description": "Section title for AI prompt onboarding."
+  },
+  "describeYourLife": "Describe your life, habits, and biggest struggles in a few sentences.",
+  "@describeYourLife": {
+    "description": "Placeholder text for AI prompt input."
+  },
+  "aiCoachBrief": "AI Coach Brief",
+  "@aiCoachBrief": {
+    "description": "Section title for AI coach brief."
+  },
+  "iHearYou": "I hear you. Based on what you shared, here's your initial discipline blueprint.",
+  "@iHearYou": {
+    "description": "AI coach intro text."
+  },
+  "analyze": "Analyze",
+  "@analyze": {
+    "description": "Button label to submit AI analysis."
+  },
+  "launchRizenOS": "Launch RizenOS",
+  "@launchRizenOS": {
+    "description": "Final onboarding button text."
+  },
+
+  "habits": "Habits",
+  "@habits": {
+    "description": "Title for the habits hub."
+  },
+  "habitEngine": "Habit Engine",
+  "@habitEngine": {
+    "description": "Section title for habit engine."
+  },
+  "positiveHabits": "Positive Habits",
+  "@positiveHabits": {
+    "description": "Label for positive habits section."
+  },
+  "shadowHabits": "Shadow Habits",
+  "@shadowHabits": {
+    "description": "Label for shadow habits section."
+  },
+  "shadowScore": "Shadow Score",
+  "@shadowScore": {
+    "description": "Label for shadow score feature."
+  },
+  "rewardStore": "Reward Store",
+  "@rewardStore": {
+    "description": "Label for reward store feature."
+  },
+  "habitAnalytics": "Habit Analytics",
+  "@habitAnalytics": {
+    "description": "Label for habit analytics feature."
+  },
+  "emergencyRecoveryMode": "Emergency Recovery Mode",
+  "@emergencyRecoveryMode": {
+    "description": "Label for emergency recovery mode."
+  },
+  "addHabit": "Add Habit",
+  "@addHabit": {
+    "description": "Button text to add a new habit."
+  },
+  "checkIn": "Check In",
+  "@checkIn": {
+    "description": "Button text for habit check-in."
+  },
+  "logShadowEvent": "Log Shadow Event",
+  "@logShadowEvent": {
+    "description": "Button text for logging shadow events."
+  },
+  "createReward": "Create Reward",
+  "@createReward": {
+    "description": "Button text for creating a new reward."
+  },
+
+  "habitDetail": "Habit Detail",
+  "@habitDetail": {
+    "description": "Page title for habit detail."
+  },
+  "habitAnalyticsTitle": "Analytics",
+  "@habitAnalyticsTitle": {
+    "description": "Page title for habit analytics."
+  },
+  "export": "Export",
+  "@export": {
+    "description": "Button text for exporting data."
+  },
+
+  "finance": "Finance",
+  "@finance": {
+    "description": "Title for finance hub."
+  },
+  "currentCycle": "Current Cycle",
+  "@currentCycle": {
+    "description": "Section title for current finance cycle."
+  },
+  "addCommitment": "Add Commitment",
+  "@addCommitment": {
+    "description": "Button text to add a commitment."
+  },
+  "editCommitment": "Edit Commitment",
+  "@editCommitment": {
+    "description": "Page title for editing a commitment."
+  },
+  "quickExpense": "Quick Expense",
+  "@quickExpense": {
+    "description": "Page title for quick expense entry."
+  },
+  "parse": "Parse",
+  "@parse": {
+    "description": "Button text for parsing expense text."
+  },
+  "confirmExpense": "Confirm Expense",
+  "@confirmExpense": {
+    "description": "Button text for confirming an expense."
+  },
+  "expenseText": "Expense text",
+  "@expenseText": {
+    "description": "Hint text for expense input."
+  },
+  "manualTransaction": "Manual Transaction",
+  "@manualTransaction": {
+    "description": "Page title for manual transaction."
+  },
+  "saveTransaction": "Save Transaction",
+  "@saveTransaction": {
+    "description": "Button text for saving a transaction."
+  },
+  "amount": "Amount",
+  "@amount": {
+    "description": "Form field label for amount."
+  },
+  "descriptionField": "Description",
+  "@descriptionField": {
+    "description": "Form field label for description."
+  },
+  "category": "Category",
+  "@category": {
+    "description": "Form field label for category."
+  },
+  "type": "Type",
+  "@type": {
+    "description": "Form field label for transaction type."
+  },
+  "changeReviewTime": "Change review time",
+  "@changeReviewTime": {
+    "description": "Button text for changing financial review time."
+  },
+
+  "routines": "Routines",
+  "@routines": {
+    "description": "Title for routines hub."
+  },
+  "createRoutine": "Create Routine",
+  "@createRoutine": {
+    "description": "Page title for creating a routine."
+  },
+  "editRoutine": "Edit Routine",
+  "@editRoutine": {
+    "description": "Page title for editing a routine."
+  },
+  "saveChanges": "Save Changes",
+  "@saveChanges": {
+    "description": "Button text to save routine changes."
+  },
+  "routineDetail": "Routine Detail",
+  "@routineDetail": {
+    "description": "Page title for routine detail."
+  },
+  "addTimeBlock": "Add Time Block",
+  "@addTimeBlock": {
+    "description": "Button text to add a time block."
+  },
+  "routineTemplates": "Routine Templates",
+  "@routineTemplates": {
+    "description": "Page title for routine templates."
+  },
+  "apply": "Apply",
+  "@apply": {
+    "description": "Button text to apply a template."
+  },
+  "routineHistory": "Routine History",
+  "@routineHistory": {
+    "description": "Page title for routine history."
+  },
+  "aiRoutineGenerator": "AI Routine Generator",
+  "@aiRoutineGenerator": {
+    "description": "Page title for AI routine generator."
+  },
+  "routineName": "Routine Name",
+  "@routineName": {
+    "description": "Form field label for routine name."
+  },
+  "routineDescription": "Description (Optional)",
+  "@routineDescription": {
+    "description": "Form field label for routine description."
+  },
+  "whatIsThisRoutineFor": "What is this routine for?",
+  "@whatIsThisRoutineFor": {
+    "description": "Placeholder text for routine description."
+  },
+  "blockTitle": "Block Title",
+  "@blockTitle": {
+    "description": "Form field label for time block title."
+  },
+  "domain": "Domain",
+  "@domain": {
+    "description": "Form field label for time block domain."
+  },
+  "startTime": "Start Time",
+  "@startTime": {
+    "description": "Form field label for start time."
+  },
+  "endTime": "End Time",
+  "@endTime": {
+    "description": "Form field label for end time."
+  },
+  "anchorType": "Anchor Type",
+  "@anchorType": {
+    "description": "Label for time block anchor type."
+  },
+  "descriptionOptional": "Description (optional)",
+  "@descriptionOptional": {
+    "description": "Form field label for optional description."
+  },
+
+  "notes": "Notes",
+  "@notes": {
+    "description": "Title for notes hub."
+  },
+  "createNote": "Create Note",
+  "@createNote": {
+    "description": "Page title for creating a note."
+  },
+  "editNote": "Edit Note",
+  "@editNote": {
+    "description": "Page title for editing a note."
+  },
+  "saveNote": "Save Note",
+  "@saveNote": {
+    "description": "Button text for saving a note."
+  },
+  "noteDetail": "Note Detail",
+  "@noteDetail": {
+    "description": "Page title for note detail."
+  },
+  "searchNotes": "Search Notes",
+  "@searchNotes": {
+    "description": "Page title for notes search."
+  },
+  "nightlyReflection": "Nightly Reflection",
+  "@nightlyReflection": {
+    "description": "Page title for nightly reflection."
+  },
+  "reflectionSaved": "Reflection saved.",
+  "@reflectionSaved": {
+    "description": "Snackbar message for saved reflection."
+  },
+  "titleField": "Title",
+  "@titleField": {
+    "description": "Form field label for note title."
+  },
+  "tags": "Tags",
+  "@tags": {
+    "description": "Form field label for note tags."
+  },
+  "startWriting": "Start writing... Markdown supported.",
+  "@startWriting": {
+    "description": "Hint text for note content input."
+  },
+  "yourReflection": "Your reflection...",
+  "@yourReflection": {
+    "description": "Hint text for reflection input."
+  },
+
+  "home": "Home",
+  "@home": {
+    "description": "Navigation label for home tab."
+  },
+  "goodMorning": "Good morning",
+  "@goodMorning": {
+    "description": "Morning greeting."
+  },
+  "goodEvening": "Good evening",
+  "@goodEvening": {
+    "description": "Evening greeting."
+  },
+  "weeklyView": "Weekly view",
+  "@weeklyView": {
+    "description": "Button text for weekly view."
+  },
+  "focus": "Focus",
+  "@focus": {
+    "description": "Focus mode button text."
+  },
+  "noActiveTimeBlocks": "No active time blocks",
+  "@noActiveTimeBlocks": {
+    "description": "Placeholder for empty active blocks list."
+  },
+  "quickActions": "Quick Actions",
+  "@quickActions": {
+    "description": "Section title for quick actions."
+  },
+  "logActivity": "Log Activity",
+  "@logActivity": {
+    "description": "Quick action tile label."
+  },
+  "checkHabits": "Check Habits",
+  "@checkHabits": {
+    "description": "Quick action tile label."
+  },
+  "burnoutMode": "Burnout Mode",
+  "@burnoutMode": {
+    "description": "Quick action tile label."
+  },
+  "aiCoach": "AI Coach",
+  "@aiCoach": {
+    "description": "Quick action tile label."
+  },
+  "todayFlow": "Today's Flow",
+  "@todayFlow": {
+    "description": "Section title for today's flow."
+  },
+  "eveningWrapUp": "Evening Wrap-up",
+  "@eveningWrapUp": {
+    "description": "Section title for evening wrap-up."
+  },
+  "noUpcomingBlocksToday": "No upcoming blocks today",
+  "@noUpcomingBlocksToday": {
+    "description": "Placeholder for empty upcoming blocks."
+  },
+  "activeTimeBlock": "Active Time Block",
+  "@activeTimeBlock": {
+    "description": "Label for active time block card."
+  },
+  "minsRemaining": "mins remaining",
+  "@minsRemaining": {
+    "description": "Suffix for remaining minutes display."
+  },
+  "voiceLoggingComingSoon": "Voice logging — Gemini integration coming in Phase 4",
+  "@voiceLoggingComingSoon": {
+    "description": "Snackbar message for voice logging feature."
+  },
+  "dailyScore": "Daily Score",
+  "@dailyScore": {
+    "description": "Page title for daily score."
+  },
+  "weeklyOverview": "Weekly Overview",
+  "@weeklyOverview": {
+    "description": "Page title for weekly overview."
+  },
+  "weeklyAvg": "Weekly Avg",
+  "@weeklyAvg": {
+    "description": "Stat label in weekly overview."
+  },
+  "bestStreak": "Best Streak",
+  "@bestStreak": {
+    "description": "Stat label in weekly overview."
+  },
+  "activeDomains": "Active Domains",
+  "@activeDomains": {
+    "description": "Stat label in weekly overview."
+  },
+  "shadowTrend": "Shadow Trend",
+  "@shadowTrend": {
+    "description": "Stat label in weekly overview."
+  },
+  "monthlyCalendar": "Monthly Calendar",
+  "@monthlyCalendar": {
+    "description": "Page title for monthly calendar."
+  },
+  "completed": "Completed",
+  "@completed": {
+    "description": "Calendar label for completed occurrences."
+  },
+  "missed": "Missed",
+  "@missed": {
+    "description": "Calendar label for missed occurrences."
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Calendar label for current day."
+  },
+  "sleepAnalytics": "Sleep Analytics",
+  "@sleepAnalytics": {
+    "description": "Page title for sleep analytics."
+  },
+  "target": "Target",
+  "@target": {
+    "description": "Label for sleep target."
+  },
+  "actual": "Actual",
+  "@actual": {
+    "description": "Label for actual sleep duration."
+  },
+  "delay": "Delay",
+  "@delay": {
+    "description": "Label for sleep delay."
+  },
+  "notificationsPage": "Notifications",
+  "@notificationsPage": {
+    "description": "Page title for notifications list."
+  },
+  "markAllRead": "Mark all read",
+  "@markAllRead": {
+    "description": "Button text to mark all notifications as read."
+  },
+  "all": "All",
+  "@all": {
+    "description": "Filter tab label."
+  },
+  "important": "Important",
+  "@important": {
+    "description": "Filter tab label."
+  },
+  "aiCoachFilter": "AI Coach",
+  "@aiCoachFilter": {
+    "description": "Filter tab label for AI coach notifications."
+  },
+  "spiritualFilter": "Spiritual",
+  "@spiritualFilter": {
+    "description": "Filter tab label for spiritual notifications."
+  },
+
+  "domains": "Domains",
+  "@domains": {
+    "description": "Title for domains hub."
+  },
+  "domainsHub": "Domains Hub",
+  "@domainsHub": {
+    "description": "Page title for domains hub."
+  },
+  "domainDashboard": "Domain Dashboard",
+  "@domainDashboard": {
+    "description": "Page title for domain dashboard."
+  },
+  "domainLog": "Domain Log",
+  "@domainLog": {
+    "description": "Page title for domain log."
+  },
+  "saveEntry": "Save Entry",
+  "@saveEntry": {
+    "description": "Button text for saving a domain log entry."
+  },
+  "durationMinutes": "Duration (Minutes)",
+  "@durationMinutes": {
+    "description": "Form field label for duration in minutes."
+  },
+  "notesField": "Notes",
+  "@notesField": {
+    "description": "Form field label for session notes."
+  },
+  "enterDurationOrMetric": "Please enter duration or metric value",
+  "@enterDurationOrMetric": {
+    "description": "Validation message for domain log entry."
+  },
+  "sessionLogged": "Session logged!",
+  "@sessionLogged": {
+    "description": "Success message after logging a session."
+  },
+  "howDidSessionGo": "How did the session go?",
+  "@howDidSessionGo": {
+    "description": "Placeholder text for session notes."
+  },
+
+  "coach": "Coach",
+  "@coach": {
+    "description": "Navigation label for coach tab."
+  },
+  "aiCoachChat": "AI Coach Chat",
+  "@aiCoachChat": {
+    "description": "Page title for AI coach chat."
+  },
+  "coachHub": "Coach Hub",
+  "@coachHub": {
+    "description": "Page title for coach hub."
+  },
+  "coachBriefing": "Briefing",
+  "@coachBriefing": {
+    "description": "Page title for coach briefing."
+  },
+  "regenerate": "Regenerate",
+  "@regenerate": {
+    "description": "Button text to regenerate briefing."
+  },
+  "coachWeekly": "Weekly Insights",
+  "@coachWeekly": {
+    "description": "Page title for coach weekly insights."
+  },
+  "exportPdf": "Export PDF",
+  "@exportPdf": {
+    "description": "Button text to export weekly insights as PDF."
+  },
+  "keyInsights": "Key Insights",
+  "@keyInsights": {
+    "description": "Section title for key insights."
+  },
+  "coachSuggestions": "Suggestions",
+  "@coachSuggestions": {
+    "description": "Page title for coach suggestions."
+  },
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Button text to refresh suggestions."
+  },
+  "coachMicroGoals": "Micro Goals",
+  "@coachMicroGoals": {
+    "description": "Page title for coach micro goals."
+  },
+  "recalculate": "Recalculate",
+  "@recalculate": {
+    "description": "Button text to recalculate micro goals."
+  },
+  "coachInsights": "Insights",
+  "@coachInsights": {
+    "description": "Page title for coach insights."
+  },
+
+  "more": "More",
+  "@more": {
+    "description": "Navigation label for more tab."
+  },
+  "exploreRizenOS": "Explore RizenOS",
+  "@exploreRizenOS": {
+    "description": "Section title on more hub page."
+  },
+  "helpAndCommunity": "Help & Community",
+  "@helpAndCommunity": {
+    "description": "Section title on support page."
+  },
+  "faqs": "FAQs & Documentation",
+  "@faqs": {
+    "description": "Menu item label for FAQs."
+  },
+  "sendFeedback": "Send Feedback",
+  "@sendFeedback": {
+    "description": "Menu item label for sending feedback."
+  },
+  "openSourceAttributions": "Open Source Attributions",
+  "@openSourceAttributions": {
+    "description": "Menu item label for open source attributions."
+  },
+  "rizenOSVersion": "RizenOS v1.0.0",
+  "@rizenOSVersion": {
+    "description": "App version string."
+  },
+  "builtWithFlutter": "Built with Flutter ❤️",
+  "@builtWithFlutter": {
+    "description": "Credits text."
+  },
+
+  "deleteRoutine": "Delete Routine",
+  "@deleteRoutine": {
+    "description": "Header text for delete routine confirmation dialog."
+  },
+  "areYouSureDeleteRoutine": "Are you sure you want to delete this routine?",
+  "@areYouSureDeleteRoutine": {
+    "description": "Confirmation text for deleting a routine."
+  },
+  "deleteNote": "Delete Note",
+  "@deleteNote": {
+    "description": "Header text for delete note confirmation dialog."
+  },
+  "areYouSureDeleteNote": "Are you sure you want to delete this note?",
+  "@areYouSureDeleteNote": {
+    "description": "Confirmation text for deleting a note."
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Dialog button text to cancel an action."
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Dialog button text to confirm deletion."
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Dialog button text to save."
+  },
+  "yes": "Yes",
+  "@yes": {
+    "description": "Affirmative response."
+  },
+  "no": "No",
+  "@no": {
+    "description": "Negative response."
+  },
+  "loading": "Loading",
+  "@loading": {
+    "description": "Accessibility label for loading state."
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Label for error state."
+  },
+  "failed": "Failed",
+  "@failed": {
+    "description": "Label for failed operations."
+  },
+
+  "islamicHub": "Islamic Hub",
+  "@islamicHub": {
+    "description": "Page title for Islamic hub."
+  },
+  "qibla": "Qibla Compass",
+  "@qibla": {
+    "description": "Page title for Qibla compass."
+  },
+  "prayerDetail": "Prayer Detail",
+  "@prayerDetail": {
+    "description": "Page title for prayer detail."
+  },
+  "prayerSettings": "Prayer Settings",
+  "@prayerSettings": {
+    "description": "Page title for prayer settings."
+  },
+  "hijriCalendar": "Hijri Calendar",
+  "@hijriCalendar": {
+    "description": "Page title for Hijri calendar."
+  },
+  "fajr": "Fajr",
+  "@fajr": {
+    "description": "Prayer name: Fajr."
+  },
+  "dhuhr": "Dhuhr",
+  "@dhuhr": {
+    "description": "Prayer name: Dhuhr."
+  },
+  "asr": "Asr",
+  "@asr": {
+    "description": "Prayer name: Asr."
+  },
+  "maghrib": "Maghrib",
+  "@maghrib": {
+    "description": "Prayer name: Maghrib."
+  },
+  "isha": "Isha",
+  "@isha": {
+    "description": "Prayer name: Isha."
+  },
+  "muslimWorldLeague": "Muslim World League",
+  "@muslimWorldLeague": {
+    "description": "Prayer time calculation method."
+  },
+  "ummAlQura": "Umm Al-Qura",
+  "@ummAlQura": {
+    "description": "Prayer time calculation method."
+  },
+  "egyptianGeneralAuthority": "Egyptian General Authority",
+  "@egyptianGeneralAuthority": {
+    "description": "Prayer time calculation method."
+  },
+  "isna": "ISNA",
+  "@isna": {
+    "description": "Prayer time calculation method."
+  },
+
+  "analytics": "Analytics",
+  "@analytics": {
+    "description": "Navigation label for analytics."
+  },
+  "analyticsHub": "Analytics Hub",
+  "@analyticsHub": {
+    "description": "Page title for analytics hub."
+  },
+  "dataExportAndBackup": "Data Export & Backup",
+  "@dataExportAndBackup": {
+    "description": "Page title for data export."
+  },
+  "growthIndex": "Growth Index",
+  "@growthIndex": {
+    "description": "Page title for growth index."
+  },
+  "habitTrends": "Habit Trends",
+  "@habitTrends": {
+    "description": "Page title for habit trends."
+  },
+  "domainCorrelation": "Domain Correlation",
+  "@domainCorrelation": {
+    "description": "Page title for domain correlation."
+  },
+
+  "sports": "Sports",
+  "@sports": {
+    "description": "Domain option label."
+  },
+  "study": "Study",
+  "@study": {
+    "description": "Domain option label."
+  },
+  "work": "Work",
+  "@work": {
+    "description": "Domain option label."
+  },
+  "coding": "Coding",
+  "@coding": {
+    "description": "Domain option label."
+  },
+  "cookingNutrition": "Cooking/Nutrition",
+  "@cookingNutrition": {
+    "description": "Domain option label."
+  },
+  "spiritual": "Spiritual",
+  "@spiritual": {
+    "description": "Domain option label."
+  },
+  "custom": "Custom",
+  "@custom": {
+    "description": "Domain option label."
+  },
+
+  "sar": "SAR",
+  "@sar": {
+    "description": "Currency code: Saudi Riyal."
+  },
+  "usd": "USD",
+  "@usd": {
+    "description": "Currency code: US Dollar."
+  },
+  "eur": "EUR",
+  "@eur": {
+    "description": "Currency code: Euro."
+  },
+  "aed": "AED",
+  "@aed": {
+    "description": "Currency code: UAE Dirham."
+  },
+  "gbp": "GBP",
+  "@gbp": {
+    "description": "Currency code: British Pound."
+  },
+
+  "monthlyIncome": "Monthly income",
+  "@monthlyIncome": {
+    "description": "Form field label for monthly income."
+  },
+  "currencyField": "Currency",
+  "@currencyField": {
+    "description": "Form field label for currency selection."
+  },
+  "day": "Day {day}",
+  "@day": {
+    "description": "Day label with number placeholder.",
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "optionalContextCheckIn": "Optional context for this check-in",
+  "@optionalContextCheckIn": {
+    "description": "Hint text for habit check-in context."
+  },
+  "confirmApplyTemplate": "Apply \"{template}\"?",
+  "@confirmApplyTemplate": {
+    "description": "Confirmation text for applying a template.",
+    "placeholders": {
+      "template": {
+        "type": "String"
+      }
+    }
+  },
+  "profileUpdatedSuccess": "Profile updated successfully.",
+  "@profileUpdatedSuccess": {
+    "description": "Snackbar message for successful profile update."
+  },
+  "searchNotesPlaceholder": "Search notes by meaning or keyword...",
+  "@searchNotesPlaceholder": {
+    "description": "Hint text for notes search."
+  }
+}

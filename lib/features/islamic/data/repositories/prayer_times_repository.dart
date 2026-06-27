@@ -79,6 +79,10 @@ class PrayerTimesRepository {
     required String country,
     String method = '3',
   }) async {
+    final today = DateTime.now();
+    final todayStr =
+        '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+
     try {
       final response = await _dio.get(
         '$_aladhanBaseUrl/timingsByCity',
@@ -100,7 +104,7 @@ class PrayerTimesRepository {
           timings: Timings.fromJson(timingsData),
           hijriDate: HijriDate.fromJson(hijriData),
           fetchedAt: DateTime.now(),
-          validForDate: DateTime.now().toString(),
+          validForDate: todayStr,
         );
 
         await _cachePrayerTimes(cache);
@@ -172,6 +176,11 @@ class PrayerTimesRepository {
         .doc(_userId)
         .get();
     if (!doc.exists) return null;
-    return PrayerTimesCache.fromFirestore(doc);
+    final cache = PrayerTimesCache.fromFirestore(doc);
+    final today = DateTime.now();
+    final todayStr =
+        '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+    if (cache.validForDate != todayStr) return null;
+    return cache;
   }
 }

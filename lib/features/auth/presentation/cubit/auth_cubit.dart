@@ -22,18 +22,16 @@ final class AuthError extends AuthState {
 }
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit({AuthRepository? repository})
-    : _repository = repository,
-      super(AuthInitial()) {
-    if (repository != null) {
-      _listenToAuthChanges();
-    }
+  AuthCubit({required AuthRepository repository})
+      : _repository = repository,
+        super(AuthInitial()) {
+    _listenToAuthChanges();
   }
 
-  final AuthRepository? _repository;
+  final AuthRepository _repository;
 
   void _listenToAuthChanges() {
-    _repository?.authStateChanges().listen((user) {
+    _repository.authStateChanges().listen((user) {
       if (user != null) {
         emit(AuthAuthenticated(user));
       } else {
@@ -48,7 +46,7 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(AuthLoading());
     try {
-      await _repository?.signInWithEmailAndPassword(
+      await _repository.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -66,7 +64,7 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(AuthLoading());
     try {
-      await _repository?.createUserWithEmailAndPassword(
+      await _repository.createUserWithEmailAndPassword(
         email: email,
         password: password,
         displayName: displayName,
@@ -81,7 +79,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signInWithGoogle() async {
     emit(AuthLoading());
     try {
-      await _repository?.signInWithGoogle();
+      await _repository.signInWithGoogle();
     } on FirebaseAuthException catch (e) {
       emit(AuthError(e.message ?? 'Google sign in failed'));
     } catch (e) {
@@ -90,12 +88,12 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> signOut() async {
-    await _repository?.signOut();
+    await _repository.signOut();
   }
 
   Future<void> sendPasswordResetEmail(String email) async {
     try {
-      await _repository?.sendPasswordResetEmail(email);
+      await _repository.sendPasswordResetEmail(email);
     } on FirebaseAuthException catch (e) {
       emit(AuthError(e.message ?? 'Failed to send reset email'));
     } catch (e) {

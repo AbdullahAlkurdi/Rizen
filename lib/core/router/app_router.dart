@@ -13,6 +13,7 @@ import '../../features/analytics/presentation/pages/data_export_page.dart';
 import '../../features/analytics/presentation/pages/domain_correlation_page.dart';
 import '../../features/analytics/presentation/pages/growth_index_page.dart';
 import '../../features/analytics/presentation/pages/habit_trends_page.dart';
+import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
@@ -139,18 +140,22 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.signIn,
-      builder: (context, state) =>
-          BlocProvider(create: (_) => AuthCubit(), child: const LoginPage()),
+      builder: (context, state) => BlocProvider(
+        create: (_) => AuthCubit(repository: AuthRepository()),
+        child: const LoginPage(),
+      ),
     ),
     GoRoute(
       path: AppRoutes.signUp,
-      builder: (context, state) =>
-          BlocProvider(create: (_) => AuthCubit(), child: const RegisterPage()),
+      builder: (context, state) => BlocProvider(
+        create: (_) => AuthCubit(repository: AuthRepository()),
+        child: const RegisterPage(),
+      ),
     ),
     GoRoute(
       path: AppRoutes.forgotPassword,
       builder: (context, state) => BlocProvider(
-        create: (_) => AuthCubit(),
+        create: (_) => AuthCubit(repository: AuthRepository()),
         child: const ForgotPasswordPage(),
       ),
     ),

@@ -1,0 +1,5 @@
+flutter_native_splash:
+  color: "#1A1A2E"
+  image: "assetes/images/Rizen_OS_Icon.png"
+  android: true
+  ios: true

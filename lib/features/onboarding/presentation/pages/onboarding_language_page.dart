@@ -20,7 +20,18 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
   String _language = 'English';
   String _region = 'United States';
 
-  static const _languages = ['English', 'Arabic'];
+  static const _languages = [
+    'English',
+    'Arabic',
+    'French',
+    'German',
+    'Spanish',
+    'Turkish',
+    'Urdu',
+    'Indonesian',
+    'Malay',
+  ];
+
   static const _regions = [
     'United States',
     'United Kingdom',
@@ -28,7 +39,28 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
     'UAE',
     'Egypt',
     'Morocco',
+    'France',
+    'Germany',
+    'Spain',
+    'Turkey',
+    'Pakistan',
+    'Indonesia',
+    'Malaysia',
   ];
+
+  static const Map<String, List<String>> _languageRegions = {
+    'English': ['United States', 'United Kingdom', 'Pakistan'],
+    'Arabic': ['Saudi Arabia', 'UAE', 'Egypt', 'Morocco'],
+    'French': ['France'],
+    'German': ['Germany'],
+    'Spanish': ['Spain'],
+    'Turkish': ['Turkey'],
+    'Urdu': ['Pakistan'],
+    'Indonesian': ['Indonesia'],
+    'Malay': ['Malaysia'],
+  };
+
+  List<String> get _availableRegions => _languageRegions[_language] ?? _regions;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +100,15 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
                 return ChoiceChip(
                   label: Text(language),
                   selected: selected,
-                  onSelected: (_) => setState(() => _language = language),
+                  onSelected: (value) {
+                    setState(() {
+                      _language = language;
+                      final available = _languageRegions[language];
+                      if (available != null && !available.contains(_region)) {
+                        _region = available.first;
+                      }
+                    });
+                  },
                   selectedColor: AppColors.accent.withValues(alpha: 0.25),
                   labelStyle: TextStyle(
                     color: selected
@@ -84,7 +124,7 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
             const SizedBox(height: 28),
             Text('Region', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
-            ..._regions.map((region) {
+            ..._availableRegions.map((region) {
               final selected = _region == region;
               return Padding(
                 padding: const EdgeInsets.only(bottom: 10),
@@ -120,7 +160,7 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
                 ),
               );
             }),
-            const SizedBox(height: 120),
+            const SizedBox(height: 24),
             RizenButton(
               label: 'Continue',
               icon: PhosphorIconsBold.arrowRight,

@@ -3,8 +3,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRepository {
   AuthRepository({FirebaseAuth? auth, GoogleSignIn? googleSignIn})
-    : _auth = auth,
-      _googleSignIn = googleSignIn;
+      : _auth = auth ?? FirebaseAuth.instance,
+        _googleSignIn = googleSignIn ?? GoogleSignIn();
 
   final FirebaseAuth? _auth;
   final GoogleSignIn? _googleSignIn;

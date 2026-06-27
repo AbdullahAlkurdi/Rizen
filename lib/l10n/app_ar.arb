@@ -1,0 +1,1036 @@
+{
+  "@@locale": "ar",
+  "appTitle": "ريزن",
+  "@appTitle": {
+    "description": "Application title shown in the app bar and system."
+  },
+  "settings": "الإعدادات",
+  "@settings": {
+    "description": "Page title for the Settings screen."
+  },
+  "appearance": "المظهر",
+  "@appearance": {
+    "description": "Section label for appearance settings."
+  },
+  "theme": "الثيم",
+  "@theme": {
+    "description": "Label for theme selection."
+  },
+  "dark": "داكن",
+  "@dark": {
+    "description": "Theme option label."
+  },
+  "light": "فاتح",
+  "@light": {
+    "description": "Theme option label."
+  },
+  "system": "النظام",
+  "@system": {
+    "description": "Theme option label."
+  },
+  "language": "اللغة",
+  "@language": {
+    "description": "Section label for language settings."
+  },
+  "appLanguage": "لغة التطبيق",
+  "@appLanguage": {
+    "description": "Label for app language selection."
+  },
+  "languageAndPrayer": "اللغة والصلاة",
+  "@languageAndPrayer": {
+    "description": "Title for the language and prayer settings page."
+  },
+  "prayerCalculation": "حساب الصلاة",
+  "@prayerCalculation": {
+    "description": "Section title for prayer calculation settings."
+  },
+  "locationMethod": "طريقة الموقع",
+  "@locationMethod": {
+    "description": "Label for the location method used for prayer times."
+  },
+  "gpsBasedRiyadh": "عبر GPS · الرياض، السعودية",
+  "@gpsBasedRiyadh": {
+    "description": "Current GPS-based location display."
+  },
+  "updateLocation": "تحديث الموقع",
+  "@updateLocation": {
+    "description": "Button text to update location."
+  },
+  "notifications": "الإشعارات",
+  "@notifications": {
+    "description": "Section label for notification settings."
+  },
+  "enableNotifications": "تفعيل الإشعارات",
+  "@enableNotifications": {
+    "description": "Label for notification toggle."
+  },
+  "currency": "العملة",
+  "@currency": {
+    "description": "Section label for currency settings."
+  },
+  "preferredCurrency": "العملة المفضلة",
+  "@preferredCurrency": {
+    "description": "Label for currency selection."
+  },
+  "appVersion": "إصدار التطبيق",
+  "@appVersion": {
+    "description": "Label showing the current app version."
+  },
+  "appSettings": "إعدادات التطبيق",
+  "@appSettings": {
+    "description": "Title for the app settings page."
+  },
+  "cliAccess": "الوصول CLI",
+  "@cliAccess": {
+    "description": "Title for the CLI access page."
+  },
+  "developerCli": "CLI المطور",
+  "@developerCli": {
+    "description": "Section title for developer CLI."
+  },
+  "generateApiCredentials": "إنشاء بيانات اعتماد API لبناء أتمتة قوية.",
+  "@generateApiCredentials": {
+    "description": "Description for API credentials generator."
+  },
+  "usageExamples": "أمثلة الاستخدام",
+  "@usageExamples": {
+    "description": "Section title for CLI usage examples."
+  },
+  "generateNewToken": "إنشاء رمز جديد",
+  "@generateNewToken": {
+    "description": "Button text to generate a new API token."
+  },
+  "editProfile": "تعديل الملف الشخصي",
+  "@editProfile": {
+    "description": "Title for the edit profile page."
+  },
+  "profile": "الملف الشخصي",
+  "@profile": {
+    "description": "Title for the profile page."
+  },
+  "privacyAndSecurity": "الخصوصية والأمان",
+  "@privacyAndSecurity": {
+    "description": "Title for the privacy and security settings page."
+  },
+  "notificationSettings": "الإشعارات",
+  "@notificationSettings": {
+    "description": "Title for notification settings page."
+  },
+  "spiritualFramework": "الإطار الروحي",
+  "@spiritualFramework": {
+    "description": "Title for spiritual framework settings."
+  },
+  "supportAndFeedback": "الدعم وملاحظات المستخدم",
+  "@supportAndFeedback": {
+    "description": "Title for support and feedback page."
+  },
+
+  "login": "تسجيل الدخول",
+  "@login": {
+    "description": "Page title for the login screen."
+  },
+  "welcomeBack": "مرحباً بعودتك",
+  "@welcomeBack": {
+    "description": "Greeting on the login screen."
+  },
+  "continueDiscipline": "تواصل رحلة الانضباط مع RizenOS.",
+  "@continueDiscipline": {
+    "description": "Subtitle on the login screen."
+  },
+  "email": "البريد الإلكتروني",
+  "@email": {
+    "description": "Form field label for email."
+  },
+  "password": "كلمة المرور",
+  "@password": {
+    "description": "Form field label for password."
+  },
+  "enterYourEmail": "أدخل بريدك الإلكتروني",
+  "@enterYourEmail": {
+    "description": "Validation message for empty email."
+  },
+  "enterValidEmail": "أدخل بريداً إلكترونياً صالحاً",
+  "@enterValidEmail": {
+    "description": "Validation message for invalid email format."
+  },
+  "passwordMinLength": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+  "@passwordMinLength": {
+    "description": "Validation message for short password."
+  },
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "@forgotPassword": {
+    "description": "Link text for forgot password."
+  },
+  "signIn": "تسجيل الدخول",
+  "@signIn": {
+    "description": "Button label for sign in."
+  },
+  "continueWithGoogle": "المتابعة مع Google",
+  "@continueWithGoogle": {
+    "description": "Button label for Google sign-in."
+  },
+  "createAnAccount": "إنشاء حساب",
+  "@createAnAccount": {
+    "description": "Button text for creating a new account."
+  },
+  "register": "التسجيل",
+  "@register": {
+    "description": "Page title for the register screen."
+  },
+  "fullName": "الاسم الكامل",
+  "@fullName": {
+    "description": "Form field label for full name."
+  },
+  "enterYourName": "أدخل اسمك",
+  "@enterYourName": {
+    "description": "Validation message for empty name."
+  },
+  "createAccount": "إنشاء الحساب",
+  "@createAccount": {
+    "description": "Button label for account creation."
+  },
+  "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+  "@alreadyHaveAccount": {
+    "description": "Prompt text on register screen."
+  },
+  "backToSignIn": "العودة لتسجيل الدخول",
+  "@backToSignIn": {
+    "description": "Button text to return to sign in."
+  },
+  "resetPassword": "إعادة تعيين كلمة المرور",
+  "@resetPassword": {
+    "description": "Page title for password reset."
+  },
+  "sendResetLink": "إرسال رابط إعادة التعيين",
+  "@sendResetLink": {
+    "description": "Button label for sending reset link."
+  },
+  "getStarted": "ابدأ الآن",
+  "@getStarted": {
+    "description": "Primary action button on the welcome/onboarding pages."
+  },
+  "alreadyHaveAnAccount": "لدي حساب بالفعل",
+  "@alreadyHaveAnAccount": {
+    "description": "Secondary action on welcome page."
+  },
+
+  "setup": "الإعداد",
+  "@setup": {
+    "description": "App bar title for onboarding setup pages."
+  },
+  "skip": "تخطي",
+  "@skip": {
+    "description": "Button text to skip onboarding step."
+  },
+  "continueAction": "متابعة",
+  "@continue": {
+    "description": "Button text to continue to the next step."
+  },
+  "languageAndRegion": "اللغة والمنطقة",
+  "@languageAndRegion": {
+    "description": "Section title on onboarding language page."
+  },
+  "arabicFirstLayouts": "يدعم RizenOS تخطيطات عربية أولاً مع دعم كامل لـ RTL.",
+  "@arabicFirstLayouts": {
+    "description": "Description text about Arabic support."
+  },
+  "region": "المنطقة",
+  "@region": {
+    "description": "Section title for region selection."
+  },
+
+  "spiritualLayer": "الطبقة الروحية",
+  "@spiritualLayer": {
+    "description": "Section title for spiritual layer onboarding."
+  },
+  "enableSpiritualLayer": "تفعيل الطبقة الروحية",
+  "@enableSpiritualLayer": {
+    "description": "Label to enable the spiritual layer."
+  },
+  "locationForPrayerTimes": "الموقع لأوقات الصلاة",
+  "@locationForPrayerTimes": {
+    "description": "Label for prayer time location setting."
+  },
+  "dailyStartTime": "وقت البدء اليومي",
+  "@dailyStartTime": {
+    "description": "Label for the daily start time setting."
+  },
+  "calculationMethod": "طريقة الحساب",
+  "@calculationMethod": {
+    "description": "Label for prayer time calculation method."
+  },
+  "locationAccessEnabled": "تم تفعيل الوصول للموقع",
+  "@locationAccessEnabled": {
+    "description": "Snackbar message for enabling location access."
+  },
+
+  "theAhaMoment": "لحظة ال \"آه!\"",
+  "@theAhaMoment": {
+    "description": "Section title for AI prompt onboarding."
+  },
+  "describeYourLife": "وصف حياتك وعاداتك وأكبر تحدياتك في بضع جمل.",
+  "@describeYourLife": {
+    "description": "Placeholder text for AI prompt input."
+  },
+  "aiCoachBrief": "موجز المدرب الذكي",
+  "@aiCoachBrief": {
+    "description": "Section title for AI coach brief."
+  },
+  "iHearYou": "أسمعك. بناءً على ما شاركته، إليك خطة الانضباط الأولية.",
+  "@iHearYou": {
+    "description": "AI coach intro text."
+  },
+  "analyze": "تحليل",
+  "@analyze": {
+    "description": "Button label to submit AI analysis."
+  },
+  "launchRizenOS": "تشغيل RizenOS",
+  "@launchRizenOS": {
+    "description": "Final onboarding button text."
+  },
+
+  "habits": "العادات",
+  "@habits": {
+    "description": "Title for the habits hub."
+  },
+  "habitEngine": "محرك العادات",
+  "@habitEngine": {
+    "description": "Section title for habit engine."
+  },
+  "positiveHabits": "العادات الإيجابية",
+  "@positiveHabits": {
+    "description": "Label for positive habits section."
+  },
+  "shadowHabits": "العادات المظلمة",
+  "@shadowHabits": {
+    "description": "Label for shadow habits section."
+  },
+  "shadowScore": "نقاط العادات المظلمة",
+  "@shadowScore": {
+    "description": "Label for shadow score feature."
+  },
+  "rewardStore": "متجر المكافآت",
+  "@rewardStore": {
+    "description": "Label for reward store feature."
+  },
+  "habitAnalytics": "تحليل العادات",
+  "@habitAnalytics": {
+    "description": "Label for habit analytics feature."
+  },
+  "emergencyRecoveryMode": "وضع التعافي الطارئ",
+  "@emergencyRecoveryMode": {
+    "description": "Label for emergency recovery mode."
+  },
+  "addHabit": "إضافة عادة",
+  "@addHabit": {
+    "description": "Button text to add a new habit."
+  },
+  "checkIn": "تسجيل الحضور",
+  "@checkIn": {
+    "description": "Button text for habit check-in."
+  },
+  "logShadowEvent": "تسجيل حدث مظلم",
+  "@logShadowEvent": {
+    "description": "Button text for logging shadow events."
+  },
+  "createReward": "إنشاء مكافأة",
+  "@createReward": {
+    "description": "Button text for creating a new reward."
+  },
+
+  "habitDetail": "تفاصيل العادة",
+  "@habitDetail": {
+    "description": "Page title for habit detail."
+  },
+  "habitAnalyticsTitle": "التحليلات",
+  "@habitAnalyticsTitle": {
+    "description": "Page title for habit analytics."
+  },
+  "export": "تصدير",
+  "@export": {
+    "description": "Button text for exporting data."
+  },
+
+  "finance": "المالية",
+  "@finance": {
+    "description": "Title for finance hub."
+  },
+  "currentCycle": "الدورة الحالية",
+  "@currentCycle": {
+    "description": "Section title for current finance cycle."
+  },
+  "addCommitment": "إضافة التزام",
+  "@addCommitment": {
+    "description": "Button text to add a commitment."
+  },
+  "editCommitment": "تعديل الالتزام",
+  "@editCommitment": {
+    "description": "Page title for editing a commitment."
+  },
+  "quickExpense": "إدخال سريع للمصروف",
+  "@quickExpense": {
+    "description": "Page title for quick expense entry."
+  },
+  "parse": "تحليل",
+  "@parse": {
+    "description": "Button text for parsing expense text."
+  },
+  "confirmExpense": "تأكيد المصروف",
+  "@confirmExpense": {
+    "description": "Button text for confirming an expense."
+  },
+  "expenseText": "نص المصروف",
+  "@expenseText": {
+    "description": "Hint text for expense input."
+  },
+  "manualTransaction": "معاملة يدوية",
+  "@manualTransaction": {
+    "description": "Page title for manual transaction."
+  },
+  "saveTransaction": "حفظ المعاملة",
+  "@saveTransaction": {
+    "description": "Button text for saving a transaction."
+  },
+  "amount": "المبلغ",
+  "@amount": {
+    "description": "Form field label for amount."
+  },
+  "descriptionField": "الوصف",
+  "@descriptionField": {
+    "description": "Form field label for description."
+  },
+  "category": "الفئة",
+  "@category": {
+    "description": "Form field label for category."
+  },
+  "type": "النوع",
+  "@type": {
+    "description": "Form field label for transaction type."
+  },
+  "changeReviewTime": "تغيير وقت المراجعة",
+  "@changeReviewTime": {
+    "description": "Button text for changing financial review time."
+  },
+
+  "routines": "الروتينات",
+  "@routines": {
+    "description": "Title for routines hub."
+  },
+  "createRoutine": "إنشاء روتين",
+  "@createRoutine": {
+    "description": "Page title for creating a routine."
+  },
+  "editRoutine": "تعديل الروتين",
+  "@editRoutine": {
+    "description": "Page title for editing a routine."
+  },
+  "saveChanges": "حفظ التغييرات",
+  "@saveChanges": {
+    "description": "Button text to save routine changes."
+  },
+  "routineDetail": "تفاصيل الروتين",
+  "@routineDetail": {
+    "description": "Page title for routine detail."
+  },
+  "addTimeBlock": "إضافة كتلة زمنية",
+  "@addTimeBlock": {
+    "description": "Button text to add a time block."
+  },
+  "routineTemplates": "قوالب الروتينات",
+  "@routineTemplates": {
+    "description": "Page title for routine templates."
+  },
+  "apply": "تطبيق",
+  "@apply": {
+    "description": "Button text to apply a template."
+  },
+  "routineHistory": "سجل الروتينات",
+  "@routineHistory": {
+    "description": "Page title for routine history."
+  },
+  "aiRoutineGenerator": "مولد الروتينات بالذكاء الاصطناعي",
+  "@aiRoutineGenerator": {
+    "description": "Page title for AI routine generator."
+  },
+  "routineName": "اسم الروتين",
+  "@routineName": {
+    "description": "Form field label for routine name."
+  },
+  "routineDescription": "الوصف (اختياري)",
+  "@routineDescription": {
+    "description": "Form field label for routine description."
+  },
+  "whatIsThisRoutineFor": "ما الغرض من هذا الروتين؟",
+  "@whatIsThisRoutineFor": {
+    "description": "Placeholder text for routine description."
+  },
+  "blockTitle": "عنوان الكتلة",
+  "@blockTitle": {
+    "description": "Form field label for time block title."
+  },
+  "domain": "المجال",
+  "@domain": {
+    "description": "Form field label for time block domain."
+  },
+  "startTime": "وقت البدء",
+  "@startTime": {
+    "description": "Form field label for start time."
+  },
+  "endTime": "وقت الانتهاء",
+  "@endTime": {
+    "description": "Form field label for end time."
+  },
+  "anchorType": "نوع المرساة",
+  "@anchorType": {
+    "description": "Label for time block anchor type."
+  },
+  "descriptionOptional": "الوصف (اختياري)",
+  "@descriptionOptional": {
+    "description": "Form field label for optional description."
+  },
+
+  "notes": "الملاحظات",
+  "@notes": {
+    "description": "Title for notes hub."
+  },
+  "createNote": "إنشاء ملاحظة",
+  "@createNote": {
+    "description": "Page title for creating a note."
+  },
+  "editNote": "تعديل الملاحظة",
+  "@editNote": {
+    "description": "Page title for editing a note."
+  },
+  "saveNote": "حفظ الملاحظة",
+  "@saveNote": {
+    "description": "Button text for saving a note."
+  },
+  "noteDetail": "تفاصيل الملاحظة",
+  "@noteDetail": {
+    "description": "Page title for note detail."
+  },
+  "searchNotes": "البحث في الملاحظات",
+  "@searchNotes": {
+    "description": "Page title for notes search."
+  },
+  "nightlyReflection": "التأمل الليلي",
+  "@nightlyReflection": {
+    "description": "Page title for nightly reflection."
+  },
+  "reflectionSaved": "تم حفظ التأمل.",
+  "@reflectionSaved": {
+    "description": "Snackbar message for saved reflection."
+  },
+  "titleField": "العنوان",
+  "@titleField": {
+    "description": "Form field label for note title."
+  },
+  "tags": "الوسوم",
+  "@tags": {
+    "description": "Form field label for note tags."
+  },
+  "startWriting": "ابدأ الكتابة... Markdown مدعوم.",
+  "@startWriting": {
+    "description": "Hint text for note content input."
+  },
+  "yourReflection": "تأملك...",
+  "@yourReflection": {
+    "description": "Hint text for reflection input."
+  },
+
+  "home": "الرئيسية",
+  "@home": {
+    "description": "Navigation label for home tab."
+  },
+  "goodMorning": "صباح الخير",
+  "@goodMorning": {
+    "description": "Morning greeting."
+  },
+  "goodEvening": "مساء الخير",
+  "@goodEvening": {
+    "description": "Evening greeting."
+  },
+  "weeklyView": "عرض أسبوعي",
+  "@weeklyView": {
+    "description": "Button text for weekly view."
+  },
+  "focus": "تركيز",
+  "@focus": {
+    "description": "Focus mode button text."
+  },
+  "noActiveTimeBlocks": "لا توجد كتل نشطة",
+  "@noActiveTimeBlocks": {
+    "description": "Placeholder for empty active blocks list."
+  },
+  "quickActions": "إجراءات سريعة",
+  "@quickActions": {
+    "description": "Section title for quick actions."
+  },
+  "logActivity": "تسجيل نشاط",
+  "@logActivity": {
+    "description": "Quick action tile label."
+  },
+  "checkHabits": "تسجيل العادات",
+  "@checkHabits": {
+    "description": "Quick action tile label."
+  },
+  "burnoutMode": "وضع الاحتراق",
+  "@burnoutMode": {
+    "description": "Quick action tile label."
+  },
+  "aiCoach": "المدرب الذكي",
+  "@aiCoach": {
+    "description": "Quick action tile label."
+  },
+  "todayFlow": "سجدول اليوم",
+  "@todayFlow": {
+    "description": "Section title for today's flow."
+  },
+  "eveningWrapUp": "ملخص المساء",
+  "@eveningWrapUp": {
+    "description": "Section title for evening wrap-up."
+  },
+  "noUpcomingBlocksToday": "لا توجد كتل قادمة اليوم",
+  "@noUpcomingBlocksToday": {
+    "description": "Placeholder for empty upcoming blocks."
+  },
+  "activeTimeBlock": "الكتلة النشطة",
+  "@activeTimeBlock": {
+    "description": "Label for active time block card."
+  },
+  "minsRemaining": "دقائق متبقية",
+  "@minsRemaining": {
+    "description": "Suffix for remaining minutes display."
+  },
+  "voiceLoggingComingSoon": "تسجيل صوتي — تكامل Gemini قادم في المرحلة 4",
+  "@voiceLoggingComingSoon": {
+    "description": "Snackbar message for voice logging feature."
+  },
+  "dailyScore": "النتيجة اليومية",
+  "@dailyScore": {
+    "description": "Page title for daily score."
+  },
+  "weeklyOverview": "نظرة عامة أسبوعية",
+  "@weeklyOverview": {
+    "description": "Page title for weekly overview."
+  },
+  "weeklyAvg": "المتوسط الأسبوعي",
+  "@weeklyAvg": {
+    "description": "Stat label in weekly overview."
+  },
+  "bestStreak": "أفضل سلسلة",
+  "@bestStreak": {
+    "description": "Stat label in weekly overview."
+  },
+  "activeDomains": "المجالات النشطة",
+  "@activeDomains": {
+    "description": "Stat label in weekly overview."
+  },
+  "shadowTrend": "اتجاه العادات المظلمة",
+  "@shadowTrend": {
+    "description": "Stat label in weekly overview."
+  },
+  "monthlyCalendar": "التقويم الشهري",
+  "@monthlyCalendar": {
+    "description": "Page title for monthly calendar."
+  },
+  "completed": "مكتمل",
+  "@completed": {
+    "description": "Calendar label for completed occurrences."
+  },
+  "missed": "فائت",
+  "@missed": {
+    "description": "Calendar label for missed occurrences."
+  },
+  "today": "اليوم",
+  "@today": {
+    "description": "Calendar label for current day."
+  },
+  "sleepAnalytics": "تحليل النوم",
+  "@sleepAnalytics": {
+    "description": "Page title for sleep analytics."
+  },
+  "target": "الهدف",
+  "@target": {
+    "description": "Label for sleep target."
+  },
+  "actual": "الفعلي",
+  "@actual": {
+    "description": "Label for actual sleep duration."
+  },
+  "delay": "التأخير",
+  "@delay": {
+    "description": "Label for sleep delay."
+  },
+  "notificationsPage": "الإشعارات",
+  "@notificationsPage": {
+    "description": "Page title for notifications list."
+  },
+  "markAllRead": "تحديد الكل كمقروء",
+  "@markAllRead": {
+    "description": "Button text to mark all notifications as read."
+  },
+  "all": "الكل",
+  "@all": {
+    "description": "Filter tab label."
+  },
+  "important": "مهم",
+  "@important": {
+    "description": "Filter tab label."
+  },
+  "aiCoachFilter": "المدرب الذكي",
+  "@aiCoachFilter": {
+    "description": "Filter tab label for AI coach notifications."
+  },
+  "spiritualFilter": "روحي",
+  "@spiritualFilter": {
+    "description": "Filter tab label for spiritual notifications."
+  },
+
+  "domains": "المجالات",
+  "@domains": {
+    "description": "Title for domains hub."
+  },
+  "domainsHub": "مركز المجالات",
+  "@domainsHub": {
+    "description": "Page title for domains hub."
+  },
+  "domainDashboard": "لوحة المجال",
+  "@domainDashboard": {
+    "description": "Page title for domain dashboard."
+  },
+  "domainLog": "سجل المجال",
+  "@domainLog": {
+    "description": "Page title for domain log."
+  },
+  "saveEntry": "حفظ الإدخال",
+  "@saveEntry": {
+    "description": "Button text for saving a domain log entry."
+  },
+  "durationMinutes": "المدة (بالدقائق)",
+  "@durationMinutes": {
+    "description": "Form field label for duration in minutes."
+  },
+  "notesField": "الملاحظات",
+  "@notesField": {
+    "description": "Form field label for session notes."
+  },
+  "enterDurationOrMetric": "الرجاء إدخال المدة أو قيمة المقياس",
+  "@enterDurationOrMetric": {
+    "description": "Validation message for domain log entry."
+  },
+  "sessionLogged": "تم تسجيل الجلسة!",
+  "@sessionLogged": {
+    "description": "Success message after logging a session."
+  },
+  "howDidSessionGo": "كيف كانت الجلسة؟",
+  "@howDidSessionGo": {
+    "description": "Placeholder text for session notes."
+  },
+
+  "coach": "المدرب",
+  "@coach": {
+    "description": "Navigation label for coach tab."
+  },
+  "aiCoachChat": "محادثة المدرب الذكي",
+  "@aiCoachChat": {
+    "description": "Page title for AI coach chat."
+  },
+  "coachHub": "مركز المدرب",
+  "@coachHub": {
+    "description": "Page title for coach hub."
+  },
+  "coachBriefing": "الموجز",
+  "@coachBriefing": {
+    "description": "Page title for coach briefing."
+  },
+  "regenerate": "إعادة إنشاء",
+  "@regenerate": {
+    "description": "Button text to regenerate briefing."
+  },
+  "coachWeekly": "رؤى أسبوعية",
+  "@coachWeekly": {
+    "description": "Page title for coach weekly insights."
+  },
+  "exportPdf": "تصدير PDF",
+  "@exportPdf": {
+    "description": "Button text to export weekly insights as PDF."
+  },
+  "keyInsights": "الرؤى الرئيسية",
+  "@keyInsights": {
+    "description": "Section title for key insights."
+  },
+  "coachSuggestions": "الاقتراحات",
+  "@coachSuggestions": {
+    "description": "Page title for coach suggestions."
+  },
+  "refresh": "تحديث",
+  "@refresh": {
+    "description": "Button text to refresh suggestions."
+  },
+  "coachMicroGoals": "الأهداف الصغيرة",
+  "@coachMicroGoals": {
+    "description": "Page title for coach micro goals."
+  },
+  "recalculate": "إعادة الحساب",
+  "@recalculate": {
+    "description": "Button text to recalculate micro goals."
+  },
+  "coachInsights": "الرؤى",
+  "@coachInsights": {
+    "description": "Page title for coach insights."
+  },
+
+  "more": "المزيد",
+  "@more": {
+    "description": "Navigation label for more tab."
+  },
+  "exploreRizenOS": "استكشف RizenOS",
+  "@exploreRizenOS": {
+    "description": "Section title on more hub page."
+  },
+  "helpAndCommunity": "المساعدة والمجتمع",
+  "@helpAndCommunity": {
+    "description": "Section title on support page."
+  },
+  "faqs": "الأسئلة الشائعة والتوثيق",
+  "@faqs": {
+    "description": "Menu item label for FAQs."
+  },
+  "sendFeedback": "إرسال ملاحظات",
+  "@sendFeedback": {
+    "description": "Menu item label for sending feedback."
+  },
+  "openSourceAttributions": "اعتمادات المصدر المفتوح",
+  "@openSourceAttributions": {
+    "description": "Menu item label for open source attributions."
+  },
+  "rizenOSVersion": "RizenOS v1.0.0",
+  "@rizenOSVersion": {
+    "description": "App version string."
+  },
+  "builtWithFlutter": "مبني بتقنية Flutter ❤️",
+  "@builtWithFlutter": {
+    "description": "Credits text."
+  },
+
+  "deleteRoutine": "حذف الروتين",
+  "@deleteRoutine": {
+    "description": "Header text for delete routine confirmation dialog."
+  },
+  "areYouSureDeleteRoutine": "هل أنت متأكد من حذف هذا الروتين؟",
+  "@areYouSureDeleteRoutine": {
+    "description": "Confirmation text for deleting a routine."
+  },
+  "deleteNote": "حذف الملاحظة",
+  "@deleteNote": {
+    "description": "Header text for delete note confirmation dialog."
+  },
+  "areYouSureDeleteNote": "هل أنت متأكد من حذف هذه الملاحظة؟",
+  "@areYouSureDeleteNote": {
+    "description": "Confirmation text for deleting a note."
+  },
+  "cancel": "إلغاء",
+  "@cancel": {
+    "description": "Dialog button text to cancel an action."
+  },
+  "delete": "حذف",
+  "@delete": {
+    "description": "Dialog button text to confirm deletion."
+  },
+  "save": "حفظ",
+  "@save": {
+    "description": "Dialog button text to save."
+  },
+  "yes": "نعم",
+  "@yes": {
+    "description": "Affirmative response."
+  },
+  "no": "لا",
+  "@no": {
+    "description": "Negative response."
+  },
+  "loading": "جاري التحميل",
+  "@loading": {
+    "description": "Accessibility label for loading state."
+  },
+  "error": "خطأ",
+  "@error": {
+    "description": "Label for error state."
+  },
+  "failed": "فشل",
+  "@failed": {
+    "description": "Label for failed operations."
+  },
+
+  "islamicHub": "المركز الإسلامي",
+  "@islamicHub": {
+    "description": "Page title for Islamic hub."
+  },
+  "qibla": "بوصلة القبلة",
+  "@qibla": {
+    "description": "Page title for Qibla compass."
+  },
+  "prayerDetail": "تفاصيل الصلاة",
+  "@prayerDetail": {
+    "description": "Page title for prayer detail."
+  },
+  "prayerSettings": "إعدادات الصلاة",
+  "@prayerSettings": {
+    "description": "Page title for prayer settings."
+  },
+  "hijriCalendar": "التقويم الهجري",
+  "@hijriCalendar": {
+    "description": "Page title for Hijri calendar."
+  },
+  "fajr": "الفجر",
+  "@fajr": {
+    "description": "Prayer name: Fajr."
+  },
+  "dhuhr": "الظهر",
+  "@dhuhr": {
+    "description": "Prayer name: Dhuhr."
+  },
+  "asr": "العصر",
+  "@asr": {
+    "description": "Prayer name: Asr."
+  },
+  "maghrib": "المغرب",
+  "@maghrib": {
+    "description": "Prayer name: Maghrib."
+  },
+  "isha": "العشاء",
+  "@isha": {
+    "description": "Prayer name: Isha."
+  },
+  "muslimWorldLeague": "رابطة العالم الإسلامي",
+  "@muslimWorldLeague": {
+    "description": "Prayer time calculation method."
+  },
+  "ummAlQura": "أم القرى",
+  "@ummAlQura": {
+    "description": "Prayer time calculation method."
+  },
+  "egyptianGeneralAuthority": "الهيئة المصرية العامة",
+  "@egyptianGeneralAuthority": {
+    "description": "Prayer time calculation method."
+  },
+  "isna": "ISNA",
+  "@isna": {
+    "description": "Prayer time calculation method."
+  },
+
+  "analytics": "التحليلات",
+  "@analytics": {
+    "description": "Navigation label for analytics."
+  },
+  "analyticsHub": "مركز التحليلات",
+  "@analyticsHub": {
+    "description": "Page title for analytics hub."
+  },
+  "dataExportAndBackup": "تصدير البيانات والنسخ الاحتياطي",
+  "@dataExportAndBackup": {
+    "description": "Page title for data export."
+  },
+  "growthIndex": "مؤشر النمو",
+  "@growthIndex": {
+    "description": "Page title for growth index."
+  },
+  "habitTrends": "اتجاهات العادات",
+  "@habitTrends": {
+    "description": "Page title for habit trends."
+  },
+  "domainCorrelation": "ارتباط المجالات",
+  "@domainCorrelation": {
+    "description": "Page title for domain correlation."
+  },
+
+  "sports": "رياضة",
+  "@sports": {
+    "description": "Domain option label."
+  },
+  "study": "دراسة",
+  "@study": {
+    "description": "Domain option label."
+  },
+  "work": "عمل",
+  "@work": {
+    "description": "Domain option label."
+  },
+  "coding": "برمجة",
+  "@coding": {
+    "description": "Domain option label."
+  },
+  "cookingNutrition": "طبخ/تغذية",
+  "@cookingNutrition": {
+    "description": "Domain option label."
+  },
+  "spiritual": "روحي",
+  "@spiritual": {
+    "description": "Domain option label."
+  },
+  "custom": "مخصص",
+  "@custom": {
+    "description": "Domain option label."
+  },
+
+  "sar": "ر.س",
+  "@sar": {
+    "description": "Currency code: Saudi Riyal."
+  },
+  "usd": "د.أ",
+  "@usd": {
+    "description": "Currency code: US Dollar."
+  },
+  "eur": "€",
+  "@eur": {
+    "description": "Currency code: Euro."
+  },
+  "aed": "د.إ",
+  "@aed": {
+    "description": "Currency code: UAE Dirham."
+  },
+  "gbp": "£",
+  "@gbp": {
+    "description": "Currency code: British Pound."
+  },
+
+  "monthlyIncome": "الدخل الشهري",
+  "@monthlyIncome": {
+    "description": "Form field label for monthly income."
+  },
+  "currencyField": "العملة",
+  "@currencyField": {
+    "description": "Form field label for currency selection."
+  },
+  "day": "يوم {day}",
+  "@day": {
+    "description": "Day label with number placeholder.",
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "optionalContextCheckIn": "سياق اختياري لهذا التسجيل",
+  "@optionalContextCheckIn": {
+    "description": "Hint text for habit check-in context."
+  },
+  "confirmApplyTemplate": "تطبيق \"{template}\"?",
+  "@confirmApplyTemplate": {
+    "description": "Confirmation text for applying a template.",
+    "placeholders": {
+      "template": {
+        "type": "String"
+      }
+    }
+  },
+  "profileUpdatedSuccess": "تم تحديث الملف الشخصي بنجاح.",
+  "@profileUpdatedSuccess": {
+    "description": "Snackbar message for successful profile update."
+  },
+  "searchNotesPlaceholder": "البحث في الملاحظات بالمعنى أو الكلمة المفتاحية...",
+  "@searchNotesPlaceholder": {
+    "description": "Hint text for notes search."
+  }
+}
