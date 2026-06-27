@@ -1,0 +1,1 @@
+enum AdhkarSession { morning, evening }

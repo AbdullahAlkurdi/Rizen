@@ -53,3 +53,5 @@ flutter:
   assets:
     - .env
     - assetes/images/
+    - assets/data/adhkar.json
+    - assets/data/dua_library.json

@@ -3,11 +3,17 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../features/islamic/presentation/cubit/prayer_times_cubit.dart';
+import '../../features/islamic/presentation/cubit/spiritual_cubit.dart';
+import '../../features/islamic/data/models/adhkar_session.dart';
 import '../../features/islamic/presentation/pages/hijri_calendar_page.dart';
 import '../../features/islamic/presentation/pages/islamic_hub_page.dart';
+import '../../features/islamic/presentation/pages/adhkar_checklist_page.dart';
+import '../../features/islamic/presentation/pages/dua_library_page.dart';
 import '../../features/islamic/presentation/pages/prayer_detail_page.dart';
 import '../../features/islamic/presentation/pages/prayer_settings_page.dart';
 import '../../features/islamic/presentation/pages/qibla_page.dart';
+import '../../features/islamic/presentation/pages/quran_tracker_page.dart';
+import '../../features/islamic/presentation/pages/spiritual_summary_page.dart';
 import '../../features/analytics/presentation/pages/analytics_hub_page.dart';
 import '../../features/analytics/presentation/pages/data_export_page.dart';
 import '../../features/analytics/presentation/pages/domain_correlation_page.dart';
@@ -670,6 +676,34 @@ final appRouter = GoRouter(
         GoRoute(
           path: AppRoutes.hijriCalendar,
           builder: (context, state) => const HijriCalendarPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.quranTracker,
+          builder: (context, state) => BlocProvider(
+            create: (_) => SpiritualCubit()..loadQuranTracker(),
+            child: const QuranTrackerPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.adhkarChecklist,
+          builder: (context, state) => BlocProvider(
+            create: (_) => SpiritualCubit()..loadAdhkarChecklist(AdhkarSession.morning),
+            child: const AdhkarChecklistPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.duaLibrary,
+          builder: (context, state) => BlocProvider(
+            create: (_) => SpiritualCubit()..loadDuaLibrary(),
+            child: const DuaLibraryPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.spiritualSummary,
+          builder: (context, state) => BlocProvider(
+            create: (_) => SpiritualCubit()..loadSpiritualSummary(),
+            child: const SpiritualSummaryPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.domainCorrelation,

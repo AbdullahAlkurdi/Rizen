@@ -1,0 +1,54 @@
+{
+  "morning": [
+    {
+      "id": "adhkar_morning_1",
+      "arabicText": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ",
+      "transliteration": "Asbahna wa asbahal mulku lillah, walhamdulillah",
+      "translationAr": "أصبحنا وأصبح الملك لله، والحمد لله",
+      "translationEn": "We have reached the morning and at this very time all sovereignty belongs to Allah, and all praise is for Allah.",
+      "count": 1
+    },
+    {
+      "id": "adhkar_morning_2",
+      "arabicText": "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ",
+      "transliteration": "Allahumma bika asbahna, wa bika amsayna, wa bika nahya, wa bika namutu wa ilaykan nushur",
+      "translationAr": "اللهم بك أصبحنا، وبك أمسينا، وبك نحيا، وبك نموت وإليك النشور",
+      "translationEn": "O Allah, by Your leave we have reached the morning and by Your leave we have reached the evening, by Your leave we live and die, and to You is our resurrection.",
+      "count": 1
+    },
+    {
+      "id": "adhkar_morning_3",
+      "arabicText": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+      "transliteration": "SubhanAllahi wa bihamdih",
+      "translationAr": "سبحان الله وبحمده",
+      "translationEn": "Glory be to Allah and praise Him.",
+      "count": 100
+    }
+  ],
+  "evening": [
+    {
+      "id": "adhkar_evening_1",
+      "arabicText": "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ",
+      "transliteration": "Amsayna wa amsal mulku lillah, walhamdulillah",
+      "translationAr": "أمسينا وأمسى الملك لله، والحمد لله",
+      "translationEn": "We have reached the evening and at this very time all sovereignty belongs to Allah, and all praise is for Allah.",
+      "count": 1
+    },
+    {
+      "id": "adhkar_evening_2",
+      "arabicText": "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ",
+      "transliteration": "Allahumma bika amsayna, wa bika asbahna, wa bika nahya, wa bika namutu wa ilaykal maseer",
+      "translationAr": "اللهم بك أمسينا، وبك أصبحنا، وبك نحيا، وبك نموت وإليك المصير",
+      "translationEn": "O Allah, by Your leave we have reached the evening and by Your leave we have reached the morning, by Your leave we live and die, and to You is our final return.",
+      "count": 1
+    },
+    {
+      "id": "adhkar_evening_3",
+      "arabicText": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+      "transliteration": "SubhanAllahi wa bihamdih",
+      "translationAr": "سبحان الله وبحمده",
+      "translationEn": "Glory be to Allah and praise Him.",
+      "count": 100
+    }
+  ]
+}

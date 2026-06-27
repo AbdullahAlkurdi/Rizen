@@ -84,6 +84,10 @@ abstract final class AppRoutes {
   static const prayerDetail = '/islamic/prayer';
   static const prayerSettings = '/islamic/settings';
   static const hijriCalendar = '/islamic/calendar';
+  static const quranTracker = '/islamic/quran';
+  static const adhkarChecklist = '/islamic/adhkar';
+  static const duaLibrary = '/islamic/dua';
+  static const spiritualSummary = '/islamic/summary';
 
   static const profile = '/settings/profile';
   static const editProfile = '/settings/profile/edit';
