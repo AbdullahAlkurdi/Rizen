@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../features/analytics/presentation/cubit/analytics_cubit.dart';
+import '../../features/analytics/presentation/pages/analytics_hub_page.dart';
+import '../../features/analytics/presentation/pages/data_export_page.dart';
+import '../../features/analytics/presentation/pages/domain_correlation_page.dart';
+import '../../features/analytics/presentation/pages/growth_index_page.dart';
+import '../../features/analytics/presentation/pages/habit_trends_page.dart';
 import '../../features/islamic/presentation/cubit/prayer_times_cubit.dart';
 import '../../features/islamic/presentation/cubit/spiritual_cubit.dart';
 import '../../features/islamic/data/models/adhkar_session.dart';
@@ -14,11 +20,6 @@ import '../../features/islamic/presentation/pages/prayer_settings_page.dart';
 import '../../features/islamic/presentation/pages/qibla_page.dart';
 import '../../features/islamic/presentation/pages/quran_tracker_page.dart';
 import '../../features/islamic/presentation/pages/spiritual_summary_page.dart';
-import '../../features/analytics/presentation/pages/analytics_hub_page.dart';
-import '../../features/analytics/presentation/pages/data_export_page.dart';
-import '../../features/analytics/presentation/pages/domain_correlation_page.dart';
-import '../../features/analytics/presentation/pages/growth_index_page.dart';
-import '../../features/analytics/presentation/pages/habit_trends_page.dart';
 import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/auth/presentation/cubit/auth_cubit.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
@@ -650,7 +651,10 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.analytics,
-          builder: (context, state) => const AnalyticsHubPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => AnalyticsCubit()..loadAll(),
+            child: const AnalyticsHubPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.islamicHub,
@@ -707,19 +711,31 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.domainCorrelation,
-          builder: (context, state) => const DomainCorrelationPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => AnalyticsCubit()..loadAll(),
+            child: const DomainCorrelationPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.habitTrends,
-          builder: (context, state) => const HabitTrendsPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => AnalyticsCubit()..loadAll(),
+            child: const HabitTrendsPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.growthIndex,
-          builder: (context, state) => const GrowthIndexPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => AnalyticsCubit()..loadAll(),
+            child: const GrowthIndexPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.dataExport,
-          builder: (context, state) => const DataExportPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => AnalyticsCubit()..loadAll(),
+            child: const DataExportPage(),
+          ),
         ),
       ],
     ),
