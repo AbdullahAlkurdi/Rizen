@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/feature_scaffold.dart';
 import '../../../../core/widgets/glass_card.dart';
+import '../cubit/burnout_mode_cubit.dart';
 
 class RewardStorePage extends StatelessWidget {
   const RewardStorePage({super.key});
 
-  static const _rewards = [
-    _Reward('Morning Coffee at Café', 120, 'Unlocked', AppColors.success),
-    _Reward('New Game Release', 450, 'Locked', AppColors.textMuted),
-    _Reward('Movie Night Budget', 250, 'Locked', AppColors.accent),
-    _Reward('Weekend Trip Fund', 800, 'Locked', AppColors.warning),
-  ];
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => BurnoutModeCubit()..activateEmergencyMode(),
+      child: const RewardStoreView(),
+    );
+  }
+}
+
+class RewardStoreView extends StatelessWidget {
+  const RewardStoreView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +30,8 @@ class RewardStorePage extends StatelessWidget {
       subtitle: 'Real-life pleasures unlocked through discipline.',
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
-        icon: Icon(PhosphorIconsBold.plus),
-        label: Text('Create Reward'),
+        icon: const Icon(PhosphorIconsBold.plus),
+        label: const Text('Create Reward'),
       ),
       body: ListView(
         children: [
@@ -56,8 +63,15 @@ class RewardStorePage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          ..._rewards.map(
-            (r) => Padding(
+          ...List.generate(4, (index) {
+            final rewards = [
+              _Reward('Morning Coffee at Café', 120, true, AppColors.success),
+              _Reward('New Game Release', 450, false, AppColors.textMuted),
+              _Reward('Movie Night Budget', 250, false, AppColors.accent),
+              _Reward('Weekend Trip Fund', 800, false, AppColors.warning),
+            ];
+            final r = rewards[index];
+            return Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: GlassCard(
                 onTap: () {},
@@ -104,8 +118,8 @@ class RewardStorePage extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ),
+            );
+          }),
         ],
       ),
     );
@@ -113,11 +127,10 @@ class RewardStorePage extends StatelessWidget {
 }
 
 class _Reward {
-  const _Reward(this.title, this.pointsNeeded, this.status, this.color);
+  const _Reward(this.title, this.pointsNeeded, this.isUnlocked, this.color);
   final String title;
   final int pointsNeeded;
-  final String status;
+  final bool isUnlocked;
   final Color color;
   String get price => '$pointsNeeded pts';
-  bool get isUnlocked => status == 'Unlocked';
 }

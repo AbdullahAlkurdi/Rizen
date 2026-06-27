@@ -56,9 +56,10 @@ import '../../features/finance/presentation/pages/finance_settings_page.dart';
 import '../../features/finance/presentation/pages/manual_transaction_page.dart';
 import '../../features/finance/presentation/pages/monthly_report_page.dart';
 import '../../features/finance/presentation/pages/quick_expense_entry_page.dart';
+import '../../features/habits/presentation/cubit/burnout_mode_cubit.dart';
 import '../../features/habits/presentation/cubit/habits_cubit.dart';
 import '../../features/habits/presentation/pages/add_habit_page.dart';
-import '../../features/habits/presentation/pages/emergency_recovery_page.dart';
+import '../../features/habits/presentation/pages/burnout_mode_page.dart';
 import '../../features/habits/presentation/pages/habit_analytics_page.dart';
 import '../../features/habits/presentation/pages/habit_checkin_page.dart';
 import '../../features/habits/presentation/pages/habit_detail_page.dart';
@@ -545,7 +546,10 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.emergencyRecovery,
-          builder: (context, state) => const EmergencyRecoveryPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => BurnoutModeCubit()..activateEmergencyMode(),
+            child: const BurnoutModePage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.rewardStore,

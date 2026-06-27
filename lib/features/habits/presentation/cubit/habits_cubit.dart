@@ -16,12 +16,14 @@ final class HabitsLoaded extends HabitsState {
     required this.shadow,
     this.selectedHabit,
     this.logs = const [],
+    this.shadowScore = 0,
   });
 
   final List<Habit> positive;
   final List<Habit> shadow;
   final Habit? selectedHabit;
   final List<HabitLog> logs;
+  final int shadowScore;
 
   List<Habit> get all => [...positive, ...shadow];
 }
@@ -43,7 +45,8 @@ class HabitsCubit extends Cubit<HabitsState> {
     emit(HabitsLoading());
     try {
       final habits = await _repository.getAllHabits();
-      emit(_loadedFrom(habits));
+      final shadowScore = await _calculateShadowScore(habits);
+      emit(_loadedFrom(habits, shadowScore: shadowScore));
     } catch (e) {
       emit(HabitsError(e.toString()));
     }
@@ -59,7 +62,9 @@ class HabitsCubit extends Cubit<HabitsState> {
         return;
       }
       final logs = await _repository.getLogsForHabit(habitId);
-      emit(_loadedFrom(habits, selectedHabit: selectedHabit, logs: logs));
+      final shadowScore = await _calculateShadowScore(habits);
+      emit(_loadedFrom(habits,
+          selectedHabit: selectedHabit, logs: logs, shadowScore: shadowScore));
     } catch (e) {
       emit(HabitsError(e.toString()));
     }
@@ -80,7 +85,8 @@ class HabitsCubit extends Cubit<HabitsState> {
         targetCount: targetCount,
       );
       final habits = await _repository.getAllHabits();
-      emit(_loadedFrom(habits));
+      final shadowScore = await _calculateShadowScore(habits);
+      emit(_loadedFrom(habits, shadowScore: shadowScore));
     } catch (e) {
       emit(HabitsError(e.toString()));
     }
@@ -101,7 +107,8 @@ class HabitsCubit extends Cubit<HabitsState> {
     try {
       await _repository.deleteHabit(habitId);
       final habits = await _repository.getAllHabits();
-      emit(_loadedFrom(habits));
+      final shadowScore = await _calculateShadowScore(habits);
+      emit(_loadedFrom(habits, shadowScore: shadowScore));
     } catch (e) {
       emit(HabitsError(e.toString()));
     }
@@ -117,10 +124,31 @@ class HabitsCubit extends Cubit<HabitsState> {
     }
   }
 
+  Future<int> _calculateShadowScore(List<Habit> habits) async {
+    final shadowHabits = habits.where((h) => h.type == HabitType.shadow).toList();
+    if (shadowHabits.isEmpty) return 0;
+
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+
+    int score = 0;
+    for (final habit in shadowHabits) {
+      final logs = await _repository.getLogsForHabit(habit.id);
+      final todayLogs = logs.where((log) {
+        return log.completedAt.isAfter(startOfDay) &&
+            log.completedAt.isBefore(endOfDay);
+      }).toList();
+      score += todayLogs.length;
+    }
+    return score;
+  }
+
   HabitsLoaded _loadedFrom(
     List<Habit> habits, {
     Habit? selectedHabit,
     List<HabitLog> logs = const [],
+    int shadowScore = 0,
   }) {
     return HabitsLoaded(
       positive: habits
@@ -129,6 +157,7 @@ class HabitsCubit extends Cubit<HabitsState> {
       shadow: habits.where((habit) => habit.type == HabitType.shadow).toList(),
       selectedHabit: selectedHabit,
       logs: logs,
+      shadowScore: shadowScore,
     );
   }
 }
