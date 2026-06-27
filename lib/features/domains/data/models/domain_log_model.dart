@@ -8,8 +8,10 @@ part 'domain_log_model.g.dart';
 class DomainLog with _$DomainLog {
   const factory DomainLog({
     required String id,
+    required String uid,
     required String domainId,
     required int duration,
+    @Default(5) int intensity,
     String? notes,
     required DateTime loggedAt,
     String? metricLabel,
@@ -21,19 +23,19 @@ class DomainLog with _$DomainLog {
 
   factory DomainLog.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    return DomainLog.fromJson({
-      'id': doc.id,
-      'domainId':
-          data['domainId'] as String? ?? data['domain'] as String? ?? '',
-      'duration':
-          data['duration'] as int? ?? data['durationMinutes'] as int? ?? 0,
-      'notes': data['notes'] as String? ?? data['note'] as String?,
-      'loggedAt':
+    return DomainLog(
+      id: doc.id,
+      uid: data['uid'] as String? ?? '',
+      domainId: data['domainId'] as String? ?? data['domain'] as String? ?? '',
+      duration: data['duration'] as int? ?? data['durationMinutes'] as int? ?? 0,
+      intensity: data['intensity'] as int? ?? 5,
+      notes: data['notes'] as String? ?? data['note'] as String?,
+      loggedAt:
           (data['loggedAt'] as Timestamp?)?.toDate() ??
           (data['timestamp'] as Timestamp?)?.toDate() ??
           DateTime.now(),
-      'metricLabel': data['metricLabel'] as String?,
-      'metricValue': (data['metricValue'] as num?)?.toDouble(),
-    });
+      metricLabel: data['metricLabel'] as String?,
+      metricValue: (data['metricValue'] as num?)?.toDouble(),
+    );
   }
 }

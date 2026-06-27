@@ -29,6 +29,93 @@ class DomainLogsRepository {
     return snapshot.docs.map((doc) => DomainLog.fromFirestore(doc)).toList();
   }
 
+  Future<List<DomainLog>> getLogsByDomainRange(
+    String domainId,
+    DateTime start,
+    DateTime end,
+  ) async {
+    final uid = _uid;
+    if (uid == null) throw Exception('User not authenticated');
+
+    final snapshot = await _logsRef
+        .where('uid', isEqualTo: uid)
+        .where('domainId', isEqualTo: domainId)
+        .where('loggedAt', isGreaterThanOrEqualTo: start)
+        .where('loggedAt', isLessThanOrEqualTo: end)
+        .orderBy('loggedAt', descending: true)
+        .get();
+
+    return snapshot.docs.map((doc) => DomainLog.fromFirestore(doc)).toList();
+  }
+
+  Future<List<DomainLog>> getTodayLogs() async {
+    final uid = _uid;
+    if (uid == null) throw Exception('User not authenticated');
+
+    final now = DateTime.now();
+    final start = DateTime(now.year, now.month, now.day);
+    final end = start.add(const Duration(days: 1));
+
+    final snapshot = await _logsRef
+        .where('uid', isEqualTo: uid)
+        .where('loggedAt', isGreaterThanOrEqualTo: start)
+        .where('loggedAt', isLessThan: end)
+        .get();
+
+    return snapshot.docs.map((doc) => DomainLog.fromFirestore(doc)).toList();
+  }
+
+  Future<Map<String, double>> getWeeklySummary() async {
+    final uid = _uid;
+    if (uid == null) throw Exception('User not authenticated');
+
+    final now = DateTime.now();
+    final weekStart = DateTime(now.year, now.month, now.day - now.weekday + 1);
+    final start = DateTime(weekStart.year, weekStart.month, weekStart.day);
+    final end = start.add(const Duration(days: 7));
+
+    final snapshot = await _logsRef
+        .where('uid', isEqualTo: uid)
+        .where('loggedAt', isGreaterThanOrEqualTo: start)
+        .where('loggedAt', isLessThan: end)
+        .get();
+
+    final logs = snapshot.docs.map((doc) => DomainLog.fromFirestore(doc)).toList();
+    final summary = <String, double>{};
+    for (final log in logs) {
+      summary[log.domainId] = (summary[log.domainId] ?? 0) + log.duration / 60.0;
+    }
+    return summary;
+  }
+
+  Future<int> getDomainStreak(String domainId) async {
+    final uid = _uid;
+    if (uid == null) throw Exception('User not authenticated');
+
+    final snapshot = await _logsRef
+        .where('uid', isEqualTo: uid)
+        .where('domainId', isEqualTo: domainId)
+        .orderBy('loggedAt', descending: true)
+        .get();
+
+    final logs = snapshot.docs.map((doc) => DomainLog.fromFirestore(doc)).toList();
+    if (logs.isEmpty) return 0;
+
+    int streak = 0;
+    DateTime checkDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    for (final log in logs) {
+      final logDay = DateTime(log.loggedAt.year, log.loggedAt.month, log.loggedAt.day);
+      final diff = checkDate.difference(logDay).inDays;
+      if (diff == 0 || (diff == 1 && checkDate != logDay)) {
+        streak++;
+        checkDate = logDay;
+      } else if (diff > 1) {
+        break;
+      }
+    }
+    return streak;
+  }
+
   Stream<List<DomainLog>> watchLogsByDomain(String domainId) {
     final uid = _uid;
     if (uid == null) return const Stream.empty();
@@ -47,6 +134,7 @@ class DomainLogsRepository {
   Future<void> addLog({
     required String domainId,
     required int duration,
+    int intensity = 5,
     String? notes,
     String? metricLabel,
     double? metricValue,
@@ -66,12 +154,37 @@ class DomainLogsRepository {
       'domain': domainId,
       'duration': duration,
       'durationMinutes': duration,
+      'intensity': intensity,
       'loggedAt': Timestamp.fromDate(ts),
       'timestamp': Timestamp.fromDate(ts),
       'notes': notes,
       'note': notes,
       'metricLabel': metricLabel,
       'metricValue': metricValue,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> addLogFromModel(DomainLog log) async {
+    final user = _auth.currentUser;
+    if (user == null) throw Exception('User not authenticated');
+
+    final ref = _logsRef.doc(log.id);
+    await ref.set({
+      'id': log.id,
+      'logId': log.id,
+      'uid': log.uid.isEmpty ? user.uid : log.uid,
+      'domainId': log.domainId,
+      'domain': log.domainId,
+      'duration': log.duration,
+      'durationMinutes': log.duration,
+      'intensity': log.intensity,
+      'loggedAt': Timestamp.fromDate(log.loggedAt),
+      'timestamp': Timestamp.fromDate(log.loggedAt),
+      'notes': log.notes,
+      'note': log.notes,
+      'metricLabel': log.metricLabel,
+      'metricValue': log.metricValue,
       'createdAt': FieldValue.serverTimestamp(),
     });
   }

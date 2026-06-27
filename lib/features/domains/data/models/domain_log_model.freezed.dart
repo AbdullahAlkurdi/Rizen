@@ -22,8 +22,10 @@ DomainLog _$DomainLogFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$DomainLog {
   String get id => throw _privateConstructorUsedError;
+  String get uid => throw _privateConstructorUsedError;
   String get domainId => throw _privateConstructorUsedError;
   int get duration => throw _privateConstructorUsedError;
+  int get intensity => throw _privateConstructorUsedError;
   String? get notes => throw _privateConstructorUsedError;
   DateTime get loggedAt => throw _privateConstructorUsedError;
   String? get metricLabel => throw _privateConstructorUsedError;
@@ -46,8 +48,10 @@ abstract class $DomainLogCopyWith<$Res> {
   @useResult
   $Res call({
     String id,
+    String uid,
     String domainId,
     int duration,
+    int intensity,
     String? notes,
     DateTime loggedAt,
     String? metricLabel,
@@ -71,8 +75,10 @@ class _$DomainLogCopyWithImpl<$Res, $Val extends DomainLog>
   @override
   $Res call({
     Object? id = null,
+    Object? uid = null,
     Object? domainId = null,
     Object? duration = null,
+    Object? intensity = null,
     Object? notes = freezed,
     Object? loggedAt = null,
     Object? metricLabel = freezed,
@@ -84,6 +90,10 @@ class _$DomainLogCopyWithImpl<$Res, $Val extends DomainLog>
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
                       as String,
+            uid: null == uid
+                ? _value.uid
+                : uid // ignore: cast_nullable_to_non_nullable
+                      as String,
             domainId: null == domainId
                 ? _value.domainId
                 : domainId // ignore: cast_nullable_to_non_nullable
@@ -91,6 +101,10 @@ class _$DomainLogCopyWithImpl<$Res, $Val extends DomainLog>
             duration: null == duration
                 ? _value.duration
                 : duration // ignore: cast_nullable_to_non_nullable
+                      as int,
+            intensity: null == intensity
+                ? _value.intensity
+                : intensity // ignore: cast_nullable_to_non_nullable
                       as int,
             notes: freezed == notes
                 ? _value.notes
@@ -125,8 +139,10 @@ abstract class _$$DomainLogImplCopyWith<$Res>
   @useResult
   $Res call({
     String id,
+    String uid,
     String domainId,
     int duration,
+    int intensity,
     String? notes,
     DateTime loggedAt,
     String? metricLabel,
@@ -149,8 +165,10 @@ class __$$DomainLogImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? uid = null,
     Object? domainId = null,
     Object? duration = null,
+    Object? intensity = null,
     Object? notes = freezed,
     Object? loggedAt = null,
     Object? metricLabel = freezed,
@@ -162,6 +180,10 @@ class __$$DomainLogImplCopyWithImpl<$Res>
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
                   as String,
+        uid: null == uid
+            ? _value.uid
+            : uid // ignore: cast_nullable_to_non_nullable
+                  as String,
         domainId: null == domainId
             ? _value.domainId
             : domainId // ignore: cast_nullable_to_non_nullable
@@ -169,6 +191,10 @@ class __$$DomainLogImplCopyWithImpl<$Res>
         duration: null == duration
             ? _value.duration
             : duration // ignore: cast_nullable_to_non_nullable
+                  as int,
+        intensity: null == intensity
+            ? _value.intensity
+            : intensity // ignore: cast_nullable_to_non_nullable
                   as int,
         notes: freezed == notes
             ? _value.notes
@@ -196,8 +222,10 @@ class __$$DomainLogImplCopyWithImpl<$Res>
 class _$DomainLogImpl implements _DomainLog {
   const _$DomainLogImpl({
     required this.id,
+    required this.uid,
     required this.domainId,
     required this.duration,
+    this.intensity = 5,
     this.notes,
     required this.loggedAt,
     this.metricLabel,
@@ -210,9 +238,14 @@ class _$DomainLogImpl implements _DomainLog {
   @override
   final String id;
   @override
+  final String uid;
+  @override
   final String domainId;
   @override
   final int duration;
+  @override
+  @JsonKey()
+  final int intensity;
   @override
   final String? notes;
   @override
@@ -224,7 +257,7 @@ class _$DomainLogImpl implements _DomainLog {
 
   @override
   String toString() {
-    return 'DomainLog(id: $id, domainId: $domainId, duration: $duration, notes: $notes, loggedAt: $loggedAt, metricLabel: $metricLabel, metricValue: $metricValue)';
+    return 'DomainLog(id: $id, uid: $uid, domainId: $domainId, duration: $duration, intensity: $intensity, notes: $notes, loggedAt: $loggedAt, metricLabel: $metricLabel, metricValue: $metricValue)';
   }
 
   @override
@@ -233,10 +266,13 @@ class _$DomainLogImpl implements _DomainLog {
         (other.runtimeType == runtimeType &&
             other is _$DomainLogImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.domainId, domainId) ||
                 other.domainId == domainId) &&
             (identical(other.duration, duration) ||
                 other.duration == duration) &&
+            (identical(other.intensity, intensity) ||
+                other.intensity == intensity) &&
             (identical(other.notes, notes) || other.notes == notes) &&
             (identical(other.loggedAt, loggedAt) ||
                 other.loggedAt == loggedAt) &&
@@ -251,8 +287,10 @@ class _$DomainLogImpl implements _DomainLog {
   int get hashCode => Object.hash(
     runtimeType,
     id,
+    uid,
     domainId,
     duration,
+    intensity,
     notes,
     loggedAt,
     metricLabel,
@@ -276,8 +314,10 @@ class _$DomainLogImpl implements _DomainLog {
 abstract class _DomainLog implements DomainLog {
   const factory _DomainLog({
     required final String id,
+    required final String uid,
     required final String domainId,
     required final int duration,
+    final int intensity,
     final String? notes,
     required final DateTime loggedAt,
     final String? metricLabel,
@@ -290,9 +330,13 @@ abstract class _DomainLog implements DomainLog {
   @override
   String get id;
   @override
+  String get uid;
+  @override
   String get domainId;
   @override
   int get duration;
+  @override
+  int get intensity;
   @override
   String? get notes;
   @override

@@ -38,7 +38,15 @@ import '../../features/coach/presentation/pages/coach_weekly_page.dart';
 import '../../features/domains/presentation/cubit/domain_logs_cubit.dart';
 import '../../features/domains/presentation/pages/domain_dashboard_page.dart';
 import '../../features/domains/presentation/pages/domain_log_page.dart';
+import '../../features/domains/presentation/pages/domain_summary_page.dart';
 import '../../features/domains/presentation/pages/domains_hub_page.dart';
+import '../../features/domains/presentation/pages/sports_tracker_page.dart';
+import '../../features/domains/presentation/pages/study_tracker_page.dart';
+import '../../features/domains/presentation/pages/work_tracker_page.dart';
+import '../../features/domains/presentation/pages/coding_tracker_page.dart';
+import '../../features/domains/presentation/pages/cooking_tracker_page.dart';
+import '../../features/domains/presentation/pages/spiritual_tracker_page.dart';
+import '../../features/domains/presentation/pages/custom_tracker_page.dart';
 import '../../features/finance/presentation/cubit/finance_cubit.dart';
 import '../../features/finance/presentation/pages/commitments_page.dart';
 import '../../features/finance/presentation/pages/daily_review_page.dart';
@@ -402,6 +410,41 @@ final appRouter = GoRouter(
             create: (_) => DomainLogsCubit(),
             child: DomainLogPage(domainId: state.pathParameters['id']!),
           ),
+        ),
+        GoRoute(
+          path: AppRoutes.domainsSummary,
+          builder: (context, state) => BlocProvider(
+            create: (_) => DomainLogsCubit()..loadWeeklySummary(),
+            child: const DomainSummaryPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.sportsTracker,
+          builder: (context, state) => const SportsTrackerPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.studyTracker,
+          builder: (context, state) => const StudyTrackerPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.workTracker,
+          builder: (context, state) => const WorkTrackerPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.codingTracker,
+          builder: (context, state) => const CodingTrackerPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.cookingTracker,
+          builder: (context, state) => const CookingTrackerPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.spiritualTracker,
+          builder: (context, state) => const SpiritualTrackerPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.customTracker,
+          builder: (context, state) => const CustomTrackerPage(),
         ),
         GoRoute(
           path: AppRoutes.profile,

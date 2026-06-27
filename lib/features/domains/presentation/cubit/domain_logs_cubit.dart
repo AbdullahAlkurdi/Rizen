@@ -10,9 +10,17 @@ final class DomainLogsInitial extends DomainLogsState {}
 final class DomainLogsLoading extends DomainLogsState {}
 
 final class DomainLogsLoaded extends DomainLogsState {
+  DomainLogsLoaded({
+    required this.logs,
+    required this.summary,
+    this.todayLogs = const [],
+    this.weeklySummary = const {},
+  });
+
   final List<DomainLog> logs;
   final ({double weeklyHours, int streak, double progress}) summary;
-  DomainLogsLoaded({required this.logs, required this.summary});
+  final List<DomainLog> todayLogs;
+  final Map<String, double> weeklySummary;
 }
 
 final class DomainLogsError extends DomainLogsState {
@@ -21,11 +29,11 @@ final class DomainLogsError extends DomainLogsState {
 }
 
 class DomainLogsCubit extends Cubit<DomainLogsState> {
-  final DomainLogsRepository _repository;
-
   DomainLogsCubit({DomainLogsRepository? repository})
     : _repository = repository ?? DomainLogsRepository(),
       super(DomainLogsInitial());
+
+  final DomainLogsRepository _repository;
 
   Future<void> loadLogs(String domainId) async {
     emit(DomainLogsLoading());
@@ -38,9 +46,43 @@ class DomainLogsCubit extends Cubit<DomainLogsState> {
     }
   }
 
+  Future<void> loadTodayLogs() async {
+    emit(DomainLogsLoading());
+    try {
+      final todayLogs = await _repository.getTodayLogs();
+      final summary = _computeSummary(todayLogs);
+      emit(DomainLogsLoaded(logs: todayLogs, summary: summary, todayLogs: todayLogs));
+    } catch (e) {
+      emit(DomainLogsError(e.toString()));
+    }
+  }
+
+  Future<void> loadWeeklySummary() async {
+    emit(DomainLogsLoading());
+    try {
+      final weeklySummary = await _repository.getWeeklySummary();
+      final allLogs = await _repository.getTodayLogs();
+      final summary = _computeSummary(allLogs);
+      emit(DomainLogsLoaded(logs: allLogs, summary: summary, weeklySummary: weeklySummary));
+    } catch (e) {
+      emit(DomainLogsError(e.toString()));
+    }
+  }
+
+  Future<void> addDomainLog(DomainLog log) async {
+    emit(DomainLogsLoading());
+    try {
+      await _repository.addLogFromModel(log);
+      await loadLogs(log.domainId);
+    } catch (e) {
+      emit(DomainLogsError(e.toString()));
+    }
+  }
+
   Future<void> addLog({
     required String domainId,
     required int duration,
+    int intensity = 5,
     String? notes,
     String? metricLabel,
     double? metricValue,
@@ -50,6 +92,7 @@ class DomainLogsCubit extends Cubit<DomainLogsState> {
       await _repository.addLog(
         domainId: domainId,
         duration: duration,
+        intensity: intensity,
         notes: notes,
         metricLabel: metricLabel,
         metricValue: metricValue,
@@ -75,6 +118,19 @@ class DomainLogsCubit extends Cubit<DomainLogsState> {
     try {
       await _repository.deleteLog(logId);
       await loadLogs(domainId);
+    } catch (e) {
+      emit(DomainLogsError(e.toString()));
+    }
+  }
+
+  Future<void> loadDomainSummary(String domainId) async {
+    emit(DomainLogsLoading());
+    try {
+      final logs = await _repository.getLogsByDomain(domainId);
+      final streak = await _repository.getDomainStreak(domainId);
+      final summary = _computeSummary(logs);
+      final updatedSummary = (weeklyHours: summary.weeklyHours, streak: streak, progress: summary.progress);
+      emit(DomainLogsLoaded(logs: logs, summary: updatedSummary));
     } catch (e) {
       emit(DomainLogsError(e.toString()));
     }

@@ -38,6 +38,14 @@ abstract final class AppRoutes {
 
   static const domainsHub = '/domains';
   static const domains = '/domains';
+  static const domainsSummary = '/domains/summary';
+  static const sportsTracker = '/domains/sports';
+  static const studyTracker = '/domains/study';
+  static const workTracker = '/domains/work';
+  static const codingTracker = '/domains/coding';
+  static const cookingTracker = '/domains/cooking';
+  static const spiritualTracker = '/domains/spiritual';
+  static const customTracker = '/domains/custom';
   static const habitsRecovery = '/habits/recovery';
   static const coachHome = '/coach';
   static String domainDashboard(String id) => '/domains/dashboard/$id';
