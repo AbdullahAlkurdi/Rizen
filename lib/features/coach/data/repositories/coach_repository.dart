@@ -11,6 +11,9 @@ import '../../../../core/interfaces/note_service_interface.dart';
 import '../../../../core/interfaces/domain_service_interface.dart';
 import '../../../../core/interfaces/islamic_service_interface.dart';
 import '../models/coach_message_model.dart';
+import '../../domain/models/todo_coach_summary.dart';
+import '../../../todo/domain/usecases/get_missed_items_usecase.dart';
+import '../../../todo/domain/repositories/todo_repository_interface.dart';
 
 class CoachRepository {
   CoachRepository({
@@ -22,6 +25,8 @@ class CoachRepository {
     required NoteServiceInterface notesRepository,
     required DomainServiceInterface domainLogsRepository,
     required IslamicServiceInterface prayerTimesRepository,
+    required TodoRepositoryInterface todoRepository,
+    required GetMissedItemsUseCase getMissedItemsUseCase,
   })  : _firestore = firestore ?? FirebaseFirestore.instance,
         _auth = auth ?? FirebaseAuth.instance,
         _dio = dio ?? Dio(),
@@ -29,7 +34,9 @@ class CoachRepository {
         _financeRepository = financeRepository,
         _notesRepository = notesRepository,
         _domainLogsRepository = domainLogsRepository,
-        _prayerTimesRepository = prayerTimesRepository;
+        _prayerTimesRepository = prayerTimesRepository,
+        _todoRepository = todoRepository,
+        _getMissedItemsUseCase = getMissedItemsUseCase;
 
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
@@ -39,6 +46,8 @@ class CoachRepository {
   final NoteServiceInterface _notesRepository;
   final DomainServiceInterface _domainLogsRepository;
   final IslamicServiceInterface _prayerTimesRepository;
+  final TodoRepositoryInterface _todoRepository;
+  final GetMissedItemsUseCase _getMissedItemsUseCase;
 
   CollectionReference get _sessionsCollection =>
       _firestore.collection('coach_sessions');
@@ -410,5 +419,44 @@ Always end with a conversational message to the user.''';
     }
 
     return text.trim();
+  }
+
+  Future<TodoCoachSummary> getTodayTodoSummary() async {
+    final now = DateTime.now();
+    final todayLists = await _todoRepository.getTodoListsByDate(now);
+
+    int totalItems = 0;
+    int completedItems = 0;
+    int missedRequiredItems = 0;
+    double totalPct = 0.0;
+
+    for (final list in todayLists) {
+      totalItems += list.items.length;
+      completedItems += list.items.where((i) => i.isCompleted).length;
+      missedRequiredItems += list.items
+          .where((i) => i.isRequired && !i.isCompleted)
+          .length;
+      totalPct += list.completionPct;
+    }
+
+    final averageCompletionPct =
+        todayLists.isEmpty ? 0.0 : totalPct / todayLists.length;
+
+    final missedItems = await _getMissedItemsUseCase.call(null, 7);
+    final chronicallyMissed = missedItems.map((i) => i.title).toList();
+
+    final perfectHabits = todayLists
+        .where((list) => list.completionPct == 100.0)
+        .map((list) => list.parentId)
+        .toList();
+
+    return TodoCoachSummary(
+      totalItems: totalItems,
+      completedItems: completedItems,
+      missedRequiredItems: missedRequiredItems,
+      averageCompletionPct: averageCompletionPct,
+      chronicallyMissed: chronicallyMissed,
+      perfectHabits: perfectHabits,
+    );
   }
 }

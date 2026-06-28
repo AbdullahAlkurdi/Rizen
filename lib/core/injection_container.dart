@@ -7,6 +7,7 @@ import 'interfaces/finance_service_interface.dart';
 import 'interfaces/note_service_interface.dart';
 import 'interfaces/domain_service_interface.dart';
 import 'interfaces/islamic_service_interface.dart';
+import '../features/coach/data/repositories/coach_repository.dart';
 import '../features/habits/data/repositories/habits_repository.dart';
 import '../features/habits/data/repositories/shadow_tracker_repository.dart';
 import '../features/habits/domain/repositories/shadow_tracker_repository_interface.dart';
@@ -53,6 +54,16 @@ Future<void> init() async {
   sl.registerLazySingleton(() => CheckTodoItemUseCase(sl<TodoRepositoryInterface>()));
   sl.registerLazySingleton(() => UncheckTodoItemUseCase(sl<TodoRepositoryInterface>()));
   sl.registerLazySingleton(() => GetMissedItemsUseCase(sl<TodoRepositoryInterface>()));
+
+  sl.registerLazySingleton(() => CoachRepository(
+    habitsRepository: sl<HabitServiceInterface>(),
+    financeRepository: sl<FinanceServiceInterface>(),
+    notesRepository: sl<NoteServiceInterface>(),
+    domainLogsRepository: sl<DomainServiceInterface>(),
+    prayerTimesRepository: sl<IslamicServiceInterface>(),
+    todoRepository: sl<TodoRepositoryInterface>(),
+    getMissedItemsUseCase: sl<GetMissedItemsUseCase>(),
+  ));
 
   sl.registerLazySingleton<ShadowTrackerRepositoryInterface>(
     () => ShadowTrackerRepository(),
