@@ -4,14 +4,16 @@ import '../models/todo_list_model.dart';
 
 abstract class TodoRemoteDataSource {
   Future<TodoListModel?> getTodoList(String parentId, String parentType);
+  Stream<TodoListModel?> getTodoListStream(String parentId, String parentType);
   Future<void> saveTodoList(TodoListModel todoList);
-  Future<void> checkItem(String todoListId, String itemId, bool checked);
+  Future<void> checkItem(
+      String todoListId, String itemId, bool checked);
   Future<void> uncheckItem(String todoListId, String itemId);
   Future<void> reorderItems(String todoListId, List<String> orderedIds);
   Future<void> deleteTodoList(String parentId);
   Future<List<TodoListModel>> getTodoListsByDate(DateTime date);
   Future<Map<String, double>> getMissedItemFrequency(
-    String parentId, int lastNDays);
+      String? parentId, int lastNDays);
 }
 
 class TodoRemoteDataSourceImpl implements TodoRemoteDataSource {
@@ -38,6 +40,14 @@ class TodoRemoteDataSourceImpl implements TodoRemoteDataSource {
     final doc = await _todoListsCollection.doc(parentId).get();
     if (!doc.exists) return null;
     return TodoListModel.fromFirestore(doc);
+  }
+
+  @override
+  Stream<TodoListModel?> getTodoListStream(String parentId, String parentType) {
+    return _todoListsCollection.doc(parentId).snapshots().map((doc) {
+      if (!doc.exists) return null;
+      return TodoListModel.fromFirestore(doc);
+    });
   }
 
   @override
@@ -97,21 +107,25 @@ class TodoRemoteDataSourceImpl implements TodoRemoteDataSource {
 
   @override
   Future<Map<String, double>> getMissedItemFrequency(
-      String parentId, int lastNDays) async {
+      String? parentId, int lastNDays) async {
     final frequency = <String, double>{};
     final now = DateTime.now();
     for (int i = 0; i < lastNDays; i++) {
       final date = now.subtract(Duration(days: i));
       final dateStr = date.toIso8601String().substring(0, 10);
-      final snapshot = await _firestore
+      var query = _firestore
           .collection('users')
           .doc(_uid)
           .collection('todo_lists_history')
           .doc(dateStr)
           .collection('items')
-          .where('parent_id', isEqualTo: parentId)
-          .where('is_completed', isEqualTo: false)
-          .get();
+          .where('is_completed', isEqualTo: false);
+
+      if (parentId != null && parentId.isNotEmpty) {
+        query = query.where('parent_id', isEqualTo: parentId);
+      }
+
+      final snapshot = await query.get();
       for (final doc in snapshot.docs) {
         final title = doc['title'] as String? ?? '';
         frequency[title] = (frequency[title] ?? 0) + 1;

@@ -14,6 +14,11 @@ class TodoRepositoryImpl implements TodoRepositoryInterface {
   }
 
   @override
+  Stream<TodoListModel?> getTodoListStream(String parentId, String parentType) {
+    return _remoteDataSource.getTodoListStream(parentId, parentType);
+  }
+
+  @override
   Future<void> saveTodoList(TodoListModel todoList) {
     return _remoteDataSource.saveTodoList(todoList);
   }
@@ -45,7 +50,7 @@ class TodoRepositoryImpl implements TodoRepositoryInterface {
 
   @override
   Future<Map<String, double>> getMissedItemFrequency(
-      String parentId, int lastNDays) {
+      String? parentId, int lastNDays) {
     return _remoteDataSource.getMissedItemFrequency(parentId, lastNDays);
   }
 }

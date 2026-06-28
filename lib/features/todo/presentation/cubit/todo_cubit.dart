@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
 import 'todo_state.dart';
 import '../../domain/usecases/get_todo_list_usecase.dart';
 import '../../domain/usecases/save_todo_list_usecase.dart';
@@ -27,59 +28,97 @@ class TodoCubit extends Cubit<TodoState> {
   final UncheckTodoItemUseCase _uncheckItem;
   final ComputeTodoScoreUseCase _computeScore;
 
+  StreamSubscription<TodoListModel?>? _todoSubscription;
+
+  @override
+  Future<void> close() async {
+    await _todoSubscription?.cancel();
+    return super.close();
+  }
+
   Future<void> loadTodoList(String parentId, String parentType) async {
     emit(TodoLoading());
+    _todoSubscription?.cancel();
+    _todoSubscription = null;
+
     try {
+      _todoSubscription = _getTodoList.stream(parentId, parentType).listen(
+        (todoList) {
+          if (todoList != null && !isClosed) {
+            emit(TodoLoaded(todoList));
+          }
+        },
+        onError: (e) {
+          if (!isClosed) emit(TodoError(e.toString()));
+        },
+      );
+
       final todoList = await _getTodoList(parentId, parentType);
-      if (todoList == null) {
-        emit(TodoLoaded(TodoListModel(
-          id: parentId,
-          parentId: parentId,
-          parentType: parentType,
-          items: [],
-          completionThreshold: 70,
-        )));
-      } else {
+      if (todoList != null && !isClosed) {
         emit(TodoLoaded(todoList));
       }
     } catch (e) {
-      emit(TodoError(e.toString()));
+      if (!isClosed) emit(TodoError(e.toString()));
     }
   }
 
   Future<void> saveTodoList(TodoListModel todoList) async {
     try {
       await _saveTodoList(todoList);
-      emit(TodoSaved());
+      if (!isClosed) emit(TodoSaved());
     } catch (e) {
-      emit(TodoError(e.toString()));
+      if (!isClosed) emit(TodoError(e.toString()));
     }
   }
 
   Future<void> checkItem(String todoListId, String itemId) async {
+    final currentState = state;
+    if (currentState is! TodoLoaded) return;
+
+    final oldList = currentState.todoList;
+    final updatedItems = currentState.todoList.items.map((item) {
+      if (item.id == itemId) {
+        return item.copyWith(isCompleted: true, completedAt: DateTime.now());
+      }
+      return item;
+    }).toList();
+    final optimisticList = currentState.todoList.copyWith(items: updatedItems);
+
+    emit(TodoItemToggling(itemId));
+    emit(TodoLoaded(optimisticList));
+
     try {
       await _checkItem(todoListId, itemId, true);
-      await _reloadList(todoListId);
     } catch (e) {
-      emit(TodoError(e.toString()));
+      if (!isClosed) {
+        emit(TodoLoaded(oldList));
+        emit(TodoError('Failed to check item: $e'));
+      }
     }
   }
 
   Future<void> uncheckItem(String todoListId, String itemId) async {
+    final currentState = state;
+    if (currentState is! TodoLoaded) return;
+
+    final oldList = currentState.todoList;
+    final updatedItems = currentState.todoList.items.map((item) {
+      if (item.id == itemId) {
+        return item.copyWith(isCompleted: false, completedAt: null);
+      }
+      return item;
+    }).toList();
+    final optimisticList = currentState.todoList.copyWith(items: updatedItems);
+
+    emit(TodoItemToggling(itemId));
+    emit(TodoLoaded(optimisticList));
+
     try {
       await _uncheckItem(todoListId, itemId);
-      await _reloadList(todoListId);
     } catch (e) {
-      emit(TodoError(e.toString()));
-    }
-  }
-
-  Future<void> _reloadList(String todoListId) async {
-    final currentState = state;
-    if (currentState is TodoLoaded) {
-      final todoList = await _getTodoList(todoListId, currentState.todoList.parentType);
-      if (todoList != null) {
-        emit(TodoLoaded(todoList));
+      if (!isClosed) {
+        emit(TodoLoaded(oldList));
+        emit(TodoError('Failed to uncheck item: $e'));
       }
     }
   }

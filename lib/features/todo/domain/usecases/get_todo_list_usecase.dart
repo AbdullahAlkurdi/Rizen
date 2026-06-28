@@ -9,4 +9,8 @@ class GetTodoListUseCase {
   Future<TodoListModel?> call(String parentId, String parentType) {
     return _repository.getTodoList(parentId, parentType);
   }
+
+  Stream<TodoListModel?> stream(String parentId, String parentType) {
+    return _repository.getTodoListStream(parentId, parentType);
+  }
 }

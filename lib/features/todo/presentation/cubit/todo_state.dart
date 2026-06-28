@@ -36,6 +36,13 @@ final class TodoItemChecked extends TodoState {
 
 final class TodoSaved extends TodoState {}
 
+final class TodoItemToggling extends TodoState {
+  TodoItemToggling(this.itemId);
+  final String itemId;
+  @override
+  List<Object?> get props => [itemId];
+}
+
 final class TodoError extends TodoState {
   TodoError(this.message);
 

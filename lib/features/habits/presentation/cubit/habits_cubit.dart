@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/habit_log_model.dart';
 import '../../data/models/habit_model.dart';
 import '../../data/repositories/habits_repository.dart';
+import '../../domain/usecases/complete_habit_usecase.dart';
 
 sealed class HabitsState {}
 
@@ -35,11 +36,15 @@ final class HabitsError extends HabitsState {
 }
 
 class HabitsCubit extends Cubit<HabitsState> {
-  HabitsCubit({HabitsRepository? repository})
-      : _repository = repository ?? HabitsRepository(),
+  HabitsCubit({
+    HabitsRepository? repository,
+    CompleteHabitUseCase? completeHabitUseCase,
+  })  : _repository = repository ?? HabitsRepository(),
+        _completeHabitUseCase = completeHabitUseCase,
         super(HabitsInitial());
 
   final HabitsRepository _repository;
+  final CompleteHabitUseCase? _completeHabitUseCase;
 
   Future<void> checkInWithTodo({
     required String habitId,
@@ -47,7 +52,26 @@ class HabitsCubit extends Cubit<HabitsState> {
   }) async {
     emit(HabitsLoading());
     try {
-      await _repository.createHabitLog(habitId: habitId, note: note);
+      final habits = await _repository.getAllHabits();
+      Habit? habit;
+      for (final h in habits) {
+        if (h.id == habitId) {
+          habit = h;
+          break;
+        }
+      }
+      final habitName = habit?.name ?? '';
+
+      if (_completeHabitUseCase != null && habit != null) {
+        await _completeHabitUseCase(
+          habitId: habitId,
+          habitName: habitName,
+          hasTodoList: habit.hasTodoList,
+          note: note,
+        );
+      } else {
+        await _repository.createHabitLog(habitId: habitId, note: note);
+      }
       await loadHabit(habitId);
     } catch (e) {
       emit(HabitsError(e.toString()));

@@ -17,7 +17,7 @@ class GetMissedItemsUseCase {
 
   final TodoRepositoryInterface _repository;
 
-  Future<List<MissedItem>> call(String parentId, int lastNDays) async {
+  Future<List<MissedItem>> call(String? parentId, int lastNDays) async {
     final frequency = await _repository.getMissedItemFrequency(parentId, lastNDays);
     final now = DateTime.now();
     return frequency.entries
