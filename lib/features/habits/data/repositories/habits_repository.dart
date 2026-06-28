@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../models/habit_log_model.dart';
-import '../models/habit_model.dart';
+import '../../../../core/interfaces/habit_service_interface.dart';
 
-class HabitsRepository {
+class HabitsRepository implements HabitServiceInterface {
   HabitsRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
-    : _firestore = firestore ?? FirebaseFirestore.instance,
-      _auth = auth ?? FirebaseAuth.instance;
+      : _firestore = firestore ?? FirebaseFirestore.instance,
+        _auth = auth ?? FirebaseAuth.instance;
 
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
@@ -22,16 +21,20 @@ class HabitsRepository {
     return user.uid;
   }
 
-  Future<Habit?> getHabit(String habitId) async {
-    final uid = _uid;
-    final doc = await _habitsCollection.doc(habitId).get();
-    if (!doc.exists) return null;
-
-    final habit = Habit.fromFirestore(doc);
-    if (habit.uid != uid) throw Exception('Unauthorized');
-    return habit;
+  @override
+  Future<List<Habit>> getTodayHabits() async {
+    final habits = await getAllHabits();
+    return habits.where((h) => h.isActive).toList();
   }
 
+  @override
+  Future<int> getStreak() async {
+    final habits = await getAllHabits();
+    if (habits.isEmpty) return 0;
+    return habits.map((h) => h.currentStreak).reduce((a, b) => a > b ? a : b);
+  }
+
+  @override
   Future<List<Habit>> getAllHabits() async {
     final uid = _uid;
     final snapshot = await _habitsCollection
@@ -40,6 +43,27 @@ class HabitsRepository {
         .get();
 
     return snapshot.docs.map(Habit.fromFirestore).toList();
+  }
+
+  @override
+  Future<List<HabitLog>> getAllHabitLogs() async {
+    final uid = _uid;
+    final snapshot = await _logsCollection
+        .where('uid', isEqualTo: uid)
+        .orderBy('completedAt', descending: true)
+        .get();
+
+    return snapshot.docs.map(HabitLog.fromFirestore).toList();
+  }
+
+  Future<Habit?> getHabit(String habitId) async {
+    final uid = _uid;
+    final doc = await _habitsCollection.doc(habitId).get();
+    if (!doc.exists) return null;
+
+    final habit = Habit.fromFirestore(doc);
+    if (habit.uid != uid) throw Exception('Unauthorized');
+    return habit;
   }
 
   Future<Habit> createHabit({
@@ -115,37 +139,26 @@ class HabitsRepository {
     return snapshot.docs.map(HabitLog.fromFirestore).toList();
   }
 
-  Future<List<HabitLog>> getAllHabitLogs() async {
-    final uid = _uid;
-    final snapshot = await _logsCollection
-        .where('uid', isEqualTo: uid)
-        .orderBy('completedAt', descending: true)
-        .get();
-
-    return snapshot.docs.map(HabitLog.fromFirestore).toList();
-  }
-
+  @override
   Future<HabitLog> createHabitLog({
     required String habitId,
     DateTime? completedAt,
     String? note,
   }) async {
     final uid = _uid;
-    final habit = await getHabit(habitId);
-    if (habit == null) throw Exception('Habit not found');
-
     final ref = _logsCollection.doc();
+    final now = completedAt ?? DateTime.now();
     final log = HabitLog(
       id: ref.id,
       uid: uid,
       habitId: habitId,
-      completedAt: completedAt ?? DateTime.now(),
+      completedAt: now,
       note: note,
     );
 
     await ref.set({
       ...log.toFirestore(),
-      'completedAt': FieldValue.serverTimestamp(),
+      'createdAt': FieldValue.serverTimestamp(),
     });
     await _recalculateStreak(habitId);
     return log;

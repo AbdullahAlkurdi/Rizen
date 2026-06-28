@@ -22,11 +22,13 @@ Note _$NoteFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Note {
   String get id => throw _privateConstructorUsedError;
+  String get uid => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String get body => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  String get content => throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
+  String get mood => throw _privateConstructorUsedError;
+  DateTime get loggedAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this Note to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,11 +46,13 @@ abstract class $NoteCopyWith<$Res> {
   @useResult
   $Res call({
     String id,
+    String uid,
     String title,
-    String body,
-    DateTime createdAt,
-    DateTime? updatedAt,
+    String content,
     List<String> tags,
+    String mood,
+    DateTime loggedAt,
+    DateTime? updatedAt,
   });
 }
 
@@ -68,11 +72,13 @@ class _$NoteCopyWithImpl<$Res, $Val extends Note>
   @override
   $Res call({
     Object? id = null,
+    Object? uid = null,
     Object? title = null,
-    Object? body = null,
-    Object? createdAt = null,
-    Object? updatedAt = freezed,
+    Object? content = null,
     Object? tags = null,
+    Object? mood = null,
+    Object? loggedAt = null,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -80,26 +86,34 @@ class _$NoteCopyWithImpl<$Res, $Val extends Note>
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
                       as String,
+            uid: null == uid
+                ? _value.uid
+                : uid // ignore: cast_nullable_to_non_nullable
+                      as String,
             title: null == title
                 ? _value.title
                 : title // ignore: cast_nullable_to_non_nullable
                       as String,
-            body: null == body
-                ? _value.body
-                : body // ignore: cast_nullable_to_non_nullable
+            content: null == content
+                ? _value.content
+                : content // ignore: cast_nullable_to_non_nullable
                       as String,
-            createdAt: null == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
+            tags: null == tags
+                ? _value.tags
+                : tags // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            mood: null == mood
+                ? _value.mood
+                : mood // ignore: cast_nullable_to_non_nullable
+                      as String,
+            loggedAt: null == loggedAt
+                ? _value.loggedAt
+                : loggedAt // ignore: cast_nullable_to_non_nullable
                       as DateTime,
             updatedAt: freezed == updatedAt
                 ? _value.updatedAt
                 : updatedAt // ignore: cast_nullable_to_non_nullable
                       as DateTime?,
-            tags: null == tags
-                ? _value.tags
-                : tags // ignore: cast_nullable_to_non_nullable
-                      as List<String>,
           )
           as $Val,
     );
@@ -116,11 +130,13 @@ abstract class _$$NoteImplCopyWith<$Res> implements $NoteCopyWith<$Res> {
   @useResult
   $Res call({
     String id,
+    String uid,
     String title,
-    String body,
-    DateTime createdAt,
-    DateTime? updatedAt,
+    String content,
     List<String> tags,
+    String mood,
+    DateTime loggedAt,
+    DateTime? updatedAt,
   });
 }
 
@@ -137,11 +153,13 @@ class __$$NoteImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? uid = null,
     Object? title = null,
-    Object? body = null,
-    Object? createdAt = null,
-    Object? updatedAt = freezed,
+    Object? content = null,
     Object? tags = null,
+    Object? mood = null,
+    Object? loggedAt = null,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _$NoteImpl(
@@ -149,26 +167,34 @@ class __$$NoteImplCopyWithImpl<$Res>
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
                   as String,
+        uid: null == uid
+            ? _value.uid
+            : uid // ignore: cast_nullable_to_non_nullable
+                  as String,
         title: null == title
             ? _value.title
             : title // ignore: cast_nullable_to_non_nullable
                   as String,
-        body: null == body
-            ? _value.body
-            : body // ignore: cast_nullable_to_non_nullable
+        content: null == content
+            ? _value.content
+            : content // ignore: cast_nullable_to_non_nullable
                   as String,
-        createdAt: null == createdAt
-            ? _value.createdAt
-            : createdAt // ignore: cast_nullable_to_non_nullable
+        tags: null == tags
+            ? _value._tags
+            : tags // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        mood: null == mood
+            ? _value.mood
+            : mood // ignore: cast_nullable_to_non_nullable
+                  as String,
+        loggedAt: null == loggedAt
+            ? _value.loggedAt
+            : loggedAt // ignore: cast_nullable_to_non_nullable
                   as DateTime,
         updatedAt: freezed == updatedAt
             ? _value.updatedAt
             : updatedAt // ignore: cast_nullable_to_non_nullable
                   as DateTime?,
-        tags: null == tags
-            ? _value._tags
-            : tags // ignore: cast_nullable_to_non_nullable
-                  as List<String>,
       ),
     );
   }
@@ -176,15 +202,18 @@ class __$$NoteImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$NoteImpl implements _Note {
+class _$NoteImpl extends _Note {
   const _$NoteImpl({
     required this.id,
+    required this.uid,
     required this.title,
-    required this.body,
-    required this.createdAt,
-    this.updatedAt,
+    required this.content,
     final List<String> tags = const [],
-  }) : _tags = tags;
+    required this.mood,
+    required this.loggedAt,
+    this.updatedAt,
+  }) : _tags = tags,
+       super._();
 
   factory _$NoteImpl.fromJson(Map<String, dynamic> json) =>
       _$$NoteImplFromJson(json);
@@ -192,13 +221,11 @@ class _$NoteImpl implements _Note {
   @override
   final String id;
   @override
+  final String uid;
+  @override
   final String title;
   @override
-  final String body;
-  @override
-  final DateTime createdAt;
-  @override
-  final DateTime? updatedAt;
+  final String content;
   final List<String> _tags;
   @override
   @JsonKey()
@@ -209,8 +236,15 @@ class _$NoteImpl implements _Note {
   }
 
   @override
+  final String mood;
+  @override
+  final DateTime loggedAt;
+  @override
+  final DateTime? updatedAt;
+
+  @override
   String toString() {
-    return 'Note(id: $id, title: $title, body: $body, createdAt: $createdAt, updatedAt: $updatedAt, tags: $tags)';
+    return 'Note(id: $id, uid: $uid, title: $title, content: $content, tags: $tags, mood: $mood, loggedAt: $loggedAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -219,13 +253,15 @@ class _$NoteImpl implements _Note {
         (other.runtimeType == runtimeType &&
             other is _$NoteImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.body, body) || other.body == body) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
+            (identical(other.content, content) || other.content == content) &&
+            const DeepCollectionEquality().equals(other._tags, _tags) &&
+            (identical(other.mood, mood) || other.mood == mood) &&
+            (identical(other.loggedAt, loggedAt) ||
+                other.loggedAt == loggedAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt) &&
-            const DeepCollectionEquality().equals(other._tags, _tags));
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -233,11 +269,13 @@ class _$NoteImpl implements _Note {
   int get hashCode => Object.hash(
     runtimeType,
     id,
+    uid,
     title,
-    body,
-    createdAt,
-    updatedAt,
+    content,
     const DeepCollectionEquality().hash(_tags),
+    mood,
+    loggedAt,
+    updatedAt,
   );
 
   /// Create a copy of Note
@@ -254,30 +292,37 @@ class _$NoteImpl implements _Note {
   }
 }
 
-abstract class _Note implements Note {
+abstract class _Note extends Note {
   const factory _Note({
     required final String id,
+    required final String uid,
     required final String title,
-    required final String body,
-    required final DateTime createdAt,
-    final DateTime? updatedAt,
+    required final String content,
     final List<String> tags,
+    required final String mood,
+    required final DateTime loggedAt,
+    final DateTime? updatedAt,
   }) = _$NoteImpl;
+  const _Note._() : super._();
 
   factory _Note.fromJson(Map<String, dynamic> json) = _$NoteImpl.fromJson;
 
   @override
   String get id;
   @override
+  String get uid;
+  @override
   String get title;
   @override
-  String get body;
-  @override
-  DateTime get createdAt;
-  @override
-  DateTime? get updatedAt;
+  String get content;
   @override
   List<String> get tags;
+  @override
+  String get mood;
+  @override
+  DateTime get loggedAt;
+  @override
+  DateTime? get updatedAt;
 
   /// Create a copy of Note
   /// with the given fields replaced by the non-null parameter values.

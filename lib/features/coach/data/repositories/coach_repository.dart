@@ -5,43 +5,40 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/constants/app_config.dart';
+import '../../../../core/interfaces/habit_service_interface.dart';
+import '../../../../core/interfaces/finance_service_interface.dart';
+import '../../../../core/interfaces/note_service_interface.dart';
+import '../../../../core/interfaces/domain_service_interface.dart';
+import '../../../../core/interfaces/islamic_service_interface.dart';
 import '../models/coach_message_model.dart';
-import '../../../habits/data/repositories/habits_repository.dart';
-import '../../../habits/data/models/habit_model.dart';
-import '../../../finance/data/repositories/finance_repository.dart';
-import '../../../finance/data/models/transaction_model.dart';
-import '../../../notes/data/repositories/notes_repository.dart';
-import '../../../domains/data/repositories/domain_logs_repository.dart';
-import '../../../domains/data/models/domain_log_model.dart';
-import '../../../islamic/data/repositories/prayer_times_repository.dart';
 
 class CoachRepository {
   CoachRepository({
     FirebaseFirestore? firestore,
     FirebaseAuth? auth,
     Dio? dio,
-    HabitsRepository? habitsRepository,
-    FinanceRepositoryBase? financeRepository,
-    NotesRepository? notesRepository,
-    DomainLogsRepository? domainLogsRepository,
-    PrayerTimesRepository? prayerTimesRepository,
+    required HabitServiceInterface habitsRepository,
+    required FinanceServiceInterface financeRepository,
+    required NoteServiceInterface notesRepository,
+    required DomainServiceInterface domainLogsRepository,
+    required IslamicServiceInterface prayerTimesRepository,
   })  : _firestore = firestore ?? FirebaseFirestore.instance,
         _auth = auth ?? FirebaseAuth.instance,
         _dio = dio ?? Dio(),
-        _habitsRepository = habitsRepository ?? HabitsRepository(),
-        _financeRepository = financeRepository ?? FinanceRepository(),
-        _notesRepository = notesRepository ?? NotesRepository(),
-        _domainLogsRepository = domainLogsRepository ?? DomainLogsRepository(),
-        _prayerTimesRepository = prayerTimesRepository ?? PrayerTimesRepository();
+        _habitsRepository = habitsRepository,
+        _financeRepository = financeRepository,
+        _notesRepository = notesRepository,
+        _domainLogsRepository = domainLogsRepository,
+        _prayerTimesRepository = prayerTimesRepository;
 
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
   final Dio _dio;
-  final HabitsRepository _habitsRepository;
-  final FinanceRepositoryBase _financeRepository;
-  final NotesRepository _notesRepository;
-  final DomainLogsRepository _domainLogsRepository;
-  final PrayerTimesRepository _prayerTimesRepository;
+  final HabitServiceInterface _habitsRepository;
+  final FinanceServiceInterface _financeRepository;
+  final NoteServiceInterface _notesRepository;
+  final DomainServiceInterface _domainLogsRepository;
+  final IslamicServiceInterface _prayerTimesRepository;
 
   CollectionReference get _sessionsCollection =>
       _firestore.collection('coach_sessions');
@@ -116,7 +113,7 @@ class CoachRepository {
     try {
       final notes = await _notesRepository.getAllNotes();
       final recentNotes =
-          notes.where((n) => n.createdAt.isAfter(weekAgo)).toList();
+          notes.where((n) => n.loggedAt.isAfter(weekAgo)).toList();
       notesSummary = '${recentNotes.length} notes created this week';
     } catch (e) {
       notesSummary = 'Notes data unavailable';
@@ -262,7 +259,15 @@ Always end with a conversational message to the user.''';
               ?.map((e) => e.toString())
               .toList() ??
               const [];
-          await _notesRepository.createNote(title: title, body: body, tags: tags);
+          await _notesRepository.createNote(Note(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            uid: '',
+            title: title,
+            content: body,
+            tags: tags,
+            mood: 'neutral',
+            loggedAt: DateTime.now(),
+          ));
           return 'Note created: $title';
 
         case 'log_habit':

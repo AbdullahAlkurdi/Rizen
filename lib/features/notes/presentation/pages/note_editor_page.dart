@@ -3,25 +3,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
-import '../../data/models/note_model.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
 import '../cubit/notes_cubit.dart';
+import '../../data/models/note_model.dart';
 
-class EditNotePage extends StatefulWidget {
-  const EditNotePage({super.key, required this.noteId});
+class NoteEditorPage extends StatefulWidget {
+  const NoteEditorPage({super.key, this.noteId});
 
-  final String noteId;
+  final String? noteId;
 
   @override
-  State<EditNotePage> createState() => _EditNotePageState();
+  State<NoteEditorPage> createState() => _NoteEditorPageState();
 }
 
-class _EditNotePageState extends State<EditNotePage> {
+class _NoteEditorPageState extends State<NoteEditorPage> {
   final _titleController = TextEditingController();
-  final _bodyController = TextEditingController();
+  final _contentController = TextEditingController();
   final _tagsController = TextEditingController();
+  final _moodController = TextEditingController();
   bool _isSaving = false;
   bool _showPreview = false;
   bool _populated = false;
@@ -29,14 +30,17 @@ class _EditNotePageState extends State<EditNotePage> {
   @override
   void initState() {
     super.initState();
-    context.read<NotesCubit>().loadNote(widget.noteId);
+    if (widget.noteId != null) {
+      context.read<NotesCubit>().loadNote(widget.noteId!);
+    }
   }
 
   @override
   void dispose() {
     _titleController.dispose();
-    _bodyController.dispose();
+    _contentController.dispose();
     _tagsController.dispose();
+    _moodController.dispose();
     super.dispose();
   }
 
@@ -44,14 +48,15 @@ class _EditNotePageState extends State<EditNotePage> {
     if (_populated) return;
     _populated = true;
     _titleController.text = note.title;
-    _bodyController.text = note.body;
+    _contentController.text = note.content;
     _tagsController.text = note.tags.join(', ');
+    _moodController.text = note.mood;
   }
 
   Future<void> _save() async {
     final title = _titleController.text.trim();
-    final body = _bodyController.text.trim();
-    if (title.isEmpty && body.isEmpty) return;
+    final content = _contentController.text.trim();
+    if (title.isEmpty && content.isEmpty) return;
 
     setState(() => _isSaving = true);
 
@@ -61,12 +66,35 @@ class _EditNotePageState extends State<EditNotePage> {
         .where((t) => t.isNotEmpty)
         .toList();
 
-    await context.read<NotesCubit>().updateNote(
-      noteId: widget.noteId,
-      title: title,
-      body: body,
-      tags: tags,
-    );
+final moodText = _moodController.text.trim();
+    final mood = moodText.isEmpty ? 'neutral' : moodText;
+
+    if (widget.noteId != null) {
+      await context.read<NotesCubit>().updateNote(
+            Note(
+              id: widget.noteId!,
+              uid: '',
+              title: title,
+              content: content,
+              tags: tags,
+              mood: mood,
+              loggedAt: DateTime.now(),
+              updatedAt: DateTime.now(),
+            ),
+          );
+    } else {
+      await context.read<NotesCubit>().createNote(
+            Note(
+              id: DateTime.now().millisecondsSinceEpoch.toString(),
+              uid: '',
+              title: title,
+              content: content,
+              tags: tags,
+              mood: mood,
+              loggedAt: DateTime.now(),
+            ),
+          );
+    }
 
     if (!mounted) return;
 
@@ -116,14 +144,14 @@ class _EditNotePageState extends State<EditNotePage> {
   Widget build(BuildContext context) {
     final state = context.watch<NotesCubit>().state;
 
-    if (state is NotesInitial || state is NotesLoading) {
+    if (widget.noteId != null && (state is NotesInitial || state is NotesLoading)) {
       return RizenScaffold(
-        appBar: AppBar(title: const Text('Edit Note')),
+        appBar: AppBar(title: Text(widget.noteId != null ? 'Edit Note' : 'Create Note')),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
-    if (state is NotesError) {
+    if (widget.noteId != null && state is NotesError) {
       return RizenScaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -141,15 +169,17 @@ class _EditNotePageState extends State<EditNotePage> {
       );
     }
 
-    if (state is! NotesLoaded || state.selectedNote == null) {
+    if (widget.noteId != null && state is! NotesLoaded) {
       return RizenScaffold(
         appBar: AppBar(title: const Text('Edit Note')),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
-    final note = state.selectedNote!;
-    _populateFromNote(note);
+    if (widget.noteId != null && state is NotesLoaded) {
+      final note = state.selectedNote!;
+      _populateFromNote(note);
+    }
 
     return RizenScaffold(
       appBar: AppBar(
@@ -157,7 +187,7 @@ class _EditNotePageState extends State<EditNotePage> {
           icon: const Icon(PhosphorIconsBold.arrowLeft),
           onPressed: () => context.pop(),
         ),
-        title: const Text('Edit Note'),
+        title: Text(widget.noteId != null ? 'Edit Note' : 'Create Note'),
         actions: [
           IconButton(
             icon: Icon(
@@ -175,7 +205,7 @@ class _EditNotePageState extends State<EditNotePage> {
                     height: 18,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('Save'),
+                : Text(widget.noteId != null ? 'Save' : 'Create'),
           ),
         ],
       ),
@@ -199,6 +229,15 @@ class _EditNotePageState extends State<EditNotePage> {
             ),
           ),
           const SizedBox(height: 16),
+          TextField(
+            controller: _moodController,
+            decoration: const InputDecoration(
+              labelText: 'Mood',
+              hintText: 'happy, sad, anxious, grateful...',
+              prefixIcon: Icon(PhosphorIconsBold.smiley),
+            ),
+          ),
+          const SizedBox(height: 16),
           if (_showPreview)
             Container(
               padding: const EdgeInsets.all(16),
@@ -208,13 +247,13 @@ class _EditNotePageState extends State<EditNotePage> {
                 border: Border.all(color: AppColors.glassBorder),
               ),
               child: SelectableText(
-                _formatPreviewText(_bodyController.text),
+                _formatPreviewText(_contentController.text),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             )
           else
             TextField(
-              controller: _bodyController,
+              controller: _contentController,
               maxLines: null,
               minLines: 10,
               decoration: const InputDecoration(
@@ -224,7 +263,7 @@ class _EditNotePageState extends State<EditNotePage> {
             ),
           const SizedBox(height: 20),
           RizenButton(
-            label: 'Save Changes',
+            label: widget.noteId != null ? 'Save Changes' : 'Save Note',
             icon: PhosphorIconsBold.check,
             isLoading: _isSaving,
             onPressed: _isSaving ? null : _save,

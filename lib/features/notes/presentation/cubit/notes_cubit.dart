@@ -21,11 +21,11 @@ final class NotesError extends NotesState {
 }
 
 class NotesCubit extends Cubit<NotesState> {
-  final NotesRepository _repository;
-
   NotesCubit({NotesRepository? repository})
     : _repository = repository ?? NotesRepository(),
       super(NotesInitial());
+
+  final NotesRepository _repository;
 
   Future<void> loadNotes() async {
     emit(NotesLoading());
@@ -51,14 +51,40 @@ class NotesCubit extends Cubit<NotesState> {
     }
   }
 
-  Future<void> createNote({
-    required String title,
-    required String body,
-    List<String> tags = const [],
-  }) async {
+  Future<void> loadTodayNotes() async {
     emit(NotesLoading());
     try {
-      await _repository.createNote(title: title, body: body, tags: tags);
+      final notes = await _repository.getNotesByDate(DateTime.now());
+      emit(NotesLoaded(notes: notes));
+    } catch (e) {
+      emit(NotesError(e.toString()));
+    }
+  }
+
+  Future<void> loadNotesByTag(String tag) async {
+    emit(NotesLoading());
+    try {
+      final notes = await _repository.getNotesByTag(tag);
+      emit(NotesLoaded(notes: notes));
+    } catch (e) {
+      emit(NotesError(e.toString()));
+    }
+  }
+
+  Future<void> searchNotes(String query) async {
+    emit(NotesLoading());
+    try {
+      final notes = await _repository.searchNotes(query);
+      emit(NotesLoaded(notes: notes));
+    } catch (e) {
+      emit(NotesError(e.toString()));
+    }
+  }
+
+  Future<void> createNote(Note note) async {
+    emit(NotesLoading());
+    try {
+      await _repository.createNote(note);
       final notes = await _repository.getAllNotes();
       emit(NotesLoaded(notes: notes));
     } catch (e) {
@@ -66,20 +92,10 @@ class NotesCubit extends Cubit<NotesState> {
     }
   }
 
-  Future<void> updateNote({
-    required String noteId,
-    required String title,
-    required String body,
-    List<String> tags = const [],
-  }) async {
+  Future<void> updateNote(Note note) async {
     emit(NotesLoading());
     try {
-      await _repository.updateNote(
-        noteId: noteId,
-        title: title,
-        body: body,
-        tags: tags,
-      );
+      await _repository.updateNote(note);
       final notes = await _repository.getAllNotes();
       emit(NotesLoaded(notes: notes));
     } catch (e) {

@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart' hide Transaction;
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../models/budget_cycle_model.dart';
+import '../../../../core/interfaces/finance_service_interface.dart';
 import '../models/daily_review_schedule_model.dart';
 import '../models/financial_commitment_model.dart';
-import '../models/transaction_model.dart';
 
 abstract class FinanceRepositoryBase {
   Future<Transaction> addTransaction({
@@ -56,7 +55,7 @@ abstract class FinanceRepositoryBase {
   Future<void> markDailyReviewPrompted();
 }
 
-class FinanceRepository implements FinanceRepositoryBase {
+class FinanceRepository implements FinanceRepositoryBase, FinanceServiceInterface {
   FinanceRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
     : _firestore = firestore ?? FirebaseFirestore.instance,
       _auth = auth ?? FirebaseAuth.instance;
@@ -352,6 +351,22 @@ class FinanceRepository implements FinanceRepositoryBase {
     return commitments
         .where((commitment) => commitment.active)
         .fold<double>(0, (total, commitment) => total + commitment.amount);
+  }
+
+  @override
+  Future<List<Transaction>> getTodayTransactions() async {
+    final transactions = await getTransactions();
+    final today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    return transactions.where((t) => t.loggedAt.isAfter(today)).toList();
+  }
+
+  @override
+  Future<BudgetCycle> getCurrentBudgetCycle() async {
+    final cycle = await getCurrentCycle();
+    if (cycle == null) {
+      return createBudgetCycle(monthlyIncome: 0);
+    }
+    return cycle;
   }
 
   @override

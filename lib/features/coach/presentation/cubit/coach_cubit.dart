@@ -2,6 +2,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/coach_message_model.dart';
 import '../../data/repositories/coach_repository.dart';
+import '../../../../core/injection_container.dart';
+import '../../../../core/interfaces/habit_service_interface.dart';
+import '../../../../core/interfaces/finance_service_interface.dart';
+import '../../../../core/interfaces/note_service_interface.dart';
+import '../../../../core/interfaces/domain_service_interface.dart';
+import '../../../../core/interfaces/islamic_service_interface.dart';
 
 sealed class CoachState {}
 
@@ -22,8 +28,14 @@ final class CoachError extends CoachState {
 }
 
 class CoachCubit extends Cubit<CoachState> {
-  CoachCubit({CoachRepository? repository})
-      : _repository = repository ?? CoachRepository(),
+  CoachCubit()
+      : _repository = CoachRepository(
+          habitsRepository: sl<HabitServiceInterface>(),
+          financeRepository: sl<FinanceServiceInterface>(),
+          notesRepository: sl<NoteServiceInterface>(),
+          domainLogsRepository: sl<DomainServiceInterface>(),
+          prayerTimesRepository: sl<IslamicServiceInterface>(),
+        ),
         super(CoachInitial());
 
   final CoachRepository _repository;

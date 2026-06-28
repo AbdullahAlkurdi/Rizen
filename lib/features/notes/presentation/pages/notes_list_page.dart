@@ -12,8 +12,8 @@ import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
 import '../cubit/notes_cubit.dart';
 
-class NotesHubPage extends StatelessWidget {
-  const NotesHubPage({super.key});
+class NotesListPage extends StatelessWidget {
+  const NotesListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +37,6 @@ class NotesHubPage extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: 'Search notes...',
                   prefixIcon: const Icon(PhosphorIconsBold.magnifyingGlass),
-                  suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(PhosphorIconsBold.microphone),
-                  ),
                 ),
                 onSubmitted: (value) {
                   if (value.trim().isNotEmpty) {
@@ -177,14 +173,6 @@ class NotesHubPage extends StatelessWidget {
                       icon: PhosphorIconsBold.notebook,
                       iconColor: AppColors.shadow,
                       onTap: () => context.push(AppRoutes.dailyReflection),
-                    ),
-                    const SizedBox(height: 10),
-                    NavGlassTile(
-                      title: 'Semantic Search',
-                      subtitle: 'Find notes by meaning, not just keywords.',
-                      icon: PhosphorIconsBold.magnifyingGlass,
-                      iconColor: const Color(0xFF60A5FA),
-                      onTap: () => context.push(AppRoutes.notesSearch),
                     ),
                   ],
                 ),

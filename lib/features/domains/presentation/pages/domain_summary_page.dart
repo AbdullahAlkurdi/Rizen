@@ -156,7 +156,7 @@ class DomainSummaryPage extends StatelessWidget {
                             ],
                           ),
                         );
-                      }).toList(),
+                      }),
                   ],
                 ),
               ),
@@ -191,7 +191,7 @@ class DomainSummaryPage extends StatelessWidget {
                           ],
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),

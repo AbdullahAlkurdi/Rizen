@@ -1,21 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../models/domain_log_model.dart';
+import '../../../../core/interfaces/domain_service_interface.dart';
 
-class DomainLogsRepository {
+class DomainLogsRepository implements DomainServiceInterface {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
 
   DomainLogsRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
-    : _firestore = firestore ?? FirebaseFirestore.instance,
-      _auth = auth ?? FirebaseAuth.instance;
+      : _firestore = firestore ?? FirebaseFirestore.instance,
+        _auth = auth ?? FirebaseAuth.instance;
 
   CollectionReference<Map<String, dynamic>> get _logsRef =>
       _firestore.collection('domain_logs');
 
   String? get _uid => _auth.currentUser?.uid;
 
+  @override
+  Future<Map<String, double>> getTodayDomainScores() async {
+    final summary = await getWeeklySummary();
+    return summary;
+  }
+
+  @override
   Future<List<DomainLog>> getLogsByDomain(String domainId) async {
     final uid = _uid;
     if (uid == null) throw Exception('User not authenticated');
@@ -27,6 +34,41 @@ class DomainLogsRepository {
         .get();
 
     return snapshot.docs.map((doc) => DomainLog.fromFirestore(doc)).toList();
+  }
+
+  @override
+  Future<void> addLog({
+    required String domainId,
+    required int duration,
+    String? notes,
+    int intensity = 5,
+    String? metricLabel,
+    double? metricValue,
+    DateTime? loggedAt,
+  }) async {
+    final user = _auth.currentUser;
+    if (user == null) throw Exception('User not authenticated');
+
+    final ref = _logsRef.doc();
+    final ts = loggedAt ?? DateTime.now();
+
+    await ref.set({
+      'id': ref.id,
+      'logId': ref.id,
+      'uid': user.uid,
+      'domainId': domainId,
+      'domain': domainId,
+      'duration': duration,
+      'durationMinutes': duration,
+      'intensity': intensity,
+      'loggedAt': Timestamp.fromDate(ts),
+      'timestamp': Timestamp.fromDate(ts),
+      'notes': notes,
+      'note': notes,
+      'metricLabel': metricLabel,
+      'metricValue': metricValue,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
   }
 
   Future<List<DomainLog>> getLogsByDomainRange(
@@ -129,40 +171,6 @@ class DomainLogsRepository {
           (snapshot) =>
               snapshot.docs.map((doc) => DomainLog.fromFirestore(doc)).toList(),
         );
-  }
-
-  Future<void> addLog({
-    required String domainId,
-    required int duration,
-    int intensity = 5,
-    String? notes,
-    String? metricLabel,
-    double? metricValue,
-    DateTime? loggedAt,
-  }) async {
-    final user = _auth.currentUser;
-    if (user == null) throw Exception('User not authenticated');
-
-    final ref = _logsRef.doc();
-    final ts = loggedAt ?? DateTime.now();
-
-    await ref.set({
-      'id': ref.id,
-      'logId': ref.id,
-      'uid': user.uid,
-      'domainId': domainId,
-      'domain': domainId,
-      'duration': duration,
-      'durationMinutes': duration,
-      'intensity': intensity,
-      'loggedAt': Timestamp.fromDate(ts),
-      'timestamp': Timestamp.fromDate(ts),
-      'notes': notes,
-      'note': notes,
-      'metricLabel': metricLabel,
-      'metricValue': metricValue,
-      'createdAt': FieldValue.serverTimestamp(),
-    });
   }
 
   Future<void> addLogFromModel(DomainLog log) async {

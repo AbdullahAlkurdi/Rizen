@@ -219,13 +219,13 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           ],
           const SizedBox(height: 12),
           Text(
-            _formatDate(note.createdAt),
+            _formatDate(note.loggedAt),
             style: Theme.of(
               context,
             ).textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
           ),
           if (note.updatedAt != null &&
-              note.updatedAt!.difference(note.createdAt).inMinutes > 1) ...[
+              note.updatedAt!.difference(note.loggedAt).inMinutes > 1) ...[
             const SizedBox(height: 4),
             Text(
               'Updated ${_formatDate(note.updatedAt!)}',
@@ -243,7 +243,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               border: Border.all(color: AppColors.glassBorder),
             ),
             child: SelectableText(
-              _formatPreviewText(note.body),
+              _formatPreviewText(note.content),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),

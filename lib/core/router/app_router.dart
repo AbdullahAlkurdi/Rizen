@@ -26,7 +26,6 @@ import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/pages/welcome_page.dart';
-import '../../features/coach/data/repositories/coach_repository.dart';
 import '../../features/coach/presentation/cubit/coach_cubit.dart';
 import '../../features/coach/presentation/pages/coach_briefing_page.dart';
 import '../../features/coach/presentation/pages/coach_chat_page.dart';
@@ -78,17 +77,12 @@ import '../../features/routines/data/repositories/routine_repository.dart';
 import '../../features/habits/data/repositories/habits_repository.dart';
 import '../../features/domains/data/repositories/domain_logs_repository.dart';
 import '../../features/home/data/repositories/sleep_log_repository.dart';
-import '../../features/notes/data/repositories/notes_repository.dart';
-import '../../features/finance/data/repositories/finance_repository.dart';
-import '../../features/islamic/data/repositories/prayer_times_repository.dart';
 import '../../features/more/presentation/pages/more_hub_page.dart';
 import '../../features/notes/presentation/cubit/notes_cubit.dart';
-import '../../features/notes/presentation/pages/create_note_page.dart';
-import '../../features/notes/presentation/pages/daily_reflection_page.dart';
-import '../../features/notes/presentation/pages/edit_note_page.dart';
+import '../../features/notes/presentation/pages/notes_list_page.dart';
 import '../../features/notes/presentation/pages/note_detail_page.dart';
-import '../../features/notes/presentation/pages/notes_hub_page.dart';
-import '../../features/notes/presentation/pages/notes_search_page.dart';
+import '../../features/notes/presentation/pages/note_editor_page.dart';
+import '../../features/notes/presentation/pages/reflection_prompts_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_ai_prompt_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_finance_setup_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_language_page.dart';
@@ -558,105 +552,49 @@ final appRouter = GoRouter(
         GoRoute(
           path: AppRoutes.coach,
           builder: (context, state) => BlocProvider(
-            create: (_) => CoachCubit(
-              repository: CoachRepository(
-                habitsRepository: HabitsRepository(),
-                financeRepository: FinanceRepository(),
-                notesRepository: NotesRepository(),
-                domainLogsRepository: DomainLogsRepository(),
-                prayerTimesRepository: PrayerTimesRepository(),
-              ),
-            )..loadHistory(),
+            create: (_) => CoachCubit()..loadHistory(),
             child: const CoachHubPage(),
           ),
         ),
         GoRoute(
           path: AppRoutes.coachBriefing,
           builder: (context, state) => BlocProvider(
-            create: (_) => CoachCubit(
-              repository: CoachRepository(
-                habitsRepository: HabitsRepository(),
-                financeRepository: FinanceRepository(),
-                notesRepository: NotesRepository(),
-                domainLogsRepository: DomainLogsRepository(),
-                prayerTimesRepository: PrayerTimesRepository(),
-              ),
-            )..loadHistory(),
+            create: (_) => CoachCubit()..loadHistory(),
             child: const CoachBriefingPage(),
           ),
         ),
         GoRoute(
           path: AppRoutes.coachChat,
           builder: (context, state) => BlocProvider(
-            create: (_) => CoachCubit(
-              repository: CoachRepository(
-                habitsRepository: HabitsRepository(),
-                financeRepository: FinanceRepository(),
-                notesRepository: NotesRepository(),
-                domainLogsRepository: DomainLogsRepository(),
-                prayerTimesRepository: PrayerTimesRepository(),
-              ),
-            )..loadHistory(),
+            create: (_) => CoachCubit()..loadHistory(),
             child: const CoachChatPage(),
           ),
         ),
         GoRoute(
           path: AppRoutes.coachWeekly,
           builder: (context, state) => BlocProvider(
-            create: (_) => CoachCubit(
-              repository: CoachRepository(
-                habitsRepository: HabitsRepository(),
-                financeRepository: FinanceRepository(),
-                notesRepository: NotesRepository(),
-                domainLogsRepository: DomainLogsRepository(),
-                prayerTimesRepository: PrayerTimesRepository(),
-              ),
-            )..loadHistory(),
+            create: (_) => CoachCubit()..loadHistory(),
             child: const CoachWeeklyPage(),
           ),
         ),
         GoRoute(
           path: AppRoutes.coachSuggestions,
           builder: (context, state) => BlocProvider(
-            create: (_) => CoachCubit(
-              repository: CoachRepository(
-                habitsRepository: HabitsRepository(),
-                financeRepository: FinanceRepository(),
-                notesRepository: NotesRepository(),
-                domainLogsRepository: DomainLogsRepository(),
-                prayerTimesRepository: PrayerTimesRepository(),
-              ),
-            )..loadHistory(),
+            create: (_) => CoachCubit()..loadHistory(),
             child: const CoachSuggestionsPage(),
           ),
         ),
         GoRoute(
           path: AppRoutes.coachMicroGoals,
           builder: (context, state) => BlocProvider(
-            create: (_) => CoachCubit(
-              repository: CoachRepository(
-                habitsRepository: HabitsRepository(),
-                financeRepository: FinanceRepository(),
-                notesRepository: NotesRepository(),
-                domainLogsRepository: DomainLogsRepository(),
-                prayerTimesRepository: PrayerTimesRepository(),
-              ),
-            )..loadHistory(),
+            create: (_) => CoachCubit()..loadHistory(),
             child: const CoachMicroGoalsPage(),
           ),
         ),
         GoRoute(
           path: AppRoutes.coachInsights,
           builder: (context, state) => BlocProvider(
-            create: (_) => CoachCubit(
-              repository: CoachRepository(
-                habitsRepository: HabitsRepository(),
-                financeRepository: FinanceRepository(),
-                notesRepository: NotesRepository(),
-                domainLogsRepository: DomainLogsRepository(),
-                prayerTimesRepository: PrayerTimesRepository(),
-              ),
-            )..loadHistory(),
+            create: (_) => CoachCubit()..loadHistory(),
             child: const CoachInsightsPage(),
           ),
         ),
@@ -664,21 +602,21 @@ final appRouter = GoRouter(
           path: AppRoutes.notes,
           builder: (context, state) => BlocProvider(
             create: (_) => NotesCubit()..loadNotes(),
-            child: const NotesHubPage(),
+            child: const NotesListPage(),
           ),
         ),
         GoRoute(
           path: AppRoutes.noteCreate,
           builder: (context, state) => BlocProvider(
             create: (_) => NotesCubit(),
-            child: const CreateNotePage(),
+            child: const NoteEditorPage(),
           ),
         ),
         GoRoute(
           path: '/notes/edit/:noteId',
           builder: (context, state) => BlocProvider(
             create: (_) => NotesCubit(),
-            child: EditNotePage(noteId: state.pathParameters['noteId']!),
+            child: NoteEditorPage(noteId: state.pathParameters['noteId']!),
           ),
         ),
         GoRoute(
@@ -690,11 +628,14 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.dailyReflection,
-          builder: (context, state) => const DailyReflectionPage(),
+          builder: (context, state) => const ReflectionPromptsPage(),
         ),
         GoRoute(
           path: AppRoutes.notesSearch,
-          builder: (context, state) => const NotesSearchPage(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => NotesCubit(),
+            child: const NotesListPage(),
+          ),
         ),
         GoRoute(
           path: AppRoutes.analytics,

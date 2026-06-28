@@ -4,9 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../../core/interfaces/islamic_service_interface.dart';
 import '../models/prayer_times_cache_model.dart';
 
-class PrayerTimesRepository {
+class PrayerTimesRepository implements IslamicServiceInterface {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
   final Dio _dio;
@@ -20,8 +21,8 @@ class PrayerTimesRepository {
     FirebaseAuth? auth,
     Dio? dio,
   }) : _firestore = firestore ?? FirebaseFirestore.instance,
-       _auth = auth ?? FirebaseAuth.instance,
-       _dio = dio ?? Dio();
+        _auth = auth ?? FirebaseAuth.instance,
+        _dio = dio ?? Dio();
 
   String get _userId {
     final user = _auth.currentUser;
@@ -29,6 +30,75 @@ class PrayerTimesRepository {
     return user.uid;
   }
 
+  @override
+  Future<PrayerStatus> getTodayPrayerStatus() async {
+    try {
+      final cache = await getTodayPrayerTimes(
+        lat: _kaabaLat,
+        lng: _kaabaLng,
+      );
+      return PrayerStatus(
+        isAvailable: true,
+        validForDate: cache.validForDate,
+        timings: cache.timings,
+      );
+    } catch (e) {
+      return PrayerStatus(
+        isAvailable: false,
+        validForDate: null,
+        timings: null,
+      );
+    }
+  }
+
+  @override
+  Future<QuranProgress> getQuranProgress() async {
+    try {
+      int pagesReadToday = 0;
+      int currentStreak = 0;
+      int weeklyTotal = 0;
+      
+      final today = DateTime.now();
+      final todayStart = DateTime(today.year, today.month, today.day);
+      
+      final todayLogs = await _firestore
+          .collection('quran_logs')
+          .where('uid', isEqualTo: _userId)
+          .where('loggedAt', isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
+          .get();
+      
+      pagesReadToday = todayLogs.docs.fold<int>(0, (total, doc) {
+        final data = doc.data();
+        return total + (data['pagesRead'] as int? ?? 0);
+      });
+      
+      final weekStart = DateTime(today.year, today.month, today.day - today.weekday + 1);
+      final weekLogs = await _firestore
+          .collection('quran_logs')
+          .where('uid', isEqualTo: _userId)
+          .where('loggedAt', isGreaterThanOrEqualTo: Timestamp.fromDate(weekStart))
+          .get();
+      
+      weeklyTotal = weekLogs.docs.fold<int>(0, (total, doc) {
+        final data = doc.data();
+        return total + (data['pagesRead'] as int? ?? 0);
+      });
+      
+      return QuranProgress(
+        pagesReadToday: pagesReadToday,
+        currentStreak: currentStreak,
+        weeklyTotal: weeklyTotal,
+      );
+    } catch (e) {
+      return QuranProgress(
+        pagesReadToday: 0,
+        currentStreak: 0,
+        weeklyTotal: 0,
+      );
+    }
+  }
+
+  @override
   Future<PrayerTimesCache> getTodayPrayerTimes({
     required double lat,
     required double lng,
