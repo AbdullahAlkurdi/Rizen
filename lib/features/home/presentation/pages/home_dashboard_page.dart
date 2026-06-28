@@ -7,6 +7,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../features/dashboard/presentation/widgets/open_checklists_widget.dart';
 import '../../../routines/presentation/bloc/routines_bloc.dart';
 import '../../../routines/data/models/routine_model.dart';
 
@@ -98,6 +99,8 @@ class HomeDashboardPage extends StatelessWidget {
                     ),
                   ),
                 ),
+              const SizedBox(height: 20),
+              const OpenChecklistsWidget(),
               const SizedBox(height: 20),
               Text(
                 'Quick Actions',

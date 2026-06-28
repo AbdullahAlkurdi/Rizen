@@ -25,6 +25,7 @@ import '../features/todo/domain/usecases/uncheck_todo_item_usecase.dart';
 import '../features/todo/domain/usecases/compute_todo_score_usecase.dart';
 import '../features/todo/domain/usecases/get_missed_items_usecase.dart';
 import '../features/todo/presentation/cubit/todo_cubit.dart';
+import '../features/dashboard/presentation/cubit/dashboard_todo_cubit.dart';
 import '../features/habits/presentation/cubit/habits_cubit.dart';
 import '../features/habits/presentation/cubit/shadow_tracker_cubit.dart';
 
@@ -70,6 +71,10 @@ Future<void> init() async {
     checkItem: sl(),
     uncheckItem: sl(),
     computeScore: sl(),
+  ));
+
+  sl.registerFactory(() => DashboardTodoCubit(
+    getTodoListsByDate: sl<TodoRepositoryInterface>().getTodoListsByDate,
   ));
 
   sl.registerFactory(() => HabitsCubit(
