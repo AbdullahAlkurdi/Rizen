@@ -33,6 +33,8 @@ class Habit with _$Habit {
     required int currentStreak,
     required int longestStreak,
     required bool isActive,
+    @Default(false) bool hasTodoList,
+    @Default(70) int completionThreshold,
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     required DateTime createdAt,
   }) = _Habit;
@@ -51,6 +53,8 @@ class Habit with _$Habit {
       'currentStreak': data['currentStreak'] as int? ?? 0,
       'longestStreak': data['longestStreak'] as int? ?? 0,
       'isActive': data['isActive'] as bool? ?? true,
+      'hasTodoList': data['hasTodoList'] as bool? ?? false,
+      'completionThreshold': data['completionThreshold'] as int? ?? 70,
       'createdAt': data['createdAt'],
     });
   }
@@ -64,6 +68,8 @@ class Habit with _$Habit {
     'currentStreak': currentStreak,
     'longestStreak': longestStreak,
     'isActive': isActive,
+    'hasTodoList': hasTodoList,
+    'completionThreshold': completionThreshold,
     'createdAt': Timestamp.fromDate(createdAt),
   };
 }

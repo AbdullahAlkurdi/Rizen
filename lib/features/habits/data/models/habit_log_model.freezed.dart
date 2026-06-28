@@ -27,6 +27,7 @@ mixin _$HabitLog {
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   DateTime get completedAt => throw _privateConstructorUsedError;
   String? get note => throw _privateConstructorUsedError;
+  double get completionPct => throw _privateConstructorUsedError;
 
   /// Serializes this HabitLog to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,6 +51,7 @@ abstract class $HabitLogCopyWith<$Res> {
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     DateTime completedAt,
     String? note,
+    double completionPct,
   });
 }
 
@@ -73,6 +75,7 @@ class _$HabitLogCopyWithImpl<$Res, $Val extends HabitLog>
     Object? habitId = null,
     Object? completedAt = null,
     Object? note = freezed,
+    Object? completionPct = null,
   }) {
     return _then(
       _value.copyWith(
@@ -96,6 +99,10 @@ class _$HabitLogCopyWithImpl<$Res, $Val extends HabitLog>
                 ? _value.note
                 : note // ignore: cast_nullable_to_non_nullable
                       as String?,
+            completionPct: null == completionPct
+                ? _value.completionPct
+                : completionPct // ignore: cast_nullable_to_non_nullable
+                      as double,
           )
           as $Val,
     );
@@ -118,6 +125,7 @@ abstract class _$$HabitLogImplCopyWith<$Res>
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     DateTime completedAt,
     String? note,
+    double completionPct,
   });
 }
 
@@ -140,6 +148,7 @@ class __$$HabitLogImplCopyWithImpl<$Res>
     Object? habitId = null,
     Object? completedAt = null,
     Object? note = freezed,
+    Object? completionPct = null,
   }) {
     return _then(
       _$HabitLogImpl(
@@ -163,6 +172,10 @@ class __$$HabitLogImplCopyWithImpl<$Res>
             ? _value.note
             : note // ignore: cast_nullable_to_non_nullable
                   as String?,
+        completionPct: null == completionPct
+            ? _value.completionPct
+            : completionPct // ignore: cast_nullable_to_non_nullable
+                  as double,
       ),
     );
   }
@@ -178,6 +191,7 @@ class _$HabitLogImpl extends _HabitLog {
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     required this.completedAt,
     this.note,
+    this.completionPct = 100.0,
   }) : super._();
 
   factory _$HabitLogImpl.fromJson(Map<String, dynamic> json) =>
@@ -194,10 +208,13 @@ class _$HabitLogImpl extends _HabitLog {
   final DateTime completedAt;
   @override
   final String? note;
+  @override
+  @JsonKey()
+  final double completionPct;
 
   @override
   String toString() {
-    return 'HabitLog(id: $id, uid: $uid, habitId: $habitId, completedAt: $completedAt, note: $note)';
+    return 'HabitLog(id: $id, uid: $uid, habitId: $habitId, completedAt: $completedAt, note: $note, completionPct: $completionPct)';
   }
 
   @override
@@ -210,13 +227,22 @@ class _$HabitLogImpl extends _HabitLog {
             (identical(other.habitId, habitId) || other.habitId == habitId) &&
             (identical(other.completedAt, completedAt) ||
                 other.completedAt == completedAt) &&
-            (identical(other.note, note) || other.note == note));
+            (identical(other.note, note) || other.note == note) &&
+            (identical(other.completionPct, completionPct) ||
+                other.completionPct == completionPct));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, uid, habitId, completedAt, note);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    uid,
+    habitId,
+    completedAt,
+    note,
+    completionPct,
+  );
 
   /// Create a copy of HabitLog
   /// with the given fields replaced by the non-null parameter values.
@@ -240,6 +266,7 @@ abstract class _HabitLog extends HabitLog {
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     required final DateTime completedAt,
     final String? note,
+    final double completionPct,
   }) = _$HabitLogImpl;
   const _HabitLog._() : super._();
 
@@ -257,6 +284,8 @@ abstract class _HabitLog extends HabitLog {
   DateTime get completedAt;
   @override
   String? get note;
+  @override
+  double get completionPct;
 
   /// Create a copy of HabitLog
   /// with the given fields replaced by the non-null parameter values.

@@ -26,6 +26,7 @@ class HabitLog with _$HabitLog {
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     required DateTime completedAt,
     String? note,
+    @Default(100.0) double completionPct,
   }) = _HabitLog;
 
   factory HabitLog.fromJson(Map<String, dynamic> json) =>
@@ -39,6 +40,7 @@ class HabitLog with _$HabitLog {
       'habitId': data['habitId'] as String? ?? '',
       'completedAt': data['completedAt'],
       'note': data['note'] as String?,
+      'completionPct': (data['completionPct'] as num?)?.toDouble() ?? 100.0,
     });
   }
 
@@ -47,5 +49,6 @@ class HabitLog with _$HabitLog {
     'habitId': habitId,
     'completedAt': Timestamp.fromDate(completedAt),
     'note': note,
+    'completionPct': completionPct,
   };
 }

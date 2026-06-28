@@ -16,6 +16,8 @@ _$HabitImpl _$$HabitImplFromJson(Map<String, dynamic> json) => _$HabitImpl(
   currentStreak: (json['currentStreak'] as num).toInt(),
   longestStreak: (json['longestStreak'] as num).toInt(),
   isActive: json['isActive'] as bool,
+  hasTodoList: json['hasTodoList'] as bool? ?? false,
+  completionThreshold: (json['completionThreshold'] as num?)?.toInt() ?? 70,
   createdAt: _dateTimeFromJson(json['createdAt']),
 );
 
@@ -30,6 +32,8 @@ Map<String, dynamic> _$$HabitImplToJson(_$HabitImpl instance) =>
       'currentStreak': instance.currentStreak,
       'longestStreak': instance.longestStreak,
       'isActive': instance.isActive,
+      'hasTodoList': instance.hasTodoList,
+      'completionThreshold': instance.completionThreshold,
       'createdAt': _dateTimeToJson(instance.createdAt),
     };
 

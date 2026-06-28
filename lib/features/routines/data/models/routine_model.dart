@@ -17,6 +17,8 @@ class TimeBlock with _$TimeBlock {
     String? description,
     @Default(false) bool isCompleted,
     @Default([]) List<String> linkedHabitIds,
+    @Default(false) bool hasTodoList,
+    @Default(70) int completionThreshold,
   }) = _TimeBlock;
 
   factory TimeBlock.fromJson(Map<String, dynamic> json) =>
@@ -39,6 +41,8 @@ class TimeBlock with _$TimeBlock {
       'isCompleted': data['isCompleted'] as bool? ?? false,
       'linkedHabitIds':
           (data['linkedHabitIds'] as List<dynamic>?)?.cast<String>() ?? [],
+      'hasTodoList': data['hasTodoList'] as bool? ?? false,
+      'completionThreshold': data['completionThreshold'] as int? ?? 70,
     });
   }
 }
@@ -73,6 +77,8 @@ class Routine with _$Routine {
     DateTime? nextScheduledAt,
     @Default(0) int streak,
     DateTime? lastCompletedAt,
+    @Default(false) bool hasTodoList,
+    @Default(70) int completionThreshold,
     required DateTime createdAt,
     DateTime? updatedAt,
   }) = _Routine;
@@ -94,6 +100,8 @@ class Routine with _$Routine {
       'nextScheduledAt': (data['nextScheduledAt'] as Timestamp?)?.toDate(),
       'streak': (data['streak'] as num?)?.toInt() ?? 0,
       'lastCompletedAt': (data['lastCompletedAt'] as Timestamp?)?.toDate(),
+      'hasTodoList': data['hasTodoList'] as bool? ?? false,
+      'completionThreshold': data['completionThreshold'] as int? ?? 70,
       'createdAt':
           (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       'updatedAt': (data['updatedAt'] as Timestamp?)?.toDate(),

@@ -87,6 +87,8 @@ abstract final class AppRoutes {
   static const growthIndex = '/analytics/growth';
   static const dataExport = '/analytics/export';
 
+  static const todoEditor = '/todo/editor/:parentId/:parentType';
+
   static const islamicHub = '/islamic';
   static const qibla = '/islamic/qibla';
   static const prayerDetail = '/islamic/prayer';

@@ -31,6 +31,8 @@ mixin _$TimeBlock {
   String? get description => throw _privateConstructorUsedError;
   bool get isCompleted => throw _privateConstructorUsedError;
   List<String> get linkedHabitIds => throw _privateConstructorUsedError;
+  bool get hasTodoList => throw _privateConstructorUsedError;
+  int get completionThreshold => throw _privateConstructorUsedError;
 
   /// Serializes this TimeBlock to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -58,6 +60,8 @@ abstract class $TimeBlockCopyWith<$Res> {
     String? description,
     bool isCompleted,
     List<String> linkedHabitIds,
+    bool hasTodoList,
+    int completionThreshold,
   });
 }
 
@@ -86,6 +90,8 @@ class _$TimeBlockCopyWithImpl<$Res, $Val extends TimeBlock>
     Object? description = freezed,
     Object? isCompleted = null,
     Object? linkedHabitIds = null,
+    Object? hasTodoList = null,
+    Object? completionThreshold = null,
   }) {
     return _then(
       _value.copyWith(
@@ -129,6 +135,14 @@ class _$TimeBlockCopyWithImpl<$Res, $Val extends TimeBlock>
                 ? _value.linkedHabitIds
                 : linkedHabitIds // ignore: cast_nullable_to_non_nullable
                       as List<String>,
+            hasTodoList: null == hasTodoList
+                ? _value.hasTodoList
+                : hasTodoList // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            completionThreshold: null == completionThreshold
+                ? _value.completionThreshold
+                : completionThreshold // ignore: cast_nullable_to_non_nullable
+                      as int,
           )
           as $Val,
     );
@@ -155,6 +169,8 @@ abstract class _$$TimeBlockImplCopyWith<$Res>
     String? description,
     bool isCompleted,
     List<String> linkedHabitIds,
+    bool hasTodoList,
+    int completionThreshold,
   });
 }
 
@@ -182,6 +198,8 @@ class __$$TimeBlockImplCopyWithImpl<$Res>
     Object? description = freezed,
     Object? isCompleted = null,
     Object? linkedHabitIds = null,
+    Object? hasTodoList = null,
+    Object? completionThreshold = null,
   }) {
     return _then(
       _$TimeBlockImpl(
@@ -225,6 +243,14 @@ class __$$TimeBlockImplCopyWithImpl<$Res>
             ? _value._linkedHabitIds
             : linkedHabitIds // ignore: cast_nullable_to_non_nullable
                   as List<String>,
+        hasTodoList: null == hasTodoList
+            ? _value.hasTodoList
+            : hasTodoList // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        completionThreshold: null == completionThreshold
+            ? _value.completionThreshold
+            : completionThreshold // ignore: cast_nullable_to_non_nullable
+                  as int,
       ),
     );
   }
@@ -244,6 +270,8 @@ class _$TimeBlockImpl implements _TimeBlock {
     this.description,
     this.isCompleted = false,
     final List<String> linkedHabitIds = const [],
+    this.hasTodoList = false,
+    this.completionThreshold = 70,
   }) : _linkedHabitIds = linkedHabitIds;
 
   factory _$TimeBlockImpl.fromJson(Map<String, dynamic> json) =>
@@ -278,8 +306,15 @@ class _$TimeBlockImpl implements _TimeBlock {
   }
 
   @override
+  @JsonKey()
+  final bool hasTodoList;
+  @override
+  @JsonKey()
+  final int completionThreshold;
+
+  @override
   String toString() {
-    return 'TimeBlock(id: $id, title: $title, domainId: $domainId, startTime: $startTime, endTime: $endTime, anchor: $anchor, durationMinutes: $durationMinutes, description: $description, isCompleted: $isCompleted, linkedHabitIds: $linkedHabitIds)';
+    return 'TimeBlock(id: $id, title: $title, domainId: $domainId, startTime: $startTime, endTime: $endTime, anchor: $anchor, durationMinutes: $durationMinutes, description: $description, isCompleted: $isCompleted, linkedHabitIds: $linkedHabitIds, hasTodoList: $hasTodoList, completionThreshold: $completionThreshold)';
   }
 
   @override
@@ -304,7 +339,11 @@ class _$TimeBlockImpl implements _TimeBlock {
             const DeepCollectionEquality().equals(
               other._linkedHabitIds,
               _linkedHabitIds,
-            ));
+            ) &&
+            (identical(other.hasTodoList, hasTodoList) ||
+                other.hasTodoList == hasTodoList) &&
+            (identical(other.completionThreshold, completionThreshold) ||
+                other.completionThreshold == completionThreshold));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -321,6 +360,8 @@ class _$TimeBlockImpl implements _TimeBlock {
     description,
     isCompleted,
     const DeepCollectionEquality().hash(_linkedHabitIds),
+    hasTodoList,
+    completionThreshold,
   );
 
   /// Create a copy of TimeBlock
@@ -349,6 +390,8 @@ abstract class _TimeBlock implements TimeBlock {
     final String? description,
     final bool isCompleted,
     final List<String> linkedHabitIds,
+    final bool hasTodoList,
+    final int completionThreshold,
   }) = _$TimeBlockImpl;
 
   factory _TimeBlock.fromJson(Map<String, dynamic> json) =
@@ -374,6 +417,10 @@ abstract class _TimeBlock implements TimeBlock {
   bool get isCompleted;
   @override
   List<String> get linkedHabitIds;
+  @override
+  bool get hasTodoList;
+  @override
+  int get completionThreshold;
 
   /// Create a copy of TimeBlock
   /// with the given fields replaced by the non-null parameter values.
@@ -399,6 +446,8 @@ mixin _$Routine {
   DateTime? get nextScheduledAt => throw _privateConstructorUsedError;
   int get streak => throw _privateConstructorUsedError;
   DateTime? get lastCompletedAt => throw _privateConstructorUsedError;
+  bool get hasTodoList => throw _privateConstructorUsedError;
+  int get completionThreshold => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
 
@@ -427,6 +476,8 @@ abstract class $RoutineCopyWith<$Res> {
     DateTime? nextScheduledAt,
     int streak,
     DateTime? lastCompletedAt,
+    bool hasTodoList,
+    int completionThreshold,
     DateTime createdAt,
     DateTime? updatedAt,
   });
@@ -457,6 +508,8 @@ class _$RoutineCopyWithImpl<$Res, $Val extends Routine>
     Object? nextScheduledAt = freezed,
     Object? streak = null,
     Object? lastCompletedAt = freezed,
+    Object? hasTodoList = null,
+    Object? completionThreshold = null,
     Object? createdAt = null,
     Object? updatedAt = freezed,
   }) {
@@ -502,6 +555,14 @@ class _$RoutineCopyWithImpl<$Res, $Val extends Routine>
                 ? _value.lastCompletedAt
                 : lastCompletedAt // ignore: cast_nullable_to_non_nullable
                       as DateTime?,
+            hasTodoList: null == hasTodoList
+                ? _value.hasTodoList
+                : hasTodoList // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            completionThreshold: null == completionThreshold
+                ? _value.completionThreshold
+                : completionThreshold // ignore: cast_nullable_to_non_nullable
+                      as int,
             createdAt: null == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
@@ -535,6 +596,8 @@ abstract class _$$RoutineImplCopyWith<$Res> implements $RoutineCopyWith<$Res> {
     DateTime? nextScheduledAt,
     int streak,
     DateTime? lastCompletedAt,
+    bool hasTodoList,
+    int completionThreshold,
     DateTime createdAt,
     DateTime? updatedAt,
   });
@@ -564,6 +627,8 @@ class __$$RoutineImplCopyWithImpl<$Res>
     Object? nextScheduledAt = freezed,
     Object? streak = null,
     Object? lastCompletedAt = freezed,
+    Object? hasTodoList = null,
+    Object? completionThreshold = null,
     Object? createdAt = null,
     Object? updatedAt = freezed,
   }) {
@@ -609,6 +674,14 @@ class __$$RoutineImplCopyWithImpl<$Res>
             ? _value.lastCompletedAt
             : lastCompletedAt // ignore: cast_nullable_to_non_nullable
                   as DateTime?,
+        hasTodoList: null == hasTodoList
+            ? _value.hasTodoList
+            : hasTodoList // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        completionThreshold: null == completionThreshold
+            ? _value.completionThreshold
+            : completionThreshold // ignore: cast_nullable_to_non_nullable
+                  as int,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
@@ -636,6 +709,8 @@ class _$RoutineImpl implements _Routine {
     this.nextScheduledAt,
     this.streak = 0,
     this.lastCompletedAt,
+    this.hasTodoList = false,
+    this.completionThreshold = 70,
     required this.createdAt,
     this.updatedAt,
   }) : _timeBlockIds = timeBlockIds;
@@ -672,13 +747,19 @@ class _$RoutineImpl implements _Routine {
   @override
   final DateTime? lastCompletedAt;
   @override
+  @JsonKey()
+  final bool hasTodoList;
+  @override
+  @JsonKey()
+  final int completionThreshold;
+  @override
   final DateTime createdAt;
   @override
   final DateTime? updatedAt;
 
   @override
   String toString() {
-    return 'Routine(id: $id, title: $title, description: $description, isEnabled: $isEnabled, timeBlockIds: $timeBlockIds, frequency: $frequency, scheduleAnchorId: $scheduleAnchorId, nextScheduledAt: $nextScheduledAt, streak: $streak, lastCompletedAt: $lastCompletedAt, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Routine(id: $id, title: $title, description: $description, isEnabled: $isEnabled, timeBlockIds: $timeBlockIds, frequency: $frequency, scheduleAnchorId: $scheduleAnchorId, nextScheduledAt: $nextScheduledAt, streak: $streak, lastCompletedAt: $lastCompletedAt, hasTodoList: $hasTodoList, completionThreshold: $completionThreshold, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -705,6 +786,10 @@ class _$RoutineImpl implements _Routine {
             (identical(other.streak, streak) || other.streak == streak) &&
             (identical(other.lastCompletedAt, lastCompletedAt) ||
                 other.lastCompletedAt == lastCompletedAt) &&
+            (identical(other.hasTodoList, hasTodoList) ||
+                other.hasTodoList == hasTodoList) &&
+            (identical(other.completionThreshold, completionThreshold) ||
+                other.completionThreshold == completionThreshold) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -725,6 +810,8 @@ class _$RoutineImpl implements _Routine {
     nextScheduledAt,
     streak,
     lastCompletedAt,
+    hasTodoList,
+    completionThreshold,
     createdAt,
     updatedAt,
   );
@@ -755,6 +842,8 @@ abstract class _Routine implements Routine {
     final DateTime? nextScheduledAt,
     final int streak,
     final DateTime? lastCompletedAt,
+    final bool hasTodoList,
+    final int completionThreshold,
     required final DateTime createdAt,
     final DateTime? updatedAt,
   }) = _$RoutineImpl;
@@ -781,6 +870,10 @@ abstract class _Routine implements Routine {
   int get streak;
   @override
   DateTime? get lastCompletedAt;
+  @override
+  bool get hasTodoList;
+  @override
+  int get completionThreshold;
   @override
   DateTime get createdAt;
   @override

@@ -30,6 +30,8 @@ mixin _$Habit {
   int get currentStreak => throw _privateConstructorUsedError;
   int get longestStreak => throw _privateConstructorUsedError;
   bool get isActive => throw _privateConstructorUsedError;
+  bool get hasTodoList => throw _privateConstructorUsedError;
+  int get completionThreshold => throw _privateConstructorUsedError;
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   DateTime get createdAt => throw _privateConstructorUsedError;
 
@@ -57,6 +59,8 @@ abstract class $HabitCopyWith<$Res> {
     int currentStreak,
     int longestStreak,
     bool isActive,
+    bool hasTodoList,
+    int completionThreshold,
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     DateTime createdAt,
   });
@@ -86,6 +90,8 @@ class _$HabitCopyWithImpl<$Res, $Val extends Habit>
     Object? currentStreak = null,
     Object? longestStreak = null,
     Object? isActive = null,
+    Object? hasTodoList = null,
+    Object? completionThreshold = null,
     Object? createdAt = null,
   }) {
     return _then(
@@ -126,6 +132,14 @@ class _$HabitCopyWithImpl<$Res, $Val extends Habit>
                 ? _value.isActive
                 : isActive // ignore: cast_nullable_to_non_nullable
                       as bool,
+            hasTodoList: null == hasTodoList
+                ? _value.hasTodoList
+                : hasTodoList // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            completionThreshold: null == completionThreshold
+                ? _value.completionThreshold
+                : completionThreshold // ignore: cast_nullable_to_non_nullable
+                      as int,
             createdAt: null == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
@@ -154,6 +168,8 @@ abstract class _$$HabitImplCopyWith<$Res> implements $HabitCopyWith<$Res> {
     int currentStreak,
     int longestStreak,
     bool isActive,
+    bool hasTodoList,
+    int completionThreshold,
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     DateTime createdAt,
   });
@@ -182,6 +198,8 @@ class __$$HabitImplCopyWithImpl<$Res>
     Object? currentStreak = null,
     Object? longestStreak = null,
     Object? isActive = null,
+    Object? hasTodoList = null,
+    Object? completionThreshold = null,
     Object? createdAt = null,
   }) {
     return _then(
@@ -222,6 +240,14 @@ class __$$HabitImplCopyWithImpl<$Res>
             ? _value.isActive
             : isActive // ignore: cast_nullable_to_non_nullable
                   as bool,
+        hasTodoList: null == hasTodoList
+            ? _value.hasTodoList
+            : hasTodoList // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        completionThreshold: null == completionThreshold
+            ? _value.completionThreshold
+            : completionThreshold // ignore: cast_nullable_to_non_nullable
+                  as int,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
@@ -244,6 +270,8 @@ class _$HabitImpl extends _Habit {
     required this.currentStreak,
     required this.longestStreak,
     required this.isActive,
+    this.hasTodoList = false,
+    this.completionThreshold = 70,
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     required this.createdAt,
   }) : super._();
@@ -270,12 +298,18 @@ class _$HabitImpl extends _Habit {
   @override
   final bool isActive;
   @override
+  @JsonKey()
+  final bool hasTodoList;
+  @override
+  @JsonKey()
+  final int completionThreshold;
+  @override
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   final DateTime createdAt;
 
   @override
   String toString() {
-    return 'Habit(id: $id, uid: $uid, name: $name, type: $type, frequency: $frequency, targetCount: $targetCount, currentStreak: $currentStreak, longestStreak: $longestStreak, isActive: $isActive, createdAt: $createdAt)';
+    return 'Habit(id: $id, uid: $uid, name: $name, type: $type, frequency: $frequency, targetCount: $targetCount, currentStreak: $currentStreak, longestStreak: $longestStreak, isActive: $isActive, hasTodoList: $hasTodoList, completionThreshold: $completionThreshold, createdAt: $createdAt)';
   }
 
   @override
@@ -297,6 +331,10 @@ class _$HabitImpl extends _Habit {
                 other.longestStreak == longestStreak) &&
             (identical(other.isActive, isActive) ||
                 other.isActive == isActive) &&
+            (identical(other.hasTodoList, hasTodoList) ||
+                other.hasTodoList == hasTodoList) &&
+            (identical(other.completionThreshold, completionThreshold) ||
+                other.completionThreshold == completionThreshold) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
@@ -314,6 +352,8 @@ class _$HabitImpl extends _Habit {
     currentStreak,
     longestStreak,
     isActive,
+    hasTodoList,
+    completionThreshold,
     createdAt,
   );
 
@@ -342,6 +382,8 @@ abstract class _Habit extends Habit {
     required final int currentStreak,
     required final int longestStreak,
     required final bool isActive,
+    final bool hasTodoList,
+    final int completionThreshold,
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     required final DateTime createdAt,
   }) = _$HabitImpl;
@@ -367,6 +409,10 @@ abstract class _Habit extends Habit {
   int get longestStreak;
   @override
   bool get isActive;
+  @override
+  bool get hasTodoList;
+  @override
+  int get completionThreshold;
   @override
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   DateTime get createdAt;

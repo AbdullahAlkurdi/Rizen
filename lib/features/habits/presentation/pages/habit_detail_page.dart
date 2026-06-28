@@ -9,6 +9,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../todo/presentation/widgets/todo_checklist_widget.dart';
 import '../../data/models/habit_log_model.dart';
 import '../../data/models/habit_model.dart';
 import '../cubit/habits_cubit.dart';
@@ -58,11 +59,29 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
             return const Center(child: Text('Habit not found'));
           }
 
-          final habit = state.selectedHabit!;
+final habit = state.selectedHabit!;
           return ListView(
             children: [
               _HabitHeader(habit: habit),
               const SizedBox(height: 20),
+              if (habit.hasTodoList) ...[
+                TodoChecklistWidget(
+                  parentId: habit.id,
+                  parentType: 'habit',
+                ),
+                const SizedBox(height: 12),
+                RizenButton(
+                  label: 'Manage Checklist',
+                  icon: PhosphorIconsBold.list,
+                  variant: RizenButtonVariant.secondary,
+                  onPressed: () => context.push(
+                    AppRoutes.todoEditor
+                        .replaceAll(':parentId', habit.id)
+                        .replaceAll(':parentType', 'habit'),
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
               RizenButton(
                 label: 'Check In',
                 icon: PhosphorIconsBold.checkCircle,

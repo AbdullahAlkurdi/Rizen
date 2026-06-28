@@ -16,6 +16,9 @@ class DomainLog with _$DomainLog {
     required DateTime loggedAt,
     String? metricLabel,
     double? metricValue,
+    @Default(false) bool hasTodoList,
+    @Default(70) int completionThreshold,
+    @Default(100.0) double completionPct,
   }) = _DomainLog;
 
   factory DomainLog.fromJson(Map<String, dynamic> json) =>
@@ -36,6 +39,9 @@ class DomainLog with _$DomainLog {
           DateTime.now(),
       metricLabel: data['metricLabel'] as String?,
       metricValue: (data['metricValue'] as num?)?.toDouble(),
+      hasTodoList: data['hasTodoList'] as bool? ?? false,
+      completionThreshold: data['completionThreshold'] as int? ?? 70,
+      completionPct: (data['completionPct'] as num?)?.toDouble() ?? 100.0,
     );
   }
 }

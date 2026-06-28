@@ -46,10 +46,31 @@ class DomainLogsRepository implements DomainServiceInterface {
     double? metricValue,
     DateTime? loggedAt,
   }) async {
+    await addLogAndGetId(
+      domainId: domainId,
+      duration: duration,
+      notes: notes,
+      intensity: intensity,
+      metricLabel: metricLabel,
+      metricValue: metricValue,
+      loggedAt: loggedAt,
+    );
+  }
+
+  Future<String> addLogAndGetId({
+    required String domainId,
+    required int duration,
+    String? notes,
+    int intensity = 5,
+    String? metricLabel,
+    double? metricValue,
+    DateTime? loggedAt,
+  }) async {
     final user = _auth.currentUser;
     if (user == null) throw Exception('User not authenticated');
 
     final ref = _logsRef.doc();
+    final logId = ref.id;
     final ts = loggedAt ?? DateTime.now();
 
     await ref.set({
@@ -69,6 +90,7 @@ class DomainLogsRepository implements DomainServiceInterface {
       'metricValue': metricValue,
       'createdAt': FieldValue.serverTimestamp(),
     });
+    return logId;
   }
 
   Future<List<DomainLog>> getLogsByDomainRange(

@@ -30,6 +30,9 @@ mixin _$DomainLog {
   DateTime get loggedAt => throw _privateConstructorUsedError;
   String? get metricLabel => throw _privateConstructorUsedError;
   double? get metricValue => throw _privateConstructorUsedError;
+  bool get hasTodoList => throw _privateConstructorUsedError;
+  int get completionThreshold => throw _privateConstructorUsedError;
+  double get completionPct => throw _privateConstructorUsedError;
 
   /// Serializes this DomainLog to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -56,6 +59,9 @@ abstract class $DomainLogCopyWith<$Res> {
     DateTime loggedAt,
     String? metricLabel,
     double? metricValue,
+    bool hasTodoList,
+    int completionThreshold,
+    double completionPct,
   });
 }
 
@@ -83,6 +89,9 @@ class _$DomainLogCopyWithImpl<$Res, $Val extends DomainLog>
     Object? loggedAt = null,
     Object? metricLabel = freezed,
     Object? metricValue = freezed,
+    Object? hasTodoList = null,
+    Object? completionThreshold = null,
+    Object? completionPct = null,
   }) {
     return _then(
       _value.copyWith(
@@ -122,6 +131,18 @@ class _$DomainLogCopyWithImpl<$Res, $Val extends DomainLog>
                 ? _value.metricValue
                 : metricValue // ignore: cast_nullable_to_non_nullable
                       as double?,
+            hasTodoList: null == hasTodoList
+                ? _value.hasTodoList
+                : hasTodoList // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            completionThreshold: null == completionThreshold
+                ? _value.completionThreshold
+                : completionThreshold // ignore: cast_nullable_to_non_nullable
+                      as int,
+            completionPct: null == completionPct
+                ? _value.completionPct
+                : completionPct // ignore: cast_nullable_to_non_nullable
+                      as double,
           )
           as $Val,
     );
@@ -147,6 +168,9 @@ abstract class _$$DomainLogImplCopyWith<$Res>
     DateTime loggedAt,
     String? metricLabel,
     double? metricValue,
+    bool hasTodoList,
+    int completionThreshold,
+    double completionPct,
   });
 }
 
@@ -173,6 +197,9 @@ class __$$DomainLogImplCopyWithImpl<$Res>
     Object? loggedAt = null,
     Object? metricLabel = freezed,
     Object? metricValue = freezed,
+    Object? hasTodoList = null,
+    Object? completionThreshold = null,
+    Object? completionPct = null,
   }) {
     return _then(
       _$DomainLogImpl(
@@ -212,6 +239,18 @@ class __$$DomainLogImplCopyWithImpl<$Res>
             ? _value.metricValue
             : metricValue // ignore: cast_nullable_to_non_nullable
                   as double?,
+        hasTodoList: null == hasTodoList
+            ? _value.hasTodoList
+            : hasTodoList // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        completionThreshold: null == completionThreshold
+            ? _value.completionThreshold
+            : completionThreshold // ignore: cast_nullable_to_non_nullable
+                  as int,
+        completionPct: null == completionPct
+            ? _value.completionPct
+            : completionPct // ignore: cast_nullable_to_non_nullable
+                  as double,
       ),
     );
   }
@@ -230,6 +269,9 @@ class _$DomainLogImpl implements _DomainLog {
     required this.loggedAt,
     this.metricLabel,
     this.metricValue,
+    this.hasTodoList = false,
+    this.completionThreshold = 70,
+    this.completionPct = 100.0,
   });
 
   factory _$DomainLogImpl.fromJson(Map<String, dynamic> json) =>
@@ -254,10 +296,19 @@ class _$DomainLogImpl implements _DomainLog {
   final String? metricLabel;
   @override
   final double? metricValue;
+  @override
+  @JsonKey()
+  final bool hasTodoList;
+  @override
+  @JsonKey()
+  final int completionThreshold;
+  @override
+  @JsonKey()
+  final double completionPct;
 
   @override
   String toString() {
-    return 'DomainLog(id: $id, uid: $uid, domainId: $domainId, duration: $duration, intensity: $intensity, notes: $notes, loggedAt: $loggedAt, metricLabel: $metricLabel, metricValue: $metricValue)';
+    return 'DomainLog(id: $id, uid: $uid, domainId: $domainId, duration: $duration, intensity: $intensity, notes: $notes, loggedAt: $loggedAt, metricLabel: $metricLabel, metricValue: $metricValue, hasTodoList: $hasTodoList, completionThreshold: $completionThreshold, completionPct: $completionPct)';
   }
 
   @override
@@ -279,7 +330,13 @@ class _$DomainLogImpl implements _DomainLog {
             (identical(other.metricLabel, metricLabel) ||
                 other.metricLabel == metricLabel) &&
             (identical(other.metricValue, metricValue) ||
-                other.metricValue == metricValue));
+                other.metricValue == metricValue) &&
+            (identical(other.hasTodoList, hasTodoList) ||
+                other.hasTodoList == hasTodoList) &&
+            (identical(other.completionThreshold, completionThreshold) ||
+                other.completionThreshold == completionThreshold) &&
+            (identical(other.completionPct, completionPct) ||
+                other.completionPct == completionPct));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -295,6 +352,9 @@ class _$DomainLogImpl implements _DomainLog {
     loggedAt,
     metricLabel,
     metricValue,
+    hasTodoList,
+    completionThreshold,
+    completionPct,
   );
 
   /// Create a copy of DomainLog
@@ -322,6 +382,9 @@ abstract class _DomainLog implements DomainLog {
     required final DateTime loggedAt,
     final String? metricLabel,
     final double? metricValue,
+    final bool hasTodoList,
+    final int completionThreshold,
+    final double completionPct,
   }) = _$DomainLogImpl;
 
   factory _DomainLog.fromJson(Map<String, dynamic> json) =
@@ -345,6 +408,12 @@ abstract class _DomainLog implements DomainLog {
   String? get metricLabel;
   @override
   double? get metricValue;
+  @override
+  bool get hasTodoList;
+  @override
+  int get completionThreshold;
+  @override
+  double get completionPct;
 
   /// Create a copy of DomainLog
   /// with the given fields replaced by the non-null parameter values.

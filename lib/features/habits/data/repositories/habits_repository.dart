@@ -71,6 +71,8 @@ class HabitsRepository implements HabitServiceInterface {
     required HabitType type,
     required HabitFrequency frequency,
     int targetCount = 1,
+    bool hasTodoList = false,
+    int completionThreshold = 70,
   }) async {
     final uid = _uid;
     final ref = _habitsCollection.doc();
@@ -84,6 +86,8 @@ class HabitsRepository implements HabitServiceInterface {
       currentStreak: 0,
       longestStreak: 0,
       isActive: true,
+      hasTodoList: hasTodoList,
+      completionThreshold: completionThreshold,
       createdAt: DateTime.now(),
     );
 

@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/feature_scaffold.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_button.dart';
+import '../../../todo/presentation/widgets/todo_checklist_widget.dart';
 import '../../data/models/habit_model.dart';
 import '../cubit/habits_cubit.dart';
 
@@ -70,28 +71,55 @@ class _HabitCheckinPageState extends State<HabitCheckinPage> {
             return Center(child: Text(state.message));
           }
 
-          final habits = state is HabitsLoaded ? state.all : <Habit>[];
-          final selectedHabit = widget.habitId != null && state is HabitsLoaded
-              ? state.selectedHabit
-              : null;
-          final choices = selectedHabit == null ? habits : [selectedHabit];
+final habits = state is HabitsLoaded ? state.all : <Habit>[];
+           final selectedHabit = widget.habitId != null && state is HabitsLoaded
+               ? state.selectedHabit
+               : null;
+           final choices = selectedHabit == null ? habits : [selectedHabit];
 
-          return ListView(
-            children: [
-              if (choices.isEmpty)
-                const GlassCard(child: Text('No habits available to check in.'))
-              else
-                ...choices.map(
-                  (habit) => Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: _HabitChoice(
-                      habit: habit,
-                      selected: _selectedHabitId == habit.id,
-                      onTap: () => setState(() => _selectedHabitId = habit.id),
-                    ),
-                  ),
-                ),
-              const SizedBox(height: 16),
+           return ListView(
+             children: [
+               if (choices.isEmpty)
+                 const GlassCard(child: Text('No habits available to check in.'))
+               else
+                 ...choices.map(
+                   (habit) => Padding(
+                     padding: const EdgeInsets.only(bottom: 10),
+                     child: _HabitChoice(
+                       habit: habit,
+                       selected: _selectedHabitId == habit.id,
+                       onTap: () => setState(() => _selectedHabitId = habit.id),
+                     ),
+                   ),
+                 ),
+               if (_selectedHabitId != null) ...[
+                 const SizedBox(height: 16),
+                 Builder(
+                   builder: (context) {
+                     final selectedHabit = habits.firstWhere(
+                       (h) => h.id == _selectedHabitId,
+                       orElse: () => Habit(
+                         id: '',
+                         uid: '',
+                         name: '',
+                         type: HabitType.positive,
+                         frequency: HabitFrequency.daily,
+                         targetCount: 1,
+                         currentStreak: 0,
+                         longestStreak: 0,
+                         isActive: true,
+                         createdAt: DateTime.now(),
+                       ),
+                     );
+                     if (!selectedHabit.hasTodoList) return const SizedBox.shrink();
+                     return TodoChecklistWidget(
+                       parentId: selectedHabit.id,
+                       parentType: 'habit',
+                     );
+                   },
+                 ),
+               ],
+               const SizedBox(height: 16),
               TextField(
                 controller: _noteController,
                 minLines: 2,

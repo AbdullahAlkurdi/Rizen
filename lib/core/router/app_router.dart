@@ -107,6 +107,7 @@ import '../../features/settings/presentation/pages/profile_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/spiritual_settings_page.dart';
 import '../../features/settings/presentation/pages/support_page.dart';
+import '../../features/todo/presentation/screens/todo_editor_screen.dart';
 import '../../features/shell/presentation/pages/main_shell_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import 'app_routes.dart';
@@ -723,6 +724,13 @@ final appRouter = GoRouter(
           builder: (context, state) => BlocProvider(
             create: (_) => AnalyticsCubit()..loadAll(),
             child: const DataExportPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.todoEditor,
+          builder: (context, state) => TodoEditorScreen(
+            parentId: state.pathParameters['parentId']!,
+            parentType: state.pathParameters['parentType']!,
           ),
         ),
       ],

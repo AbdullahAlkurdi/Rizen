@@ -36,10 +36,23 @@ final class HabitsError extends HabitsState {
 
 class HabitsCubit extends Cubit<HabitsState> {
   HabitsCubit({HabitsRepository? repository})
-    : _repository = repository ?? HabitsRepository(),
-      super(HabitsInitial());
+      : _repository = repository ?? HabitsRepository(),
+        super(HabitsInitial());
 
   final HabitsRepository _repository;
+
+  Future<void> checkInWithTodo({
+    required String habitId,
+    String? note,
+  }) async {
+    emit(HabitsLoading());
+    try {
+      await _repository.createHabitLog(habitId: habitId, note: note);
+      await loadHabit(habitId);
+    } catch (e) {
+      emit(HabitsError(e.toString()));
+    }
+  }
 
   Future<void> loadHabits() async {
     emit(HabitsLoading());
@@ -70,25 +83,31 @@ class HabitsCubit extends Cubit<HabitsState> {
     }
   }
 
-  Future<void> createHabit({
+  Future<Habit?> createHabit({
     required String name,
     required HabitType type,
     required HabitFrequency frequency,
     required int targetCount,
+    bool hasTodoList = false,
+    int completionThreshold = 70,
   }) async {
     emit(HabitsLoading());
     try {
-      await _repository.createHabit(
+      final habit = await _repository.createHabit(
         name: name,
         type: type,
         frequency: frequency,
         targetCount: targetCount,
+        hasTodoList: hasTodoList,
+        completionThreshold: completionThreshold,
       );
       final habits = await _repository.getAllHabits();
       final shadowScore = await _calculateShadowScore(habits);
       emit(_loadedFrom(habits, shadowScore: shadowScore));
+      return habit;
     } catch (e) {
       emit(HabitsError(e.toString()));
+      return null;
     }
   }
 

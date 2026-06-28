@@ -13,6 +13,7 @@ _$HabitLogImpl _$$HabitLogImplFromJson(Map<String, dynamic> json) =>
       habitId: json['habitId'] as String,
       completedAt: _dateTimeFromJson(json['completedAt']),
       note: json['note'] as String?,
+      completionPct: (json['completionPct'] as num?)?.toDouble() ?? 100.0,
     );
 
 Map<String, dynamic> _$$HabitLogImplToJson(_$HabitLogImpl instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$HabitLogImplToJson(_$HabitLogImpl instance) =>
       'habitId': instance.habitId,
       'completedAt': _dateTimeToJson(instance.completedAt),
       'note': instance.note,
+      'completionPct': instance.completionPct,
     };

@@ -22,6 +22,8 @@ _$TimeBlockImpl _$$TimeBlockImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      hasTodoList: json['hasTodoList'] as bool? ?? false,
+      completionThreshold: (json['completionThreshold'] as num?)?.toInt() ?? 70,
     );
 
 Map<String, dynamic> _$$TimeBlockImplToJson(_$TimeBlockImpl instance) =>
@@ -36,6 +38,8 @@ Map<String, dynamic> _$$TimeBlockImplToJson(_$TimeBlockImpl instance) =>
       'description': instance.description,
       'isCompleted': instance.isCompleted,
       'linkedHabitIds': instance.linkedHabitIds,
+      'hasTodoList': instance.hasTodoList,
+      'completionThreshold': instance.completionThreshold,
     };
 
 const _$TimeBlockAnchorEnumMap = {
@@ -63,6 +67,8 @@ _$RoutineImpl _$$RoutineImplFromJson(Map<String, dynamic> json) =>
       lastCompletedAt: json['lastCompletedAt'] == null
           ? null
           : DateTime.parse(json['lastCompletedAt'] as String),
+      hasTodoList: json['hasTodoList'] as bool? ?? false,
+      completionThreshold: (json['completionThreshold'] as num?)?.toInt() ?? 70,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: json['updatedAt'] == null
           ? null
@@ -81,6 +87,8 @@ Map<String, dynamic> _$$RoutineImplToJson(_$RoutineImpl instance) =>
       'nextScheduledAt': instance.nextScheduledAt?.toIso8601String(),
       'streak': instance.streak,
       'lastCompletedAt': instance.lastCompletedAt?.toIso8601String(),
+      'hasTodoList': instance.hasTodoList,
+      'completionThreshold': instance.completionThreshold,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
     };

@@ -10,6 +10,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../todo/presentation/widgets/todo_checklist_widget.dart';
 import '../../data/models/routine_model.dart';
 import '../bloc/routines_bloc.dart';
 
@@ -185,7 +186,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
                 ),
               ),
               const SizedBox(height: 8),
-              LinearProgressIndicator(
+LinearProgressIndicator(
                 value: progress,
                 backgroundColor: AppColors.glassFill,
                 color: AppColors.accent,
@@ -193,6 +194,24 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
                 minHeight: 8,
               ),
               const SizedBox(height: 24),
+              if (routine.hasTodoList) ...[
+                TodoChecklistWidget(
+                  parentId: routine.id,
+                  parentType: 'routine',
+                ),
+                const SizedBox(height: 12),
+                RizenButton(
+                  label: 'Manage Checklist',
+                  icon: PhosphorIconsBold.list,
+                  variant: RizenButtonVariant.secondary,
+                  onPressed: () => context.push(
+                    AppRoutes.todoEditor
+                        .replaceAll(':parentId', routine.id)
+                        .replaceAll(':parentType', 'routine'),
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
               Text(
                 'Time Blocks',
                 style: Theme.of(context).textTheme.titleMedium,

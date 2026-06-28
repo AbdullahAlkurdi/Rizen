@@ -79,7 +79,7 @@ class DomainLogsCubit extends Cubit<DomainLogsState> {
     }
   }
 
-  Future<void> addLog({
+  Future<String> addLog({
     required String domainId,
     required int duration,
     int intensity = 5,
@@ -89,7 +89,7 @@ class DomainLogsCubit extends Cubit<DomainLogsState> {
   }) async {
     emit(DomainLogsLoading());
     try {
-      await _repository.addLog(
+      final logId = await _repository.addLogAndGetId(
         domainId: domainId,
         duration: duration,
         intensity: intensity,
@@ -98,8 +98,10 @@ class DomainLogsCubit extends Cubit<DomainLogsState> {
         metricValue: metricValue,
       );
       await loadLogs(domainId);
+      return logId;
     } catch (e) {
       emit(DomainLogsError(e.toString()));
+      rethrow;
     }
   }
 
