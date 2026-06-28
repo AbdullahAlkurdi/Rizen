@@ -53,6 +53,6 @@ flutter:
   uses-material-design: true
   assets:
     - .env
-    - assetes/images/
+    - assets/images/
     - assets/data/adhkar.json
     - assets/data/dua_library.json
