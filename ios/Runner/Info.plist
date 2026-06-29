@@ -70,6 +70,10 @@
 		<string>This app needs location access to fetch accurate prayer times based on your position.</string>
 		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 		<string>This app needs location access to fetch accurate prayer times based on your position.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>RizenOS uses the microphone to let you log your day by speaking naturally.</string>
+		<key>NSSpeechRecognitionUsageDescription</key>
+		<string>RizenOS transcribes your voice notes to update your habits and domain logs automatically.</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
 	</dict>

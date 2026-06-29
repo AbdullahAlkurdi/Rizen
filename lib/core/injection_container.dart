@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'network/dio_client.dart';
 import 'network/network_info.dart';
 import 'interfaces/habit_service_interface.dart';
@@ -8,6 +9,10 @@ import 'interfaces/note_service_interface.dart';
 import 'interfaces/domain_service_interface.dart';
 import 'interfaces/islamic_service_interface.dart';
 import 'services/tutorial_service.dart';
+import 'config/app_config.dart';
+import 'services/voice_parser_service.dart';
+import 'services/voice_log_orchestrator.dart';
+import '../features/voice/presentation/cubit/voice_cubit.dart';
 import '../features/coach/data/repositories/coach_repository.dart';
 import '../features/habits/data/repositories/habits_repository.dart';
 import '../features/habits/data/repositories/shadow_tracker_repository.dart';
@@ -100,4 +105,30 @@ Future<void> init() async {
   ));
 
   sl.registerLazySingleton(() => TutorialService());
+
+  sl.registerLazySingleton(
+    () => VoiceParserService(
+      geminiApiKey: AppConfig.geminiApiKey,
+      dio: Dio(),
+    ),
+  );
+
+  sl.registerLazySingleton(
+    () => VoiceLogOrchestrator(
+      habitsRepository: sl<HabitServiceInterface>(),
+      domainLogsRepository: sl<DomainServiceInterface>(),
+      notesRepository: sl<NoteServiceInterface>(),
+      todoRepository: sl<TodoRepositoryInterface>(),
+      completeHabitUseCase: sl<CompleteHabitUseCase>(),
+      checkTodoItemUseCase: sl<CheckTodoItemUseCase>(),
+      uncheckTodoItemUseCase: sl<UncheckTodoItemUseCase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => VoiceCubit(
+      parserService: sl<VoiceParserService>(),
+      orchestrator: sl<VoiceLogOrchestrator>(),
+    ),
+  );
 }

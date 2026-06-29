@@ -199,8 +199,11 @@ final appRouter = GoRouter(
       routes: [
         GoRoute(
           path: AppRoutes.home,
-          builder: (context, state) => BlocProvider(
-            create: (_) => RoutineCubit(RoutineRepository()),
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => RoutineCubit(RoutineRepository())),
+              BlocProvider(create: (_) => HabitsCubit()),
+            ],
             child: const HomeDashboardPage(),
           ),
         ),
