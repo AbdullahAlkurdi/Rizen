@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'network/dio_client.dart';
 import 'network/network_info.dart';
 import 'interfaces/habit_service_interface.dart';
@@ -13,6 +14,8 @@ import 'config/app_config.dart';
 import 'services/voice_parser_service.dart';
 import 'services/voice_log_orchestrator.dart';
 import '../features/voice/presentation/cubit/voice_cubit.dart';
+import '../features/analytics/data/repositories/analytics_repository.dart';
+import '../features/analytics/presentation/cubit/analytics_cubit.dart';
 import '../features/coach/data/repositories/coach_repository.dart';
 import '../features/habits/data/repositories/habits_repository.dart';
 import '../features/habits/data/repositories/shadow_tracker_repository.dart';
@@ -125,10 +128,23 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton(
+    () => AnalyticsRepository(
+      firestore: sl(),
+      uid: sl<FirebaseAuth>().currentUser?.uid ?? '',
+    ),
+  );
+
   sl.registerFactory(
     () => VoiceCubit(
       parserService: sl<VoiceParserService>(),
       orchestrator: sl<VoiceLogOrchestrator>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => AnalyticsCubit(
+      repository: sl(),
     ),
   );
 }

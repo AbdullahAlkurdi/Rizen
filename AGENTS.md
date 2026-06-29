@@ -78,14 +78,116 @@ Before any agent starts work on a feature, they must check:
 
 ---
 
-## 4. Verification & Validation Standards
+## 4. Testing Governance
+
+### Core Principle
+All code must be testable. All testable code must have tests.
+A task is NOT complete until tests are written and passing.
+
+### Test Types Required
+
+| Type | Coverage Target | What It Tests |
+|------|-----------------|---------------|
+| Unit Tests | 70%+ | Domain entities, use cases, repository logic |
+| Widget Tests | 50%+ | UI components, pages, interactions |
+| Integration Tests | 20%+ | Critical user flows (login, habit check-in, analytics) |
+
+### Test Commands
+
+| Command | Purpose |
+|---------|---------|
+| `flutter test` | Run entire test suite |
+| `flutter test test/features/<name>/` | Run specific feature tests |
+| `flutter test --name "test name"` | Run test by name |
+| `flutter test --coverage` | Generate coverage report |
+
+### Test Structure
+
+Mirror the lib/ structure in test/:
+```
+test/
+├── core/
+│   ├── utils/
+│   └── validators/
+├── features/
+│   ├── auth/
+│   │   ├── domain/
+│   │   └── presentation/
+│   ├── habits/
+│   │   ├── data/
+│   │   ├── domain/
+│   │   └── presentation/
+│   └── analytics/
+│       ├── data/
+│       └── presentation/
+└── helpers/
+    ├── test_helpers.dart
+    └── mock_firestore.dart
+```
+
+### Mocking Rules
+
+1. Use `mocktail` for all mocks (already in dev_dependencies)
+2. Mock ALL external dependencies:
+   - Firebase (Firestore, Auth, Storage)
+   - Gemini API
+   - Aladhan API
+   - SharedPreferences
+   - Geolocator
+3. Never mock domain entities or use cases — test them directly
+4. Use `@GenerateMocks` from `mockito` only when mocktail cannot handle
+
+### Test File Naming
+
+Each test file must follow:
+- Unit tests: `<filename>_test.dart` (e.g., `compute_todo_score_usecase_test.dart`)
+- Widget tests: `<filename>_widget_test.dart` (e.g., `todo_checklist_widget_test.dart`)
+- Integration tests: `<filename>_integration_test.dart` (e.g., `habit_checkin_integration_test.dart`)
+
+### Writing Unit Tests
+
+Rules for every unit test:
+1. Arrange: Set up test data and mocks
+2. Act: Call the method being tested
+3. Assert: Verify the expected outcome
+
+Example structure:
+```dart
+group('ComputeTodoScoreUseCase', () {
+  late ComputeTodoScoreUseCase useCase;
+  late MockTodoRepository mockRepo;
+
+  setUp(() {
+    mockRepo = MockTodoRepository();
+    useCase = ComputeTodoScoreUseCase(mockRepo);
+  });
+
+  test('returns 100% when all items checked', () async {
+    // Arrange
+    when(() => mockRepo.getTodoList(...))
+        .thenAnswer((_) async => todoListWithAllChecked);
+    
+    // Act
+    final result = await useCase.execute(...);
+    
+    // Assert
+    expect(result.completionPct, equals(100.0));
+    expect(result.status, equals(TodoStatus.complete));
+  });
+});
+```
+
+---
+
+## 5. Verification & Validation Standards
 
 Every implementation cycle must end in full verification:
 1. **Compilation Check:** The project must compile successfully after each feature addition.
 2. **Analysis/Linter Checks:** No compilation warnings or Dart analyzer violations.
 3. **Automated Testing:** Every modification must be validated by running related tests, and new features must be accompanied by relevant unit or widget tests.
 
-## 5. Required Specification Documents
+## 6. Required Specification Documents
+
 All agents must read before starting any task:
 - `MASTER_PRODUCT_SPEC.md`  
 - `MASTER_PRODUCT_SPEC_ADDENDUM_v1.md` (Required reading for any agent touching `lib/features/finance`, `lib/features/learning`, or `lib/features/domains/`, `lib/features/onboarding`)
