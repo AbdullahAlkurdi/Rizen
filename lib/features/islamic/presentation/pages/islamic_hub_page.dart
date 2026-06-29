@@ -9,6 +9,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../cubit/prayer_times_cubit.dart';
 
 class IslamicHubPage extends StatelessWidget {
@@ -29,9 +30,20 @@ class IslamicHubPage extends StatelessWidget {
           extendBody: true,
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
           body: switch (state) {
-            PrayerTimesLoading() => const Center(
-              child: CircularProgressIndicator(),
-            ),
+             PrayerTimesLoading() => const Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    SkeletonCard(height: 80),
+                    SizedBox(height: 12),
+                    SkeletonListTile(),
+                    SizedBox(height: 10),
+                    SkeletonListTile(),
+                    SizedBox(height: 10),
+                    SkeletonListTile(),
+                  ],
+                ),
+              ),
             PrayerTimesError(:final message) => Center(
               child: Text(
                 'Error: $message',

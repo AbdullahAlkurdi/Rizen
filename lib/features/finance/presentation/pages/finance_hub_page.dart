@@ -10,6 +10,7 @@ import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../cubit/finance_cubit.dart';
 
 class FinanceHubPage extends StatefulWidget {
@@ -43,7 +44,10 @@ class _FinanceHubPageState extends State<FinanceHubPage> {
                 ),
                 const SizedBox(height: 20),
                 if (state is FinanceLoading)
-                  const Center(child: CircularProgressIndicator())
+                  const Padding(
+                    padding: EdgeInsets.all(20),
+                    child: SkeletonCard(height: 160),
+                  )
                 else if (state is FinanceError)
                   GlassCard(child: Text(state.message))
                 else if (state is FinanceLoaded)

@@ -11,6 +11,7 @@ import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../../data/models/habit_model.dart';
 import '../cubit/habits_cubit.dart';
 
@@ -44,8 +45,19 @@ class _HabitsHubPageState extends State<HabitsHubPage> {
                   subtitle: 'Positive patterns and shadow behavior tracking.',
                 ),
                 const SizedBox(height: 20),
-                if (state is HabitsLoading)
-                  const Center(child: CircularProgressIndicator())
+                 if (state is HabitsLoading)
+                  const Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        SkeletonListTile(),
+                        SizedBox(height: 10),
+                        SkeletonListTile(),
+                        SizedBox(height: 10),
+                        SkeletonListTile(),
+                      ],
+                    ),
+                  )
                 else if (state is HabitsError)
                   _MessageCard(message: state.message)
                 else if (state is HabitsLoaded) ...[

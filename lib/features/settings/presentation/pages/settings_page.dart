@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/theme_cubit.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import '../../../../generated/app_localizations.dart';
 import '../cubit/settings_cubit.dart';
 
@@ -180,6 +181,38 @@ class SettingsPage extends StatelessWidget {
                         Text(
                           '1.0.0',
                           style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Help & Tutorials',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 12),
+                  GlassCard(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              PhosphorIconsBold.question,
+                              color: AppColors.accent,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Help & Tutorials',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                        Icon(
+                          PhosphorIconsBold.caretRight,
+                          color: AppColors.textMuted,
+                          size: 18,
                         ),
                       ],
                     ),

@@ -10,6 +10,7 @@ import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../cubit/spiritual_cubit.dart';
 
 class QuranTrackerPage extends StatelessWidget {
@@ -23,8 +24,19 @@ class QuranTrackerPage extends StatelessWidget {
           extendBody: true,
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
           body: switch (state) {
-            SpiritualLoading() => const Center(
-                child: CircularProgressIndicator(),
+             SpiritualLoading() => const Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    SkeletonCard(height: 100),
+                    SizedBox(height: 12),
+                    SkeletonChip(width: 120),
+                    SizedBox(height: 12),
+                    SkeletonChip(width: 120),
+                    SizedBox(height: 12),
+                    SkeletonChip(width: 120),
+                  ],
+                ),
               ),
             SpiritualError(:final message) => Center(
                 child: Text(

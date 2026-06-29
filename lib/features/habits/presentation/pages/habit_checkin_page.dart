@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../../../../core/widgets/feature_scaffold.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_button.dart';
@@ -65,7 +66,16 @@ class _HabitCheckinPageState extends State<HabitCheckinPage> {
         },
         builder: (context, state) {
           if (state is HabitsLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return ListView(
+              padding: const EdgeInsets.all(20),
+              children: const [
+                SkeletonListTile(),
+                SizedBox(height: 10),
+                SkeletonListTile(),
+                SizedBox(height: 10),
+                SkeletonListTile(),
+              ],
+            );
           }
           if (state is HabitsError) {
             return Center(child: Text(state.message));

@@ -9,6 +9,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../cubit/analytics_cubit.dart';
 
 class AnalyticsHubPage extends StatelessWidget {
@@ -34,8 +35,17 @@ class AnalyticsHubView extends StatelessWidget {
           extendBody: true,
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
           body: switch (state) {
-            AnalyticsLoading() => const Center(
-                child: CircularProgressIndicator(),
+            AnalyticsLoading() => const Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    SkeletonChip(width: 160),
+                    SizedBox(height: 12),
+                    SkeletonChip(width: 160),
+                    SizedBox(height: 12),
+                    SkeletonChip(width: 160),
+                  ],
+                ),
               ),
             AnalyticsError(:final message) => Center(
                 child: Text(

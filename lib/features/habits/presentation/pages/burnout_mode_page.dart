@@ -7,6 +7,7 @@ import '../../../../core/widgets/feature_scaffold.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_button.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../cubit/burnout_mode_cubit.dart';
 
 class BurnoutModePage extends StatelessWidget {
@@ -39,10 +40,16 @@ class BurnoutModeView extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               if (state is BurnoutModeLoading)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: CircularProgressIndicator(),
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                    ],
                   ),
                 )
               else if (state is BurnoutModeError)

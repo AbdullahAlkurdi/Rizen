@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -9,6 +10,10 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
+import '../../../../core/tutorials/tutorial_mixin.dart';
+import '../../../../core/services/tutorial_service.dart';
+import '../../../../core/tutorials/rizen_tutorial.dart';
 import '../../../todo/presentation/widgets/todo_checklist_widget.dart';
 import '../../data/models/habit_log_model.dart';
 import '../../data/models/habit_model.dart';
@@ -23,11 +28,26 @@ class HabitDetailPage extends StatefulWidget {
   State<HabitDetailPage> createState() => _HabitDetailPageState();
 }
 
-class _HabitDetailPageState extends State<HabitDetailPage> {
+class _HabitDetailPageState extends State<HabitDetailPage> with TutorialMixin {
+  @override
+  String get tutorialKey => TutorialService.keys['habit_detail']!;
+
+  @override
+  List<TargetFocus> buildTargets() => RizenTutorial.habitDetail(_tutorialKeys);
+
+  final Map<String, GlobalKey> _tutorialKeys = {
+    'streak': GlobalKey(),
+    'checklist': GlobalKey(),
+    'manage': GlobalKey(),
+  };
+
   @override
   void initState() {
     super.initState();
     context.read<HabitsCubit>().loadHabit(widget.habitId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) maybeShowTutorial();
+    });
   }
 
   @override
@@ -35,7 +55,7 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
     return RizenScaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(PhosphorIconsBold.arrowLeft),
+          icon: const Icon(PhosphorIconsBold.arrowLeft),
           onPressed: () => context.pop(),
         ),
         title: const Text('Habit Detail'),
@@ -43,14 +63,35 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
           IconButton(
             onPressed: () =>
                 context.push(AppRoutes.habitEditPath(widget.habitId)),
-            icon: Icon(PhosphorIconsBold.pencilSimple),
+            icon: const Icon(PhosphorIconsBold.pencilSimple),
+          ),
+          IconButton(
+            onPressed: showTutorialNow,
+            icon: const Icon(PhosphorIconsBold.question),
+            color: const Color(0xFF9CA3AF),
+            tooltip: 'Help',
           ),
         ],
       ),
       body: BlocBuilder<HabitsCubit, HabitsState>(
         builder: (context, state) {
           if (state is HabitsLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return ListView(
+              padding: const EdgeInsets.all(20),
+              children: [
+                SkeletonCard(height: 120),
+                const SizedBox(height: 20),
+                SkeletonCard(height: 80),
+                const SizedBox(height: 20),
+                const SkeletonListTile(),
+                const SizedBox(height: 10),
+                const SkeletonListTile(),
+                const SizedBox(height: 10),
+                const SkeletonListTile(),
+                const SizedBox(height: 20),
+                SkeletonBarChart(barCount: 7),
+              ],
+            );
           }
           if (state is HabitsError) {
             return Center(child: Text(state.message));
@@ -59,25 +100,34 @@ class _HabitDetailPageState extends State<HabitDetailPage> {
             return const Center(child: Text('Habit not found'));
           }
 
-final habit = state.selectedHabit!;
+          final habit = state.selectedHabit!;
           return ListView(
             children: [
-              _HabitHeader(habit: habit),
+              Container(
+                key: _tutorialKeys['streak'],
+                child: _HabitHeader(habit: habit),
+              ),
               const SizedBox(height: 20),
               if (habit.hasTodoList) ...[
-                TodoChecklistWidget(
-                  parentId: habit.id,
-                  parentType: 'habit',
+                Container(
+                  key: _tutorialKeys['checklist'],
+                  child: TodoChecklistWidget(
+                    parentId: habit.id,
+                    parentType: 'habit',
+                  ),
                 ),
                 const SizedBox(height: 12),
-                RizenButton(
-                  label: 'Manage Checklist',
-                  icon: PhosphorIconsBold.list,
-                  variant: RizenButtonVariant.secondary,
-                  onPressed: () => context.push(
-                    AppRoutes.todoEditor
-                        .replaceAll(':parentId', habit.id)
-                        .replaceAll(':parentType', 'habit'),
+                Container(
+                  key: _tutorialKeys['manage'],
+                  child: RizenButton(
+                    label: 'Manage Checklist',
+                    icon: PhosphorIconsBold.list,
+                    variant: RizenButtonVariant.secondary,
+                    onPressed: () => context.push(
+                      AppRoutes.todoEditor
+                          .replaceAll(':parentId', habit.id)
+                          .replaceAll(':parentType', 'habit'),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12),

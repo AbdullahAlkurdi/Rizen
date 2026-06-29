@@ -7,6 +7,7 @@ import 'interfaces/finance_service_interface.dart';
 import 'interfaces/note_service_interface.dart';
 import 'interfaces/domain_service_interface.dart';
 import 'interfaces/islamic_service_interface.dart';
+import 'services/tutorial_service.dart';
 import '../features/coach/data/repositories/coach_repository.dart';
 import '../features/habits/data/repositories/habits_repository.dart';
 import '../features/habits/data/repositories/shadow_tracker_repository.dart';
@@ -97,4 +98,6 @@ Future<void> init() async {
     shadowTrackerRepository: sl<ShadowTrackerRepositoryInterface>(),
     getMissedItemsUseCase: sl<GetMissedItemsUseCase>(),
   ));
+
+  sl.registerLazySingleton(() => TutorialService());
 }

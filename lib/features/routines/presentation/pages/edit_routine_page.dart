@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../bloc/routines_bloc.dart';
 
 class EditRoutinePage extends StatefulWidget {
@@ -96,7 +97,20 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
             title: const Text('Edit Routine'),
           ),
           body: state.isLoading && !isLoaded
-              ? const Center(child: CircularProgressIndicator())
+              ? const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      SkeletonCard(height: 60),
+                      SizedBox(height: 16),
+                      SkeletonLine(height: 16),
+                      SizedBox(height: 12),
+                      SkeletonLine(height: 16),
+                      SizedBox(height: 12),
+                      SkeletonLine(height: 16),
+                    ],
+                  ),
+                )
               : !isLoaded
               ? const Center(child: Text('Routine not found'))
               : ListView(

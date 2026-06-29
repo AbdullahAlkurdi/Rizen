@@ -11,6 +11,7 @@ import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../bloc/routines_bloc.dart';
 
 class RoutinesHubPage extends StatefulWidget {
@@ -35,7 +36,18 @@ class _RoutinesHubPageState extends State<RoutinesHubPage> {
           extendBody: true,
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
           body: state.isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                    ],
+                  ),
+                )
               : state.error != null
               ? Center(child: Text('Error: ${state.error}'))
               : state.routines.isEmpty

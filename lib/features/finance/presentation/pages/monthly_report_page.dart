@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/feature_scaffold.dart';
 import '../../../../core/widgets/glass_card.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../../data/models/transaction_model.dart';
 import '../cubit/finance_cubit.dart';
 
@@ -29,7 +30,10 @@ class _MonthlyReportPageState extends State<MonthlyReportPage> {
       body: BlocBuilder<FinanceCubit, FinanceState>(
         builder: (context, state) {
           if (state is FinanceLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Padding(
+              padding: EdgeInsets.all(20),
+              child: SkeletonCard(height: 200),
+            );
           }
           if (state is! FinanceLoaded) {
             return const Center(child: Text('No report data yet.'));

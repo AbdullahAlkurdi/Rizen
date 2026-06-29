@@ -2,17 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/tutorial_service.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/tutorials/rizen_tutorial.dart';
+import '../../../../core/tutorials/tutorial_mixin.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../../../../features/dashboard/presentation/widgets/open_checklists_widget.dart';
 import '../../../routines/presentation/bloc/routines_bloc.dart';
 import '../../../routines/data/models/routine_model.dart';
 
-class HomeDashboardPage extends StatelessWidget {
+class HomeDashboardPage extends StatefulWidget {
   const HomeDashboardPage({super.key});
+
+  @override
+  State<HomeDashboardPage> createState() => _HomeDashboardPageState();
+}
+
+class _HomeDashboardPageState extends State<HomeDashboardPage> with TutorialMixin {
+  @override
+  String get tutorialKey => TutorialService.keys['home']!;
+
+  @override
+  List<TargetFocus> buildTargets() => RizenTutorial.homeDashboard(_tutorialKeys);
+
+  final Map<String, GlobalKey> _tutorialKeys = {
+    'timeblock': GlobalKey(),
+    'checklists': GlobalKey(),
+    'quickactions': GlobalKey(),
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) maybeShowTutorial();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +59,17 @@ class HomeDashboardPage extends StatelessWidget {
         }
 
         return RizenScaffold(
+          appBar: AppBar(
+            title: const Text('Home'),
+            actions: [
+              IconButton(
+                onPressed: showTutorialNow,
+                icon: const Icon(PhosphorIconsBold.question),
+                color: const Color(0xFF9CA3AF),
+                tooltip: 'Help',
+              ),
+            ],
+          ),
           extendBody: true,
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
           floatingActionButton: FloatingActionButton.large(
@@ -46,10 +87,16 @@ class HomeDashboardPage extends StatelessWidget {
           body: ListView(
             children: [
               if (state.isLoading)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: CircularProgressIndicator(),
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      SkeletonCard(height: 80),
+                      SizedBox(height: 12),
+                      SkeletonLine(height: 16),
+                      SizedBox(height: 12),
+                      SkeletonLine(height: 16),
+                    ],
                   ),
                 ),
               if (state.error != null)
@@ -87,7 +134,11 @@ class HomeDashboardPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              if (activeBlock != null) _ActiveTimeBlockCard(block: activeBlock),
+              if (activeBlock != null)
+                Container(
+                  key: _tutorialKeys['timeblock'] as Key,
+                  child: _ActiveTimeBlockCard(block: activeBlock),
+                ),
               if (activeBlock != null) const SizedBox(height: 16),
               if (activeBlock == null && !state.isLoading)
                 GlassCard(
@@ -100,46 +151,52 @@ class HomeDashboardPage extends StatelessWidget {
                   ),
                 ),
               const SizedBox(height: 20),
-              const OpenChecklistsWidget(),
+              Container(
+                key: _tutorialKeys['checklists'] as Key,
+                child: const OpenChecklistsWidget(),
+              ),
               const SizedBox(height: 20),
               Text(
                 'Quick Actions',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 12),
-              GridView.count(
-                crossAxisCount: 2,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 1.6,
-                children: const [
-                  _QuickActionTile(
-                    label: 'Log Activity',
-                    icon: PhosphorIconsBold.plusCircle,
-                    color: Color(0xFFE94560),
-                    route: AppRoutes.domains,
-                  ),
-                  _QuickActionTile(
-                    label: 'Check Habits',
-                    icon: PhosphorIconsBold.checkCircle,
-                    color: Color(0xFF4ADE80),
-                    route: AppRoutes.habits,
-                  ),
-                  _QuickActionTile(
-                    label: 'Burnout Mode',
-                    icon: PhosphorIconsBold.firstAid,
-                    color: Color(0xFFFBBF24),
-                    route: AppRoutes.habitsRecovery,
-                  ),
-                  _QuickActionTile(
-                    label: 'AI Coach',
-                    icon: PhosphorIconsBold.robot,
-                    color: Color(0xFF9333EA),
-                    route: AppRoutes.coachHome,
-                  ),
-                ],
+              Container(
+                key: _tutorialKeys['quickactions'] as Key,
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 1.6,
+                  children: const [
+                    _QuickActionTile(
+                      label: 'Log Activity',
+                      icon: PhosphorIconsBold.plusCircle,
+                      color: Color(0xFFE94560),
+                      route: AppRoutes.domains,
+                    ),
+                    _QuickActionTile(
+                      label: 'Check Habits',
+                      icon: PhosphorIconsBold.checkCircle,
+                      color: Color(0xFF4ADE80),
+                      route: AppRoutes.habits,
+                    ),
+                    _QuickActionTile(
+                      label: 'Burnout Mode',
+                      icon: PhosphorIconsBold.firstAid,
+                      color: Color(0xFFFBBF24),
+                      route: AppRoutes.habitsRecovery,
+                    ),
+                    _QuickActionTile(
+                      label: 'AI Coach',
+                      icon: PhosphorIconsBold.robot,
+                      color: Color(0xFF9333EA),
+                      route: AppRoutes.coachHome,
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 24),
               Row(

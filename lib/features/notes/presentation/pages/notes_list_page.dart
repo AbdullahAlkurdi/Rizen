@@ -10,6 +10,7 @@ import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../cubit/notes_cubit.dart';
 
 class NotesListPage extends StatelessWidget {
@@ -47,10 +48,16 @@ class NotesListPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             switch (state) {
-              NotesInitial() || NotesLoading() => const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(40),
-                    child: CircularProgressIndicator(),
+              NotesInitial() || NotesLoading() => const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                    ],
                   ),
                 ),
               NotesError(:final message) => Center(

@@ -7,6 +7,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../cubit/spiritual_cubit.dart';
 
 class DuaLibraryPage extends StatelessWidget {
@@ -30,7 +31,18 @@ class DuaLibraryPage extends StatelessWidget {
             child: BlocBuilder<SpiritualCubit, SpiritualState>(
               builder: (context, state) {
                 if (state is SpiritualLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        SkeletonListTile(),
+                        SizedBox(height: 10),
+                        SkeletonListTile(),
+                        SizedBox(height: 10),
+                        SkeletonListTile(),
+                      ],
+                    ),
+                  );
                 }
                 if (state is SpiritualError) {
                   return Center(

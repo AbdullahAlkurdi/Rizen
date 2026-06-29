@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -10,10 +11,38 @@ import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
+import '../../../../core/tutorials/tutorial_mixin.dart';
+import '../../../../core/services/tutorial_service.dart';
+import '../../../../core/tutorials/rizen_tutorial.dart';
 import '../cubit/notes_cubit.dart';
 
-class NotesHubPage extends StatelessWidget {
+class NotesHubPage extends StatefulWidget {
   const NotesHubPage({super.key});
+
+  @override
+  State<NotesHubPage> createState() => _NotesHubPageState();
+}
+
+class _NotesHubPageState extends State<NotesHubPage> with TutorialMixin {
+  @override
+  String get tutorialKey => TutorialService.keys['notes_hub']!;
+
+  @override
+  List<TargetFocus> buildTargets() => RizenTutorial.notesHub(_tutorialKeys);
+
+  final Map<String, GlobalKey> _tutorialKeys = {
+    'grid': GlobalKey(),
+    'create': GlobalKey(),
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) maybeShowTutorial();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +51,17 @@ class NotesHubPage extends StatelessWidget {
     return RizenScaffold(
       extendBody: true,
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
+      appBar: AppBar(
+        title: const Text('Notes & Reflections'),
+        actions: [
+          IconButton(
+            onPressed: showTutorialNow,
+            icon: const Icon(PhosphorIconsBold.question),
+            color: const Color(0xFF9CA3AF),
+            tooltip: 'Help',
+          ),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: () => context.read<NotesCubit>().loadNotes(),
         child: ListView(
@@ -51,10 +91,16 @@ class NotesHubPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             switch (state) {
-              NotesInitial() || NotesLoading() => const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(40),
-                    child: CircularProgressIndicator(),
+              NotesInitial() || NotesLoading() => const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                    ],
                   ),
                 ),
               NotesError(:final message) => Center(
@@ -112,63 +158,72 @@ class NotesHubPage extends StatelessWidget {
                         ),
                       )
                     else
-                      for (final note in notes)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: GlassCard(
-                            onTap: () =>
-                                context.push(AppRoutes.noteDetail(note.id)),
-                            child: Row(
-                              children: [
-                                if (note.tags.isNotEmpty)
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 14),
-                                    child: Container(
-                                      width: 4,
-                                      height: 44,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.accent,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                    ),
-                                  ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                      Container(
+                        key: _tutorialKeys['grid'],
+                        child: Column(
+                          children: [
+                            for (final note in notes)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: GlassCard(
+                                  onTap: () => context.push(AppRoutes.noteDetail(note.id)),
+                                  child: Row(
                                     children: [
-                                      Text(
-                                        note.title,
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.titleMedium,
+                                      if (note.tags.isNotEmpty)
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 14),
+                                          child: Container(
+                                            width: 4,
+                                            height: 44,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.accent,
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                          ),
+                                        ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              note.title,
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.titleMedium,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              note.content,
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodySmall,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      const SizedBox(height: 4),
+                                      const SizedBox(width: 8),
                                       Text(
-                                        note.content,
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodySmall,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                        _formatDate(note.loggedAt),
+                                        style: Theme.of(context).textTheme.labelSmall
+                                            ?.copyWith(color: AppColors.textMuted),
                                       ),
                                     ],
                                   ),
                                 ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  _formatDate(note.loggedAt),
-                                  style: Theme.of(context).textTheme.labelSmall
-                                      ?.copyWith(color: AppColors.textMuted),
-                                ),
-                              ],
-                            ),
-                          ),
+                              ),
+                          ],
                         ),
+                      ),
                     const SizedBox(height: 16),
-                    RizenButton(
-                      label: 'Create Note',
-                      icon: PhosphorIconsBold.plus,
-                      onPressed: () => context.push(AppRoutes.noteCreate),
+                    Container(
+                      key: _tutorialKeys['create'],
+                      child: RizenButton(
+                        label: 'Create Note',
+                        icon: PhosphorIconsBold.plus,
+                        onPressed: () => context.push(AppRoutes.noteCreate),
+                      ),
                     ),
                     const SizedBox(height: 10),
                     NavGlassTile(

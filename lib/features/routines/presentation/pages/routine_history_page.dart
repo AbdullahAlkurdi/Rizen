@@ -8,6 +8,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../../data/models/routine_model.dart';
 import '../bloc/routines_bloc.dart';
 
@@ -80,10 +81,16 @@ class _RoutineHistoryPageState extends State<RoutineHistoryPage> {
               ),
               const SizedBox(height: 20),
               if (state.isLoading && routines.isEmpty)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(32),
-                    child: CircularProgressIndicator(),
+                const Padding(
+                  padding: EdgeInsets.all(32),
+                  child: Column(
+                    children: [
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                    ],
                   ),
                 )
               else if (routines.isEmpty)

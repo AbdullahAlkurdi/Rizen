@@ -6,6 +6,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/widgets/feature_scaffold.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_button.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../../data/models/transaction_model.dart';
 import '../cubit/finance_cubit.dart';
 
@@ -31,7 +32,10 @@ class _DailyReviewPageState extends State<DailyReviewPage> {
       body: BlocBuilder<FinanceCubit, FinanceState>(
         builder: (context, state) {
           if (state is FinanceLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Padding(
+              padding: EdgeInsets.all(20),
+              child: SkeletonCard(height: 120),
+            );
           }
           final today = DateTime.now();
           final transactions = state is FinanceLoaded

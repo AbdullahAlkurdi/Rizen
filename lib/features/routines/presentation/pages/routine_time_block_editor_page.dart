@@ -8,6 +8,7 @@ import '../../../../core/widgets/feature_scaffold.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_button.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../../data/models/routine_model.dart';
 import '../bloc/routines_bloc.dart';
 
@@ -276,7 +277,18 @@ class _RoutineTimeBlockEditorPageState
             label: const Text('Add Block'),
           ),
           body: state.isLoading && blocks.isEmpty
-              ? const Center(child: CircularProgressIndicator())
+              ? const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                    ],
+                  ),
+                )
               : blocks.isEmpty
               ? Center(
                   child: Column(

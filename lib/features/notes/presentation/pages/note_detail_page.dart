@@ -7,6 +7,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../cubit/notes_cubit.dart';
 
 class NoteDetailPage extends StatefulWidget {
@@ -119,7 +120,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     if (state is NotesInitial || state is NotesLoading) {
       return RizenScaffold(
         appBar: AppBar(title: const Text('Note Detail')),
-        body: const Center(child: CircularProgressIndicator()),
+        body: const Padding(
+          padding: EdgeInsets.all(20),
+          child: SkeletonCard(height: 200),
+        ),
       );
     }
 

@@ -6,6 +6,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../../data/domain_catalog.dart';
 import '../cubit/domain_logs_cubit.dart';
 
@@ -27,13 +28,19 @@ class DomainsHubPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               if (state is DomainLogsLoading)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: CircularProgressIndicator(),
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                      SizedBox(height: 10),
+                      SkeletonListTile(),
+                    ],
                   ),
-                ),
-              if (state is DomainLogsError)
+                )
+              else if (state is DomainLogsError)
                 Center(
                   child: Padding(
                     padding: EdgeInsets.all(20),

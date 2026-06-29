@@ -7,6 +7,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/page_header.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../../data/models/adhkar_session.dart';
 import '../cubit/spiritual_cubit.dart';
 
@@ -59,8 +60,17 @@ class _AdhkarTab extends StatelessWidget {
     return BlocBuilder<SpiritualCubit, SpiritualState>(
       builder: (context, state) {
         return switch (state) {
-          SpiritualLoading() => const Center(
-              child: CircularProgressIndicator(),
+          SpiritualLoading() => const Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  SkeletonListTile(),
+                  SizedBox(height: 10),
+                  SkeletonListTile(),
+                  SizedBox(height: 10),
+                  SkeletonListTile(),
+                ],
+              ),
             ),
           SpiritualError(:final message) => Center(
               child: Text(

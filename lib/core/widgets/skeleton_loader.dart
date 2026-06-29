@@ -1,57 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
-class SkeletonLoader extends StatefulWidget {
+class SkeletonLoader extends StatelessWidget {
   const SkeletonLoader({super.key, required this.child});
 
   final Widget child;
 
   @override
-  State<SkeletonLoader> createState() => _SkeletonLoaderState();
-}
-
-class _SkeletonLoaderState extends State<SkeletonLoader>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _shimmer;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1200),
-      vsync: this,
-    )..repeat();
-    _shimmer = Tween<double>(begin: -1.0, end: 2.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _shimmer,
-      builder: (context, child) {
-        return ShaderMask(
-          blendMode: BlendMode.srcIn,
-          shaderCallback: (bounds) => LinearGradient(
-            begin: Alignment(_shimmer.value - 1.0, 0),
-            end: Alignment(_shimmer.value, 0),
-            colors: const [
-              Color(0xFF16213E),
-              Color(0xFF0F3460),
-              Color(0xFF16213E),
-            ],
-            stops: const [0.0, 0.5, 1.0],
-          ).createShader(bounds),
-          child: widget.child,
-        );
-      },
+    return Shimmer.fromColors(
+      baseColor: const Color(0xFF16213E),
+      highlightColor: const Color(0xFF0F3460),
+      period: const Duration(milliseconds: 1200),
+      child: child,
     );
   }
 }
@@ -115,6 +76,98 @@ class SkeletonAvatar extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFF16213E),
           shape: BoxShape.circle,
+        ),
+      ),
+    );
+  }
+}
+
+class SkeletonListTile extends StatelessWidget {
+  const SkeletonListTile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SkeletonLoader(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SkeletonAvatar(radius: 20),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                SkeletonLine(width: double.infinity, height: 16),
+                SizedBox(height: 8),
+                SkeletonLine(width: 160, height: 12),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SkeletonChip extends StatelessWidget {
+  const SkeletonChip({super.key, this.width = 80});
+
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return SkeletonLoader(
+      child: Container(
+        width: width,
+        height: 28,
+        decoration: BoxDecoration(
+          color: const Color(0xFF16213E),
+          borderRadius: BorderRadius.circular(14),
+        ),
+      ),
+    );
+  }
+}
+
+class SkeletonBarChart extends StatelessWidget {
+  const SkeletonBarChart({super.key, this.barCount = 5});
+
+  final int barCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return SkeletonLoader(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(barCount, (index) {
+          final heights = [50, 70, 40, 90, 55, 75, 35];
+          final h = heights[index % heights.length].toDouble();
+          return Container(
+            width: 20,
+            height: h,
+            decoration: BoxDecoration(
+              color: const Color(0xFF16213E),
+              borderRadius: BorderRadius.circular(4),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class SkeletonMiniBar extends StatelessWidget {
+  const SkeletonMiniBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SkeletonLoader(
+      child: Container(
+        width: double.infinity,
+        height: 3,
+        decoration: BoxDecoration(
+          color: const Color(0xFF16213E),
+          borderRadius: BorderRadius.circular(1.5),
         ),
       ),
     );

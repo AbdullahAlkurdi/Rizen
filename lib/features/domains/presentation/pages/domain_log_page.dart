@@ -6,6 +6,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../../../todo/data/models/todo_item_model.dart';
 import '../../../todo/data/models/todo_list_model.dart';
 import '../../../todo/domain/usecases/save_todo_list_usecase.dart';
@@ -302,7 +303,13 @@ class _DomainLogPageState extends State<DomainLogPage> {
           ),
           const SizedBox(height: 32),
           _isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const Column(
+                  children: [
+                    SkeletonListTile(),
+                    SkeletonListTile(),
+                    SkeletonListTile(),
+                  ],
+                )
               : RizenButton(
                   label: 'Save Entry',
                   icon: PhosphorIconsBold.check,

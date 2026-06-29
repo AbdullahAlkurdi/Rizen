@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/feature_scaffold.dart';
@@ -9,6 +10,9 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/skeleton_loader.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/tutorials/tutorial_mixin.dart';
+import '../../../../core/services/tutorial_service.dart';
+import '../../../../core/tutorials/rizen_tutorial.dart';
 import '../../domain/models/todo_coach_summary.dart';
 import '../cubit/coach_cubit.dart';
 
@@ -19,11 +23,28 @@ class CoachBriefingPage extends StatefulWidget {
   State<CoachBriefingPage> createState() => _CoachBriefingPageState();
 }
 
-class _CoachBriefingPageState extends State<CoachBriefingPage> {
+class _CoachBriefingPageState extends State<CoachBriefingPage> with TutorialMixin {
+  @override
+  String get tutorialKey => TutorialService.keys['coach_briefing']!;
+
+  @override
+  List<TargetFocus> buildTargets() => RizenTutorial.coachBriefing(_tutorialKeys);
+
+  final Map<String, GlobalKey> _tutorialKeys = {
+    'morning': GlobalKey(),
+    'checklist_intel': GlobalKey(),
+  };
+
   @override
   void initState() {
     super.initState();
     context.read<CoachCubit>().loadTodoSummary();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (mounted) maybeShowTutorial();
   }
 
   void _navigateToCoachChat(String prefilledMessage) {
@@ -40,6 +61,14 @@ class _CoachBriefingPageState extends State<CoachBriefingPage> {
       subtitle: isMorning
           ? 'Your adaptive roadmap for today.'
           : 'Evening diagnostic and reflection.',
+      actions: [
+        IconButton(
+          onPressed: showTutorialNow,
+          icon: const Icon(PhosphorIconsBold.question),
+          color: const Color(0xFF9CA3AF),
+          tooltip: 'Help',
+        ),
+      ],
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
         icon: Icon(PhosphorIconsBold.arrowClockwise),
@@ -63,89 +92,21 @@ class _CoachBriefingPageState extends State<CoachBriefingPage> {
             ),
           ),
           const SizedBox(height: 20),
-          GlassCard(
-            gradient: LinearGradient(
-              colors: [
-                AppColors.accent.withValues(alpha: 0.12),
-                AppColors.cardBackground.withValues(alpha: 0.7),
-              ],
+          Container(
+            key: _tutorialKeys['checklist_intel'] as Key,
+            child: BlocSelector<CoachCubit, CoachState, TodoCoachSummary?>(
+              selector: (state) {
+                if (state is CoachTodoSummaryLoaded) return state.summary;
+                if (state is CoachTodoSummaryError) return null;
+                return null;
+              },
+              builder: (context, summary) {
+                if (summary == null) {
+                  return _buildTodoLoadingState();
+                }
+                return _buildTodoChecklistSection(context, summary);
+              },
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Strategic Roadmap',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 12),
-                ...List.generate(4, (i) {
-                  final items = [
-                    (
-                      'Protect your 6:30 AM coding block',
-                      'High-impact time already scheduled.',
-                    ),
-                    (
-                      'Schedule workout after Dhuhr prayer',
-                      'Matches your energy peak.',
-                    ),
-                    (
-                      'Shorten evening work block by 30m',
-                      'Sleep discipline flagged.',
-                    ),
-                    (
-                      'Add reflection journal before sleep',
-                      'Supports long-term alignment.',
-                    ),
-                  ][i];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: const EdgeInsetsDirectional.only(end: 12, top: 6),
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: AppColors.accent,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                items.$1,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              Text(
-                                items.$2,
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          BlocSelector<CoachCubit, CoachState, TodoCoachSummary?>(
-            selector: (state) {
-              if (state is CoachTodoSummaryLoaded) return state.summary;
-              if (state is CoachTodoSummaryError) return null;
-              return null;
-            },
-            builder: (context, summary) {
-              if (summary == null) {
-                return _buildTodoLoadingState();
-              }
-              return _buildTodoChecklistSection(context, summary);
-            },
           ),
           const SizedBox(height: 20),
           GlassCard(

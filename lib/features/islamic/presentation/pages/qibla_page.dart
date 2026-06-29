@@ -6,6 +6,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../cubit/prayer_times_cubit.dart';
 
 class QiblaPage extends StatefulWidget {
@@ -50,7 +51,10 @@ class _QiblaPageState extends State<QiblaPage> {
       appBar: AppBar(title: const Text('Qibla Compass')),
       body: Center(
         child: !_loaded
-            ? const CircularProgressIndicator()
+            ? const Padding(
+                padding: EdgeInsets.all(20),
+                child: SkeletonCard(height: 240),
+              )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

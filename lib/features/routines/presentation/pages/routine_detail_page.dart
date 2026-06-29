@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/tutorial_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/tutorials/rizen_tutorial.dart';
+import '../../../../core/tutorials/tutorial_mixin.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/nav_glass_tile.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../../../todo/presentation/widgets/todo_checklist_widget.dart';
 import '../../data/models/routine_model.dart';
 import '../bloc/routines_bloc.dart';
@@ -23,11 +28,26 @@ class RoutineDetailPage extends StatefulWidget {
   State<RoutineDetailPage> createState() => _RoutineDetailPageState();
 }
 
-class _RoutineDetailPageState extends State<RoutineDetailPage> {
+class _RoutineDetailPageState extends State<RoutineDetailPage>
+    with TutorialMixin {
+  @override
+  String get tutorialKey => TutorialService.keys['routine_detail']!;
+
+  @override
+  List<TargetFocus> buildTargets() => RizenTutorial.routineDetail(_tutorialKeys);
+
+  final Map<String, GlobalKey> _tutorialKeys = {
+    'blocks': GlobalKey(),
+    'checklist': GlobalKey(),
+  };
+
   @override
   void initState() {
     super.initState();
     _loadData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) maybeShowTutorial();
+    });
   }
 
   Future<void> _loadData() async {
@@ -64,8 +84,28 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
         final isLoading = state.isLoading && routine == null;
 
         if (isLoading) {
-          return const RizenScaffold(
-            body: Center(child: CircularProgressIndicator()),
+          return RizenScaffold(
+            appBar: AppBar(
+              actions: [
+                IconButton(
+                  onPressed: null,
+                  icon: Icon(PhosphorIconsBold.question),
+                  color: Color(0xFF9CA3AF),
+                  tooltip: 'Help',
+                ),
+              ],
+            ),
+            body: const Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  SkeletonListTile(),
+                  SkeletonListTile(),
+                  SkeletonListTile(),
+                  SkeletonListTile(),
+                ],
+              ),
+            ),
           );
         }
 
@@ -77,13 +117,21 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
                 onPressed: () => context.pop(),
               ),
               title: const Text('Routine Detail'),
+              actions: [
+                IconButton(
+                  onPressed: null,
+                  icon: const Icon(PhosphorIconsBold.question),
+                  color: const Color(0xFF9CA3AF),
+                  tooltip: 'Help',
+                ),
+              ],
             ),
             body: const Center(child: Text('Routine not found')),
           );
         }
 
         final sortedBlocks = List<TimeBlock>.from(timeBlocks)
-          ..sort((a, b) => a.startTime.compareTo(b.startTime));
+            ..sort((a, b) => a.startTime.compareTo(b.startTime));
         final completedCount = sortedBlocks.where((b) => b.isCompleted).length;
         final totalDuration = sortedBlocks.fold<int>(
           0,
@@ -101,6 +149,12 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
             ),
             title: Text(routine.title),
             actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(PhosphorIconsBold.question),
+                color: const Color(0xFF9CA3AF),
+                tooltip: 'Help',
+              ),
               IconButton(
                 onPressed: () => context.push(
                   AppRoutes.routineEdit.replaceFirst(
@@ -186,7 +240,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
                 ),
               ),
               const SizedBox(height: 8),
-LinearProgressIndicator(
+              LinearProgressIndicator(
                 value: progress,
                 backgroundColor: AppColors.glassFill,
                 color: AppColors.accent,
@@ -195,9 +249,12 @@ LinearProgressIndicator(
               ),
               const SizedBox(height: 24),
               if (routine.hasTodoList) ...[
-                TodoChecklistWidget(
-                  parentId: routine.id,
-                  parentType: 'routine',
+                Container(
+                  key: _tutorialKeys['checklist'] as Key,
+                  child: TodoChecklistWidget(
+                    parentId: routine.id,
+                    parentType: 'routine',
+                  ),
                 ),
                 const SizedBox(height: 12),
                 RizenButton(
@@ -256,74 +313,81 @@ LinearProgressIndicator(
                   ),
                 )
               else
-                ...sortedBlocks.map((block) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: GlassCard(
-                      onTap: () async {
-                        await context.read<RoutineCubit>().updateTimeBlock(
-                          routineId: widget.routineId,
-                          blockId: block.id,
-                          updates: {'isCompleted': !block.isCompleted},
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              color: block.isCompleted
-                                  ? AppColors.success.withValues(alpha: 0.2)
-                                  : AppColors.accent.withValues(alpha: 0.15),
-                              borderRadius: AppTheme.cardRadius,
-                            ),
-                            child: Icon(
-                              block.isCompleted
-                                  ? PhosphorIconsFill.checkCircle
-                                  : PhosphorIconsBold.clock,
-                              color: block.isCompleted
-                                  ? AppColors.success
-                                  : AppColors.accent,
-                              size: 18,
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  block.title,
-                                  style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(
-                                        decoration: block.isCompleted
-                                            ? TextDecoration.lineThrough
-                                            : null,
-                                        color: block.isCompleted
-                                            ? AppColors.textMuted
-                                            : null,
+                Container(
+                  key: _tutorialKeys['blocks'] as Key,
+                  child: Column(
+                    children: sortedBlocks.map((block) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: GlassCard(
+                          onTap: () async {
+                            await context.read<RoutineCubit>().updateTimeBlock(
+                                  routineId: widget.routineId,
+                                  blockId: block.id,
+                                  updates: {'isCompleted': !block.isCompleted},
+                                );
+                          },
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: block.isCompleted
+                                      ? AppColors.success.withValues(alpha: 0.2)
+                                      : AppColors.accent.withValues(alpha: 0.15),
+                                  borderRadius: AppTheme.cardRadius,
+                                ),
+                                child: Icon(
+                                  block.isCompleted
+                                      ? PhosphorIconsFill.checkCircle
+                                      : PhosphorIconsBold.clock,
+                                  color: block.isCompleted
+                                      ? AppColors.success
+                                      : AppColors.accent,
+                                  size: 18,
+                                ),
+                              ),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      block.title,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                            decoration: block.isCompleted
+                                                ? TextDecoration.lineThrough
+                                                : null,
+                                            color: block.isCompleted
+                                                ? AppColors.textMuted
+                                                : null,
+                                          ),
+                                    ),
+                                    Text(
+                                      _formatTimeRange(
+                                        block.startTime,
+                                        block.endTime,
                                       ),
+                                      style: Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  _formatTimeRange(
-                                    block.startTime,
-                                    block.endTime,
-                                  ),
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                              ],
-                            ),
+                              ),
+                              Icon(
+                                PhosphorIconsBold.caretRight,
+                                color: AppColors.textMuted,
+                              ),
+                            ],
                           ),
-                          Icon(
-                            PhosphorIconsBold.caretRight,
-                            color: AppColors.textMuted,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
               const SizedBox(height: 16),
               NavGlassTile(
                 title: 'Open Visual Editor',

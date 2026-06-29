@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -10,6 +11,9 @@ import '../../../../core/widgets/feature_scaffold.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/skeleton_loader.dart';
 import '../../../../core/widgets/rizen_button.dart';
+import '../../../../core/tutorials/tutorial_mixin.dart';
+import '../../../../core/services/tutorial_service.dart';
+import '../../../../core/tutorials/rizen_tutorial.dart';
 import '../../data/repositories/shadow_tracker_repository.dart';
 import '../cubit/shadow_tracker_cubit.dart';
 import '../../../todo/domain/usecases/get_missed_items_usecase.dart';
@@ -25,18 +29,51 @@ class ShadowTrackerPage extends StatelessWidget {
         shadowTrackerRepository: ShadowTrackerRepository(),
         getMissedItemsUseCase: GetMissedItemsUseCase(TodoRepositoryImpl()),
       )..loadShadowData(),
-      child: const ShadowTrackerView(),
+      child: ShadowTrackerView(),
     );
   }
 }
 
-class ShadowTrackerView extends StatelessWidget {
+class ShadowTrackerView extends StatefulWidget {
   const ShadowTrackerView({super.key});
+
+  @override
+  State<ShadowTrackerView> createState() => _ShadowTrackerViewState();
+}
+
+class _ShadowTrackerViewState extends State<ShadowTrackerView> with TutorialMixin {
+  @override
+  String get tutorialKey => TutorialService.keys['shadow_tracker']!;
+
+  @override
+  List<TargetFocus> buildTargets() => RizenTutorial.shadowTracker(_tutorialKeys);
+
+  final Map<String, GlobalKey> _tutorialKeys = {
+    'score': GlobalKey(),
+    'missed': GlobalKey(),
+    'recovery': GlobalKey(),
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) maybeShowTutorial();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return FeatureScaffold(
       title: 'Shadow Score',
+      actions: [
+        IconButton(
+          onPressed: showTutorialNow,
+          icon: const Icon(PhosphorIconsBold.question),
+          color: const Color(0xFF9CA3AF),
+          tooltip: 'Help',
+        ),
+      ],
       body: ListView(
         children: [
           _ScoreHeader(),

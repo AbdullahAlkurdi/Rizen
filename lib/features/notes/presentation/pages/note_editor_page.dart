@@ -6,6 +6,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
+import '../../../../core/widgets/skeleton_loader.dart';
 import '../cubit/notes_cubit.dart';
 import '../../data/models/note_model.dart';
 
@@ -147,7 +148,20 @@ final moodText = _moodController.text.trim();
     if (widget.noteId != null && (state is NotesInitial || state is NotesLoading)) {
       return RizenScaffold(
         appBar: AppBar(title: Text(widget.noteId != null ? 'Edit Note' : 'Create Note')),
-        body: const Center(child: CircularProgressIndicator()),
+        body: const Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              SkeletonCard(height: 60),
+              SizedBox(height: 16),
+              SkeletonLine(height: 16),
+              SizedBox(height: 12),
+              SkeletonLine(height: 16),
+              SizedBox(height: 12),
+              SkeletonLine(height: 16),
+            ],
+          ),
+        ),
       );
     }
 
@@ -172,7 +186,18 @@ final moodText = _moodController.text.trim();
     if (widget.noteId != null && state is! NotesLoaded) {
       return RizenScaffold(
         appBar: AppBar(title: const Text('Edit Note')),
-        body: const Center(child: CircularProgressIndicator()),
+        body: const Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              SkeletonCard(height: 60),
+              SizedBox(height: 16),
+              SkeletonLine(height: 16),
+              SizedBox(height: 12),
+              SkeletonLine(height: 16),
+            ],
+          ),
+        ),
       );
     }
 
