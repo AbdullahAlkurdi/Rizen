@@ -25,6 +25,10 @@ import '../../../../core/services/voice_parser_service.dart';
 import '../../../../core/services/voice_log_orchestrator.dart';
 import '../../../routines/presentation/bloc/routines_bloc.dart';
 import '../../../routines/data/models/routine_model.dart';
+import '../../data/repositories/sleep_log_repository.dart';
+import '../../data/services/sleep_detector_service.dart';
+import '../cubit/sleep_cubit.dart';
+import '../cubit/sleep_state.dart';
 
 class HomeDashboardPage extends StatefulWidget {
   const HomeDashboardPage({super.key});
@@ -82,13 +86,14 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> with TutorialMixi
                     );
                   }
                   if (state is VoiceSuccess) {
+                    final habitsCubit = context.read<HabitsCubit>();
                     VoiceResultSheet.show(
                       context,
                       state.summary,
                       state.result.rawTranscript,
                     ).then((_) {
                       if (!mounted) return;
-                      context.read<HabitsCubit>().loadHabits();
+                      habitsCubit.loadHabits();
                     });
                   }
                 },
@@ -182,124 +187,132 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> with TutorialMixi
                               child: _ActiveTimeBlockCard(block: activeBlock),
                             ),
                           if (activeBlock != null) const SizedBox(height: 16),
-                          if (activeBlock == null && !state.isLoading)
-                            GlassCard(
-                              child: Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Text(
-                                  'No active time blocks',
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ),
+                           if (activeBlock == null && !state.isLoading)
+                             GlassCard(
+                               child: Padding(
+                                 padding: const EdgeInsets.all(20),
+                                 child: Text(
+                                   'No active time blocks',
+                                   style: Theme.of(context).textTheme.bodyMedium,
+                                 ),
+                               ),
+                             ),
+                           const SizedBox(height: 20),
+                           BlocProvider(
+                             create: (_) => SleepCubit(
+                               repository: sl<SleepLogRepository>(),
+                               sleepDetectorService: SleepDetectorService(sl<SleepLogRepository>()),
+                             ),
+                              child: _SleepCard(),
                             ),
-                          const SizedBox(height: 20),
-                          Container(
-                            key: _tutorialKeys['checklists'] as Key,
-                            child: const OpenChecklistsWidget(),
-                          ),
-                          const SizedBox(height: 20),
-                          Text(
-                            'Quick Actions',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const SizedBox(height: 12),
-                          Container(
-                            key: _tutorialKeys['quickactions'] as Key,
-                            child: GridView.count(
-                              crossAxisCount: 2,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              mainAxisSpacing: 12,
-                              crossAxisSpacing: 12,
-                              childAspectRatio: 1.6,
-                              children: const [
-                                _QuickActionTile(
-                                  label: 'Log Activity',
-                                  icon: PhosphorIconsBold.plusCircle,
-                                  color: Color(0xFFE94560),
-                                  route: AppRoutes.domains,
-                                ),
-                                _QuickActionTile(
-                                  label: 'Check Habits',
-                                  icon: PhosphorIconsBold.checkCircle,
-                                  color: Color(0xFF4ADE80),
-                                  route: AppRoutes.habits,
-                                ),
-                                _QuickActionTile(
-                                  label: 'Burnout Mode',
-                                  icon: PhosphorIconsBold.firstAid,
-                                  color: Color(0xFFFBBF24),
-                                  route: AppRoutes.habitsRecovery,
-                                ),
-                                _QuickActionTile(
-                                  label: 'AI Coach',
-                                  icon: PhosphorIconsBold.robot,
-                                  color: Color(0xFF9333EA),
-                                  route: AppRoutes.coachHome,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  isMorning ? 'Today\'s Flow' : 'Evening Wrap-up',
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () => context.go(AppRoutes.weeklyOverview),
-                                child: const Text('Weekly view'),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          ...(state.activeTimeBlocks).skip(1).map((block) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: GlassCard(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 18,
-                                  vertical: 16,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 4,
-                                      height: 44,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.accent,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 14),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            block.title,
-                                            style: Theme.of(context).textTheme.titleMedium,
-                                          ),
-                                          Text(
-                                            '${block.startTime ~/ 60}:${(block.startTime % 60).toString().padLeft(2, '0')} - ${block.endTime ~/ 60}:${(block.endTime % 60).toString().padLeft(2, '0')}',
-                                            style: Theme.of(context).textTheme.bodySmall,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Icon(
-                                      PhosphorIconsBold.caretRight,
-                                      color: AppColors.textMuted,
-                                      size: 18,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
+                           const SizedBox(height: 20),
+                           Container(
+                             key: _tutorialKeys['checklists'] as Key,
+                             child: const OpenChecklistsWidget(),
+                           ),
+                           const SizedBox(height: 20),
+                           Text(
+                             'Quick Actions',
+                             style: Theme.of(context).textTheme.titleLarge,
+                           ),
+                           const SizedBox(height: 12),
+                           Container(
+                             key: _tutorialKeys['quickactions'] as Key,
+                             child: GridView.count(
+                               crossAxisCount: 2,
+                               shrinkWrap: true,
+                               physics: const NeverScrollableScrollPhysics(),
+                               mainAxisSpacing: 12,
+                               crossAxisSpacing: 12,
+                               childAspectRatio: 1.6,
+                               children: const [
+                                 _QuickActionTile(
+                                   label: 'Log Activity',
+                                   icon: PhosphorIconsBold.plusCircle,
+                                   color: Color(0xFFE94560),
+                                   route: AppRoutes.domains,
+                                 ),
+                                 _QuickActionTile(
+                                   label: 'Check Habits',
+                                   icon: PhosphorIconsBold.checkCircle,
+                                   color: Color(0xFF4ADE80),
+                                   route: AppRoutes.habits,
+                                 ),
+                                 _QuickActionTile(
+                                   label: 'Burnout Mode',
+                                   icon: PhosphorIconsBold.firstAid,
+                                   color: Color(0xFFFBBF24),
+                                   route: AppRoutes.habitsRecovery,
+                                 ),
+                                 _QuickActionTile(
+                                   label: 'AI Coach',
+                                   icon: PhosphorIconsBold.robot,
+                                   color: Color(0xFF9333EA),
+                                   route: AppRoutes.coachHome,
+                                 ),
+                               ],
+                             ),
+                           ),
+                           const SizedBox(height: 24),
+                           Row(
+                             children: [
+                               Expanded(
+                                 child: Text(
+                                   isMorning ? 'Today\'s Flow' : 'Evening Wrap-up',
+                                   style: Theme.of(context).textTheme.titleLarge,
+                                 ),
+                               ),
+                               TextButton(
+                                 onPressed: () => context.go(AppRoutes.weeklyOverview),
+                                 child: const Text('Weekly view'),
+                               ),
+                             ],
+                           ),
+                           const SizedBox(height: 12),
+                           ...(state.activeTimeBlocks).skip(1).map((block) {
+                             return Padding(
+                               padding: const EdgeInsets.only(bottom: 10),
+                               child: GlassCard(
+                                 padding: const EdgeInsets.symmetric(
+                                   horizontal: 18,
+                                   vertical: 16,
+                                 ),
+                                 child: Row(
+                                   children: [
+                                     Container(
+                                       width: 4,
+                                       height: 44,
+                                       decoration: BoxDecoration(
+                                         color: AppColors.accent,
+                                         borderRadius: BorderRadius.circular(4),
+                                       ),
+                                     ),
+                                     const SizedBox(width: 14),
+                                     Expanded(
+                                       child: Column(
+                                         crossAxisAlignment: CrossAxisAlignment.start,
+                                         children: [
+                                           Text(
+                                             block.title,
+                                             style: Theme.of(context).textTheme.titleMedium,
+                                           ),
+                                           Text(
+                                             '${block.startTime ~/ 60}:${(block.startTime % 60).toString().padLeft(2, '0')} - ${block.endTime ~/ 60}:${(block.endTime % 60).toString().padLeft(2, '0')}',
+                                             style: Theme.of(context).textTheme.bodySmall,
+                                           ),
+                                         ],
+                                       ),
+                                     ),
+                                     Icon(
+                                       PhosphorIconsBold.caretRight,
+                                       color: AppColors.textMuted,
+                                       size: 18,
+                                     ),
+                                   ],
+                                 ),
+                               ),
+                             );
+                           }),
                           if (state.activeTimeBlocks.length <= 1 && !state.isLoading)
                             GlassCard(
                               child: Padding(
@@ -452,6 +465,236 @@ class _ActiveTimeBlockCard extends StatelessWidget {
             minHeight: 6,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SleepCard extends StatelessWidget {
+  const _SleepCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SleepCubit, SleepState>(
+      builder: (context, state) {
+        if (state is SleepLoading) {
+          return const SkeletonCard(height: 120);
+        }
+        if (state is SleepError) {
+          return GlassCard(
+            child: Row(
+              children: [
+                Icon(PhosphorIconsBold.moon, color: AppColors.shadow),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Sleep tracking unavailable',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        if (state is SleepLogged) {
+          final log = state.log;
+          final hours = log.sleepEnd.difference(log.sleepStart).inMinutes / 60.0;
+          final resistance = log.bedResistanceMetric != null
+              ? (log.bedResistanceMetric! * 100).clamp(0.0, 100.0)
+              : null;
+          final bedtimeStr = log.bedtime != null
+              ? '${log.bedtime!.hour}:${log.bedtime!.minute.toString().padLeft(2, '0')}'
+              : null;
+          return GlassCard(
+            onTap: () => _showLogBottomSheet(context),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppColors.shadow.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(PhosphorIconsBold.moon, color: AppColors.shadow),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Sleep',
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                      Text(
+                        '${hours.toStringAsFixed(1)}h logged',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      if (bedtimeStr != null)
+                        Text(
+                          'Bedtime: $bedtimeStr',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      if (log.sleepQuality != null)
+                        Text(
+                          'Quality: ${log.sleepQuality}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      if (resistance != null)
+                        Text(
+                          'Bed resistance: ${resistance.toStringAsFixed(0)}%',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  PhosphorIconsBold.caretRight,
+                  color: AppColors.textMuted,
+                  size: 18,
+                ),
+              ],
+            ),
+          );
+        }
+        return GlassCard(
+          onTap: () => _showLogBottomSheet(context),
+          child: Row(
+            children: [
+              Icon(PhosphorIconsBold.moon, color: AppColors.shadow),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Log Sleep',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              Icon(
+                PhosphorIconsBold.caretRight,
+                color: AppColors.textMuted,
+                size: 18,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showLogBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => const _SleepLogBottomSheet(),
+    );
+  }
+}
+
+class _SleepLogBottomSheet extends StatefulWidget {
+  const _SleepLogBottomSheet();
+
+  @override
+  State<_SleepLogBottomSheet> createState() => _SleepLogBottomSheetState();
+}
+
+class _SleepLogBottomSheetState extends State<_SleepLogBottomSheet> {
+  DateTime? _bedtime;
+  DateTime? _wakeTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      decoration: const BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Log Sleep',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 16),
+            ListTile(
+              title: const Text('Bedtime'),
+              trailing: Text(
+                _bedtime != null
+                    ? '${_bedtime!.hour}:${_bedtime!.minute.toString().padLeft(2, "0")}'
+                    : 'Select',
+              ),
+              onTap: () async {
+                final picked = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                if (picked != null && mounted) {
+                  final now = DateTime.now();
+                  setState(() {
+                    _bedtime = DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
+                  });
+                }
+              },
+            ),
+            ListTile(
+              title: const Text('Wake Time'),
+              trailing: Text(
+                _wakeTime != null
+                    ? '${_wakeTime!.hour}:${_wakeTime!.minute.toString().padLeft(2, "0")}'
+                    : 'Select',
+              ),
+              onTap: () async {
+                final picked = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                if (picked != null && mounted) {
+                  final now = DateTime.now();
+                  setState(() {
+                    _wakeTime = DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
+                  });
+                }
+              },
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.textMuted,
+                    ),
+                    child: const Text('Cancel'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: FilledButton(
+                    onPressed: () {
+                      if (_bedtime != null && _wakeTime != null && mounted) {
+                        context.read<SleepCubit>().logManualBedtime(_bedtime!);
+                        context.read<SleepCubit>().logManualWakeTime(_wakeTime!);
+                        Navigator.pop(context);
+                      }
+                    },
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.accent,
+                    ),
+                    child: const Text('Save'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

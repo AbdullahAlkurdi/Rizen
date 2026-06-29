@@ -8,8 +8,8 @@ class SleepLogRepository {
   final FirebaseAuth _auth;
 
   SleepLogRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
-    : _firestore = firestore ?? FirebaseFirestore.instance,
-      _auth = auth ?? FirebaseAuth.instance;
+      : _firestore = firestore ?? FirebaseFirestore.instance,
+        _auth = auth ?? FirebaseAuth.instance;
 
   String get _userId {
     final user = _auth.currentUser;
@@ -60,24 +60,84 @@ class SleepLogRepository {
     return SleepLog.fromFirestore(snapshot.docs.first);
   }
 
-  Future<String> createSleepLog({
-    required DateTime sleepStart,
-    DateTime? sleepEnd,
-    DateTime? wakeTimeTarget,
-  }) async {
+  Future<SleepLog?> getLastSleepLog() async {
+    final snapshot = await _firestore
+        .collection('sleep_logs')
+        .where('uid', isEqualTo: _userId)
+        .orderBy('sleepStart', descending: true)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isEmpty) return null;
+    return SleepLog.fromFirestore(snapshot.docs.first);
+  }
+
+  Stream<SleepLog> listenForWakeEvent() {
+    return _firestore
+        .collection('sleep_logs')
+        .where('uid', isEqualTo: _userId)
+        .orderBy('sleepStart', descending: true)
+        .limit(1)
+        .snapshots()
+        .map((snapshot) {
+      if (snapshot.docs.isEmpty) {
+        throw Exception('No sleep logs found');
+      }
+      return SleepLog.fromFirestore(snapshot.docs.first);
+    });
+  }
+
+  Future<String> logBedtime(DateTime bedtime) async {
+    final now = DateTime.now();
     final ref = _firestore.collection('sleep_logs').doc();
     await ref.set({
       'uid': _userId,
-      'sleepStart': Timestamp.fromDate(sleepStart),
-      'sleepEnd': sleepEnd != null ? Timestamp.fromDate(sleepEnd) : null,
-      'wakeTimeTarget': wakeTimeTarget != null
-          ? Timestamp.fromDate(wakeTimeTarget)
-          : null,
+      'sleepStart': Timestamp.fromDate(bedtime),
+      'sleepEnd': null,
+      'wakeTimeTarget': null,
+      'confirmed': null,
+      'confirmedAt': null,
+      'bedResistanceMetric': null,
       'source': 'detected',
       'isAnalysisReady': false,
-      'createdAt': FieldValue.serverTimestamp(),
+      'analysisNotes': null,
+      'bedtime': Timestamp.fromDate(bedtime),
+      'wakeTime': null,
+      'sleepMinutes': null,
+      'sleepQuality': null,
+      'notes': null,
+      'createdAt': Timestamp.fromDate(now),
+      'updatedAt': Timestamp.fromDate(now),
     });
     return ref.id;
+  }
+
+  Future<void> logWakeTime(DateTime wakeTime) async {
+    final lastLog = await getLastSleepLog();
+    if (lastLog == null) {
+      throw Exception('No bedtime logged. Please log bedtime first.');
+    }
+
+    final bedtime = lastLog.bedtime ?? lastLog.sleepStart;
+    final wakeTimeTarget = lastLog.wakeTimeTarget;
+
+    final sleepMinutes = wakeTime.difference(bedtime).inMinutes;
+    final timeToFallAsleep = wakeTimeTarget != null
+        ? wakeTimeTarget.difference(wakeTime).inMinutes
+        : 30;
+
+    final rawMetric = ((timeToFallAsleep / 60) * 100).clamp(0.0, 100.0);
+    final bedResistanceMetric = (rawMetric / 100).clamp(0.0, 1.0);
+
+    final now = DateTime.now();
+    await _firestore.collection('sleep_logs').doc(lastLog.id).update({
+      'sleepEnd': Timestamp.fromDate(wakeTime),
+      'wakeTime': Timestamp.fromDate(wakeTime),
+      'sleepMinutes': sleepMinutes,
+      'bedResistanceMetric': bedResistanceMetric,
+      'isAnalysisReady': true,
+      'updatedAt': Timestamp.fromDate(now),
+    });
   }
 
   Future<void> confirmSleepLog({
@@ -88,30 +148,6 @@ class SleepLogRepository {
       'confirmed': confirmed,
       'confirmedAt': FieldValue.serverTimestamp(),
     });
-  }
-
-  Future<void> calculateBedResistanceMetric(String logId) async {
-    final log = await _firestore.collection('sleep_logs').doc(logId).get();
-    if (!log.exists) return;
-
-    final data = log.data() as Map<String, dynamic>;
-    final sleepEnd = (data['sleepEnd'] as Timestamp?)?.toDate();
-    final wakeTimeTarget = (data['wakeTimeTarget'] as Timestamp?)?.toDate();
-
-    if (sleepEnd != null && wakeTimeTarget != null) {
-      final delayMinutes = wakeTimeTarget.difference(sleepEnd).inMinutes;
-      final metric = delayMinutes > 0
-          ? (delayMinutes / 120).clamp(0.0, 1.0)
-          : 0.0;
-
-      await _firestore.collection('sleep_logs').doc(logId).update({
-        'bedResistanceMetric': metric,
-        'isAnalysisReady': true,
-        'analysisNotes': metric > 0.5
-            ? 'Rizen downgraded today\'s payload to prevent cognitive fatigue.'
-            : 'On track with target wake time.',
-      });
-    }
   }
 
   Future<void> updateSleepLog({

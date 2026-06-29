@@ -29,9 +29,16 @@ mixin _$SleepLog {
   bool? get confirmed => throw _privateConstructorUsedError;
   DateTime? get confirmedAt => throw _privateConstructorUsedError;
   double? get bedResistanceMetric => throw _privateConstructorUsedError;
-  LogSource get source => throw _privateConstructorUsedError;
+  LogSource? get source => throw _privateConstructorUsedError;
   bool get isAnalysisReady => throw _privateConstructorUsedError;
   String? get analysisNotes => throw _privateConstructorUsedError;
+  DateTime? get bedtime => throw _privateConstructorUsedError;
+  DateTime? get wakeTime => throw _privateConstructorUsedError;
+  int? get sleepMinutes => throw _privateConstructorUsedError;
+  String? get sleepQuality => throw _privateConstructorUsedError;
+  String? get notes => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this SleepLog to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -57,9 +64,16 @@ abstract class $SleepLogCopyWith<$Res> {
     bool? confirmed,
     DateTime? confirmedAt,
     double? bedResistanceMetric,
-    LogSource source,
+    LogSource? source,
     bool isAnalysisReady,
     String? analysisNotes,
+    DateTime? bedtime,
+    DateTime? wakeTime,
+    int? sleepMinutes,
+    String? sleepQuality,
+    String? notes,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   });
 }
 
@@ -86,9 +100,16 @@ class _$SleepLogCopyWithImpl<$Res, $Val extends SleepLog>
     Object? confirmed = freezed,
     Object? confirmedAt = freezed,
     Object? bedResistanceMetric = freezed,
-    Object? source = null,
+    Object? source = freezed,
     Object? isAnalysisReady = null,
     Object? analysisNotes = freezed,
+    Object? bedtime = freezed,
+    Object? wakeTime = freezed,
+    Object? sleepMinutes = freezed,
+    Object? sleepQuality = freezed,
+    Object? notes = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -124,10 +145,10 @@ class _$SleepLogCopyWithImpl<$Res, $Val extends SleepLog>
                 ? _value.bedResistanceMetric
                 : bedResistanceMetric // ignore: cast_nullable_to_non_nullable
                       as double?,
-            source: null == source
+            source: freezed == source
                 ? _value.source
                 : source // ignore: cast_nullable_to_non_nullable
-                      as LogSource,
+                      as LogSource?,
             isAnalysisReady: null == isAnalysisReady
                 ? _value.isAnalysisReady
                 : isAnalysisReady // ignore: cast_nullable_to_non_nullable
@@ -136,6 +157,34 @@ class _$SleepLogCopyWithImpl<$Res, $Val extends SleepLog>
                 ? _value.analysisNotes
                 : analysisNotes // ignore: cast_nullable_to_non_nullable
                       as String?,
+            bedtime: freezed == bedtime
+                ? _value.bedtime
+                : bedtime // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            wakeTime: freezed == wakeTime
+                ? _value.wakeTime
+                : wakeTime // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            sleepMinutes: freezed == sleepMinutes
+                ? _value.sleepMinutes
+                : sleepMinutes // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            sleepQuality: freezed == sleepQuality
+                ? _value.sleepQuality
+                : sleepQuality // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            notes: freezed == notes
+                ? _value.notes
+                : notes // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            updatedAt: freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
           )
           as $Val,
     );
@@ -160,9 +209,16 @@ abstract class _$$SleepLogImplCopyWith<$Res>
     bool? confirmed,
     DateTime? confirmedAt,
     double? bedResistanceMetric,
-    LogSource source,
+    LogSource? source,
     bool isAnalysisReady,
     String? analysisNotes,
+    DateTime? bedtime,
+    DateTime? wakeTime,
+    int? sleepMinutes,
+    String? sleepQuality,
+    String? notes,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   });
 }
 
@@ -188,9 +244,16 @@ class __$$SleepLogImplCopyWithImpl<$Res>
     Object? confirmed = freezed,
     Object? confirmedAt = freezed,
     Object? bedResistanceMetric = freezed,
-    Object? source = null,
+    Object? source = freezed,
     Object? isAnalysisReady = null,
     Object? analysisNotes = freezed,
+    Object? bedtime = freezed,
+    Object? wakeTime = freezed,
+    Object? sleepMinutes = freezed,
+    Object? sleepQuality = freezed,
+    Object? notes = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _$SleepLogImpl(
@@ -226,10 +289,10 @@ class __$$SleepLogImplCopyWithImpl<$Res>
             ? _value.bedResistanceMetric
             : bedResistanceMetric // ignore: cast_nullable_to_non_nullable
                   as double?,
-        source: null == source
+        source: freezed == source
             ? _value.source
             : source // ignore: cast_nullable_to_non_nullable
-                  as LogSource,
+                  as LogSource?,
         isAnalysisReady: null == isAnalysisReady
             ? _value.isAnalysisReady
             : isAnalysisReady // ignore: cast_nullable_to_non_nullable
@@ -238,6 +301,34 @@ class __$$SleepLogImplCopyWithImpl<$Res>
             ? _value.analysisNotes
             : analysisNotes // ignore: cast_nullable_to_non_nullable
                   as String?,
+        bedtime: freezed == bedtime
+            ? _value.bedtime
+            : bedtime // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        wakeTime: freezed == wakeTime
+            ? _value.wakeTime
+            : wakeTime // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        sleepMinutes: freezed == sleepMinutes
+            ? _value.sleepMinutes
+            : sleepMinutes // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        sleepQuality: freezed == sleepQuality
+            ? _value.sleepQuality
+            : sleepQuality // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        notes: freezed == notes
+            ? _value.notes
+            : notes // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        updatedAt: freezed == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
       ),
     );
   }
@@ -245,7 +336,7 @@ class __$$SleepLogImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$SleepLogImpl implements _SleepLog {
+class _$SleepLogImpl extends _SleepLog {
   const _$SleepLogImpl({
     required this.id,
     required this.uid,
@@ -255,10 +346,17 @@ class _$SleepLogImpl implements _SleepLog {
     this.confirmed,
     this.confirmedAt,
     this.bedResistanceMetric,
-    this.source = LogSource.detected,
+    this.source,
     this.isAnalysisReady = false,
     this.analysisNotes,
-  });
+    this.bedtime,
+    this.wakeTime,
+    this.sleepMinutes,
+    this.sleepQuality,
+    this.notes,
+    this.createdAt,
+    this.updatedAt,
+  }) : super._();
 
   factory _$SleepLogImpl.fromJson(Map<String, dynamic> json) =>
       _$$SleepLogImplFromJson(json);
@@ -280,17 +378,30 @@ class _$SleepLogImpl implements _SleepLog {
   @override
   final double? bedResistanceMetric;
   @override
-  @JsonKey()
-  final LogSource source;
+  final LogSource? source;
   @override
   @JsonKey()
   final bool isAnalysisReady;
   @override
   final String? analysisNotes;
+  @override
+  final DateTime? bedtime;
+  @override
+  final DateTime? wakeTime;
+  @override
+  final int? sleepMinutes;
+  @override
+  final String? sleepQuality;
+  @override
+  final String? notes;
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
 
   @override
   String toString() {
-    return 'SleepLog(id: $id, uid: $uid, sleepStart: $sleepStart, sleepEnd: $sleepEnd, wakeTimeTarget: $wakeTimeTarget, confirmed: $confirmed, confirmedAt: $confirmedAt, bedResistanceMetric: $bedResistanceMetric, source: $source, isAnalysisReady: $isAnalysisReady, analysisNotes: $analysisNotes)';
+    return 'SleepLog(id: $id, uid: $uid, sleepStart: $sleepStart, sleepEnd: $sleepEnd, wakeTimeTarget: $wakeTimeTarget, confirmed: $confirmed, confirmedAt: $confirmedAt, bedResistanceMetric: $bedResistanceMetric, source: $source, isAnalysisReady: $isAnalysisReady, analysisNotes: $analysisNotes, bedtime: $bedtime, wakeTime: $wakeTime, sleepMinutes: $sleepMinutes, sleepQuality: $sleepQuality, notes: $notes, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -316,7 +427,19 @@ class _$SleepLogImpl implements _SleepLog {
             (identical(other.isAnalysisReady, isAnalysisReady) ||
                 other.isAnalysisReady == isAnalysisReady) &&
             (identical(other.analysisNotes, analysisNotes) ||
-                other.analysisNotes == analysisNotes));
+                other.analysisNotes == analysisNotes) &&
+            (identical(other.bedtime, bedtime) || other.bedtime == bedtime) &&
+            (identical(other.wakeTime, wakeTime) ||
+                other.wakeTime == wakeTime) &&
+            (identical(other.sleepMinutes, sleepMinutes) ||
+                other.sleepMinutes == sleepMinutes) &&
+            (identical(other.sleepQuality, sleepQuality) ||
+                other.sleepQuality == sleepQuality) &&
+            (identical(other.notes, notes) || other.notes == notes) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -334,6 +457,13 @@ class _$SleepLogImpl implements _SleepLog {
     source,
     isAnalysisReady,
     analysisNotes,
+    bedtime,
+    wakeTime,
+    sleepMinutes,
+    sleepQuality,
+    notes,
+    createdAt,
+    updatedAt,
   );
 
   /// Create a copy of SleepLog
@@ -350,7 +480,7 @@ class _$SleepLogImpl implements _SleepLog {
   }
 }
 
-abstract class _SleepLog implements SleepLog {
+abstract class _SleepLog extends SleepLog {
   const factory _SleepLog({
     required final String id,
     required final String uid,
@@ -360,10 +490,18 @@ abstract class _SleepLog implements SleepLog {
     final bool? confirmed,
     final DateTime? confirmedAt,
     final double? bedResistanceMetric,
-    final LogSource source,
+    final LogSource? source,
     final bool isAnalysisReady,
     final String? analysisNotes,
+    final DateTime? bedtime,
+    final DateTime? wakeTime,
+    final int? sleepMinutes,
+    final String? sleepQuality,
+    final String? notes,
+    final DateTime? createdAt,
+    final DateTime? updatedAt,
   }) = _$SleepLogImpl;
+  const _SleepLog._() : super._();
 
   factory _SleepLog.fromJson(Map<String, dynamic> json) =
       _$SleepLogImpl.fromJson;
@@ -385,11 +523,25 @@ abstract class _SleepLog implements SleepLog {
   @override
   double? get bedResistanceMetric;
   @override
-  LogSource get source;
+  LogSource? get source;
   @override
   bool get isAnalysisReady;
   @override
   String? get analysisNotes;
+  @override
+  DateTime? get bedtime;
+  @override
+  DateTime? get wakeTime;
+  @override
+  int? get sleepMinutes;
+  @override
+  String? get sleepQuality;
+  @override
+  String? get notes;
+  @override
+  DateTime? get createdAt;
+  @override
+  DateTime? get updatedAt;
 
   /// Create a copy of SleepLog
   /// with the given fields replaced by the non-null parameter values.

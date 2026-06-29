@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/coach_message_model.dart';
 import '../../domain/models/todo_coach_summary.dart';
+import '../../domain/entities/sleep_insight.dart';
 import '../../data/repositories/coach_repository.dart';
 import '../../../../core/injection_container.dart';
 import '../../../../core/interfaces/habit_service_interface.dart';
@@ -41,6 +42,16 @@ final class CoachTodoSummaryError extends CoachState {
 
   final String message;
   final void Function() onRetry;
+}
+
+final class CoachSleepInsightLoaded extends CoachState {
+  CoachSleepInsightLoaded(this.insight);
+  final SleepInsight insight;
+}
+
+final class CoachSleepInsightError extends CoachState {
+  CoachSleepInsightError(this.message);
+  final String message;
 }
 
 class CoachCubit extends Cubit<CoachState> {
@@ -96,6 +107,17 @@ class CoachCubit extends Cubit<CoachState> {
       emit(CoachTodoSummaryLoaded(summary));
     } catch (e) {
       emit(CoachTodoSummaryError(e.toString(), loadTodoSummary));
+    }
+  }
+
+  Future<void> loadSleepInsight() async {
+    try {
+      final insight = await _repository.getSleepInsight();
+      if (insight != null) {
+        emit(CoachSleepInsightLoaded(insight));
+      }
+    } catch (e) {
+      emit(CoachSleepInsightError(e.toString()));
     }
   }
 }

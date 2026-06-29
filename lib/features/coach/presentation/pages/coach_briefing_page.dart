@@ -14,6 +14,7 @@ import '../../../../core/tutorials/tutorial_mixin.dart';
 import '../../../../core/services/tutorial_service.dart';
 import '../../../../core/tutorials/rizen_tutorial.dart';
 import '../../domain/models/todo_coach_summary.dart';
+import '../../domain/entities/sleep_insight.dart';
 import '../cubit/coach_cubit.dart';
 
 class CoachBriefingPage extends StatefulWidget {
@@ -105,12 +106,71 @@ class _CoachBriefingPageState extends State<CoachBriefingPage> with TutorialMixi
                   return _buildTodoLoadingState();
                 }
                 return _buildTodoChecklistSection(context, summary);
-              },
+                },
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          GlassCard(
-            child: Column(
+            const SizedBox(height: 20),
+          BlocSelector<CoachCubit, CoachState, SleepInsight?>(
+              selector: (state) {
+                if (state is CoachSleepInsightLoaded) return state.insight;
+                return null;
+              },
+              builder: (context, insight) {
+                if (insight == null) {
+                  return GlassCard(
+                    child: Row(
+                      children: [
+                        Icon(PhosphorIconsBold.moon, color: const Color(0xFF0F3460)),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Start tracking your sleep to unlock personalized sleep coaching.',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return GlassCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(PhosphorIconsBold.moon, color: const Color(0xFF0F3460)),
+                          const SizedBox(width: 10),
+                          Text(
+                            'Sleep Insight',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        insight.insight,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        insight.recommendation,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppColors.textMuted,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                         'Tracked sleep: ${insight.bedResistanceMetric.toStringAsFixed(0)} of last 7 days',
+                         style: Theme.of(context).textTheme.labelSmall,
+                       ),
+                     ],
+                   ),
+                 );
+               },
+             ),
+           const SizedBox(height: 20),
+           GlassCard(
+             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(

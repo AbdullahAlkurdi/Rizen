@@ -38,6 +38,9 @@ import '../features/todo/presentation/cubit/todo_cubit.dart';
 import '../features/dashboard/presentation/cubit/dashboard_todo_cubit.dart';
 import '../features/habits/presentation/cubit/habits_cubit.dart';
 import '../features/habits/presentation/cubit/shadow_tracker_cubit.dart';
+import '../features/home/data/repositories/sleep_repository.dart';
+import '../features/home/data/services/sleep_detector_service.dart';
+import '../features/home/presentation/cubit/sleep_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -105,6 +108,15 @@ Future<void> init() async {
   sl.registerFactory(() => ShadowTrackerCubit(
     shadowTrackerRepository: sl<ShadowTrackerRepositoryInterface>(),
     getMissedItemsUseCase: sl<GetMissedItemsUseCase>(),
+  ));
+
+  sl.registerLazySingleton(() => SleepLogRepository());
+
+  sl.registerLazySingleton(() => SleepDetectorService(sl<SleepLogRepository>()));
+
+  sl.registerFactory(() => SleepCubit(
+    repository: sl<SleepLogRepository>(),
+    sleepDetectorService: sl<SleepDetectorService>(),
   ));
 
   sl.registerLazySingleton(() => TutorialService());

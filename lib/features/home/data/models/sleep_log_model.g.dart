@@ -20,11 +20,24 @@ _$SleepLogImpl _$$SleepLogImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['confirmedAt'] as String),
       bedResistanceMetric: (json['bedResistanceMetric'] as num?)?.toDouble(),
-      source:
-          $enumDecodeNullable(_$LogSourceEnumMap, json['source']) ??
-          LogSource.detected,
+      source: $enumDecodeNullable(_$LogSourceEnumMap, json['source']),
       isAnalysisReady: json['isAnalysisReady'] as bool? ?? false,
       analysisNotes: json['analysisNotes'] as String?,
+      bedtime: json['bedtime'] == null
+          ? null
+          : DateTime.parse(json['bedtime'] as String),
+      wakeTime: json['wakeTime'] == null
+          ? null
+          : DateTime.parse(json['wakeTime'] as String),
+      sleepMinutes: (json['sleepMinutes'] as num?)?.toInt(),
+      sleepQuality: json['sleepQuality'] as String?,
+      notes: json['notes'] as String?,
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
     );
 
 Map<String, dynamic> _$$SleepLogImplToJson(_$SleepLogImpl instance) =>
@@ -37,9 +50,16 @@ Map<String, dynamic> _$$SleepLogImplToJson(_$SleepLogImpl instance) =>
       'confirmed': instance.confirmed,
       'confirmedAt': instance.confirmedAt?.toIso8601String(),
       'bedResistanceMetric': instance.bedResistanceMetric,
-      'source': _$LogSourceEnumMap[instance.source]!,
+      'source': _$LogSourceEnumMap[instance.source],
       'isAnalysisReady': instance.isAnalysisReady,
       'analysisNotes': instance.analysisNotes,
+      'bedtime': instance.bedtime?.toIso8601String(),
+      'wakeTime': instance.wakeTime?.toIso8601String(),
+      'sleepMinutes': instance.sleepMinutes,
+      'sleepQuality': instance.sleepQuality,
+      'notes': instance.notes,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
     };
 
 const _$LogSourceEnumMap = {

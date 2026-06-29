@@ -10,6 +10,9 @@ import '../../../../core/interfaces/finance_service_interface.dart';
 import '../../../../core/interfaces/note_service_interface.dart';
 import '../../../../core/interfaces/domain_service_interface.dart';
 import '../../../../core/interfaces/islamic_service_interface.dart';
+import '../../../home/data/repositories/sleep_log_repository.dart';
+import '../../domain/entities/sleep_insight.dart';
+import '../../domain/usecases/generate_sleep_insight.dart';
 import '../models/coach_message_model.dart';
 import '../../domain/models/todo_coach_summary.dart';
 import '../../../todo/domain/usecases/get_missed_items_usecase.dart';
@@ -27,6 +30,7 @@ class CoachRepository {
     required IslamicServiceInterface prayerTimesRepository,
     required TodoRepositoryInterface todoRepository,
     required GetMissedItemsUseCase getMissedItemsUseCase,
+    SleepLogRepository? sleepRepository,
   })  : _firestore = firestore ?? FirebaseFirestore.instance,
         _auth = auth ?? FirebaseAuth.instance,
         _dio = dio ?? Dio(),
@@ -36,7 +40,8 @@ class CoachRepository {
         _domainLogsRepository = domainLogsRepository,
         _prayerTimesRepository = prayerTimesRepository,
         _todoRepository = todoRepository,
-        _getMissedItemsUseCase = getMissedItemsUseCase;
+        _getMissedItemsUseCase = getMissedItemsUseCase,
+        _sleepRepository = sleepRepository ?? SleepLogRepository();
 
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
@@ -48,6 +53,7 @@ class CoachRepository {
   final IslamicServiceInterface _prayerTimesRepository;
   final TodoRepositoryInterface _todoRepository;
   final GetMissedItemsUseCase _getMissedItemsUseCase;
+  final SleepLogRepository _sleepRepository;
 
   CollectionReference get _sessionsCollection =>
       _firestore.collection('coach_sessions');
@@ -458,5 +464,12 @@ Always end with a conversational message to the user.''';
       chronicallyMissed: chronicallyMissed,
       perfectHabits: perfectHabits,
     );
+  }
+
+  Future<SleepInsight?> getSleepInsight() async {
+    final weekLogs = await _sleepRepository.getSleepLogs(limit: 7);
+    if (weekLogs.isEmpty) return null;
+    final lastLog = weekLogs.first;
+    return GenerateSleepInsightUseCase().call(lastLog, weekLogs);
   }
 }
