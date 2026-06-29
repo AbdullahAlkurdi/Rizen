@@ -8,6 +8,7 @@ import '../../features/analytics/presentation/pages/data_export_page.dart';
 import '../../features/analytics/presentation/pages/domain_correlation_page.dart';
 import '../../features/analytics/presentation/pages/growth_index_page.dart';
 import '../../features/analytics/presentation/pages/habit_trends_page.dart';
+import '../../features/analytics/data/models/analytics_period.dart';
 import '../../features/islamic/presentation/cubit/prayer_times_cubit.dart';
 import '../../features/islamic/presentation/cubit/spiritual_cubit.dart';
 import '../../features/islamic/data/models/adhkar_session.dart';
@@ -641,7 +642,7 @@ final appRouter = GoRouter(
         GoRoute(
           path: AppRoutes.analytics,
           builder: (context, state) => BlocProvider(
-            create: (_) => AnalyticsCubit()..loadAll(),
+            create: (_) => AnalyticsCubit()..loadAll(AnalyticsPeriod.week),
             child: const AnalyticsHubPage(),
           ),
         ),
@@ -701,28 +702,35 @@ final appRouter = GoRouter(
         GoRoute(
           path: AppRoutes.domainCorrelation,
           builder: (context, state) => BlocProvider(
-            create: (_) => AnalyticsCubit()..loadAll(),
+            create: (_) => AnalyticsCubit()..loadAll(AnalyticsPeriod.week),
             child: const DomainCorrelationPage(),
           ),
         ),
         GoRoute(
           path: AppRoutes.habitTrends,
           builder: (context, state) => BlocProvider(
-            create: (_) => AnalyticsCubit()..loadAll(),
+            create: (_) => AnalyticsCubit()..loadAll(AnalyticsPeriod.week),
             child: const HabitTrendsPage(),
+          ),
+        ),
+        GoRoute(
+          path: '/analytics/trends/:habitId',
+          builder: (context, state) => BlocProvider(
+            create: (_) => AnalyticsCubit()..loadAll(AnalyticsPeriod.week),
+            child: HabitTrendsPage(habitId: state.pathParameters['habitId']),
           ),
         ),
         GoRoute(
           path: AppRoutes.growthIndex,
           builder: (context, state) => BlocProvider(
-            create: (_) => AnalyticsCubit()..loadAll(),
+            create: (_) => AnalyticsCubit()..loadAll(AnalyticsPeriod.week),
             child: const GrowthIndexPage(),
           ),
         ),
         GoRoute(
           path: AppRoutes.dataExport,
           builder: (context, state) => BlocProvider(
-            create: (_) => AnalyticsCubit()..loadAll(),
+            create: (_) => AnalyticsCubit()..loadAll(AnalyticsPeriod.week),
             child: const DataExportPage(),
           ),
         ),

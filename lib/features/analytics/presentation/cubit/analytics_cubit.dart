@@ -1,116 +1,75 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
 
+import '../../data/models/analytics_period.dart';
+import '../../data/models/correlation_insight.dart';
+import '../../data/models/domain_score_point.dart';
+import '../../data/models/growth_index.dart';
+import '../../data/models/habit_trend_point.dart';
 import '../../data/repositories/analytics_repository.dart';
-import '../../../habits/data/repositories/habits_repository.dart';
-import '../../../finance/data/repositories/finance_repository.dart';
-import '../../../domains/data/repositories/domain_logs_repository.dart';
-import '../../../home/data/models/daily_score_model.dart';
-
-sealed class AnalyticsState {}
-
-final class AnalyticsInitial extends AnalyticsState {}
-
-final class AnalyticsLoading extends AnalyticsState {}
-
-final class AnalyticsLoaded extends AnalyticsState {
-  AnalyticsLoaded({
-    required this.weeklyScore,
-    required this.habitCompletionRate,
-    required this.totalFinanceSpent,
-    required this.domainHoursThisWeek,
-    required this.quranPagesThisWeek,
-    required this.streakDays,
-    this.trendData = const [],
-  });
-
-  final double weeklyScore;
-  final double habitCompletionRate;
-  final double totalFinanceSpent;
-  final Map<String, double> domainHoursThisWeek;
-  final int quranPagesThisWeek;
-  final int streakDays;
-  final List<DailyScore> trendData;
-}
-
-final class AnalyticsError extends AnalyticsState {
-  AnalyticsError(this.message);
-  final String message;
-}
+import 'analytics_state.dart';
 
 class AnalyticsCubit extends Cubit<AnalyticsState> {
   AnalyticsCubit({AnalyticsRepository? repository})
-      : _repository = repository ?? AnalyticsRepository(
-          habitsRepository: HabitsRepository(),
-          financeRepository: FinanceRepository(),
-          domainLogsRepository: DomainLogsRepository(),
-        ),
-        super(AnalyticsInitial());
+      : _repository = repository ??
+            AnalyticsRepository(
+              firestore: FirebaseFirestore.instance,
+              uid: FirebaseAuth.instance.currentUser?.uid ?? '',
+            ),
+        super(const AnalyticsInitial());
 
   final AnalyticsRepository _repository;
+  StreamSubscription? _sub;
 
-  Future<void> loadWeeklySummary() async {
-    emit(AnalyticsLoading());
+  Future<void> loadAll(AnalyticsPeriod period) async {
+    emit(const AnalyticsLoading());
     try {
-      final summary = await _repository.getWeeklySummary();
+      final results = await Future.wait([
+        _repository.getDomainScores(period),
+        _repository.getHabitTrends(period),
+        _repository.getGrowthIndex(),
+        _repository.getCorrelationInsights(),
+      ]);
+
       emit(AnalyticsLoaded(
-        weeklyScore: summary.weeklyScore,
-        habitCompletionRate: summary.habitCompletionRate,
-        totalFinanceSpent: summary.totalFinanceSpent,
-        domainHoursThisWeek: summary.domainHoursThisWeek,
-        quranPagesThisWeek: summary.quranPagesThisWeek,
-        streakDays: summary.streakDays,
+        domainScores: results[0] as List<DomainScorePoint>,
+        habitTrends: results[1] as List<HabitTrendPoint>,
+        growthIndex: results[2] as GrowthIndex,
+        correlations: results[3] as List<CorrelationInsight>,
+        selectedPeriod: period,
       ));
     } catch (e) {
-      emit(AnalyticsError(e.toString()));
+      emit(AnalyticsError(e.toString(), () => loadAll(period)));
     }
   }
 
-  Future<void> loadTrendData() async {
+  Future<void> changePeriod(AnalyticsPeriod period) async {
+    if (state is AnalyticsLoaded) {
+      await loadAll(period);
+    }
+  }
+
+  Future<void> exportData(String format) async {
     try {
-      final trendData = await _repository.getTrendData();
-      final current = state;
-      if (current is AnalyticsLoaded) {
-        emit(AnalyticsLoaded(
-          weeklyScore: current.weeklyScore,
-          habitCompletionRate: current.habitCompletionRate,
-          totalFinanceSpent: current.totalFinanceSpent,
-          domainHoursThisWeek: current.domainHoursThisWeek,
-          quranPagesThisWeek: current.quranPagesThisWeek,
-          streakDays: current.streakDays,
-          trendData: trendData,
-        ));
+      final data = await _repository.exportData(format);
+      if (Platform.isAndroid || Platform.isIOS) {
+        await SharePlus.instance.share(ShareParams(text: data, subject: 'Rizen Analytics Export'));
       } else {
-        emit(AnalyticsLoaded(
-          weeklyScore: 0,
-          habitCompletionRate: 0,
-          totalFinanceSpent: 0,
-          domainHoursThisWeek: const {},
-          quranPagesThisWeek: 0,
-          streakDays: 0,
-          trendData: trendData,
-        ));
+        emit(AnalyticsError('Export generated. Share not supported on desktop.', () => exportData(format)));
       }
     } catch (e) {
-      emit(AnalyticsError(e.toString()));
+      emit(AnalyticsError(e.toString(), () => exportData(format)));
     }
   }
 
-  Future<void> loadAll() async {
-    emit(AnalyticsLoading());
-    try {
-      final summary = await _repository.getWeeklySummary();
-      final trendData = await _repository.getTrendData();
-      emit(AnalyticsLoaded(
-        weeklyScore: summary.weeklyScore,
-        habitCompletionRate: summary.habitCompletionRate,
-        totalFinanceSpent: summary.totalFinanceSpent,
-        domainHoursThisWeek: summary.domainHoursThisWeek,
-        quranPagesThisWeek: summary.quranPagesThisWeek,
-        streakDays: summary.streakDays,
-        trendData: trendData,
-      ));
-    } catch (e) {
-      emit(AnalyticsError(e.toString()));
-    }
+  @override
+  Future<void> close() async {
+    await _sub?.cancel();
+    return super.close();
   }
 }

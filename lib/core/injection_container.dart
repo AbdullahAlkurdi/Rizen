@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'network/dio_client.dart';
 import 'network/network_info.dart';
 import 'interfaces/habit_service_interface.dart';
@@ -8,6 +9,8 @@ import 'interfaces/note_service_interface.dart';
 import 'interfaces/domain_service_interface.dart';
 import 'interfaces/islamic_service_interface.dart';
 import 'services/tutorial_service.dart';
+import '../features/analytics/data/repositories/analytics_repository.dart';
+import '../features/analytics/presentation/cubit/analytics_cubit.dart';
 import '../features/coach/data/repositories/coach_repository.dart';
 import '../features/habits/data/repositories/habits_repository.dart';
 import '../features/habits/data/repositories/shadow_tracker_repository.dart';
@@ -100,4 +103,17 @@ Future<void> init() async {
   ));
 
   sl.registerLazySingleton(() => TutorialService());
+
+  sl.registerLazySingleton(
+    () => AnalyticsRepository(
+      firestore: sl(),
+      uid: sl<FirebaseAuth>().currentUser?.uid ?? '',
+    ),
+  );
+
+  sl.registerFactory(
+    () => AnalyticsCubit(
+      repository: sl(),
+    ),
+  );
 }

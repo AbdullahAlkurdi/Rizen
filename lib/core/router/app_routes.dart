@@ -84,6 +84,8 @@ abstract final class AppRoutes {
   static const analytics = '/analytics';
   static const domainCorrelation = '/analytics/correlation';
   static const habitTrends = '/analytics/habit-trends';
+  static String habitTrendsDetail(String habitId) => '/analytics/trends/$habitId';
+
   static const growthIndex = '/analytics/growth';
   static const dataExport = '/analytics/export';
 
