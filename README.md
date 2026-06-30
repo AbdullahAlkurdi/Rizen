@@ -150,6 +150,23 @@ Full 73-screen specification lives in [`MASTER_PRODUCT_SPEC.md`](./MASTER_PRODUC
 
 ---
 
+## Project Status
+
+All phases complete. RizenOS is prepared for beta release across all platforms.
+
+| Phase | Status |
+|-------|--------|
+| Phase 0 — Foundation | ✅ Complete |
+| Phase 1 — Daily OS | ✅ Complete |
+| Phase 2 — Domain Trackers | ✅ Complete |
+| Phase 3 — Habit Engine | ✅ Complete |
+| Phase 4 — AI Coach | ✅ Complete |
+| Phase 5 — Analytics | ✅ Complete |
+| Phase 6 — Native Polish | ✅ Complete |
+| Phase 7 — Web & CLI | ✅ Complete |
+
+---
+
 ## Repository Structure
 
 ```
@@ -259,6 +276,29 @@ GoogleService-Info.plist
 | `CLAUDE.md` | Claude Code-specific instructions |
 
 ---
+
+## Web Deployment
+
+Live preview: [https://rizenos.app](https://rizenos.app)
+
+Hosted on Firebase Hosting with automatic preview deployments on pull requests.
+
+## CLI
+
+Installation:
+```bash
+cd cli
+dart pub get
+```
+
+Quick start:
+```bash
+dart run rizen login
+dart run rizen status
+dart run rizen log coding --duration 2h --notes "Completed API layer"
+```
+
+Full CLI documentation: [`cli/README.md`](./cli/README.md).
 
 ## License
 
