@@ -1,20 +1,20 @@
+import 'dart:io';
 import 'package:args/args.dart';
 import 'package:rizen_cli/services/firestore_service.dart';
-import 'package:rizen_cli/services/table_formatter.dart';
 
-class LogCommand extends BaseCommand {
-  LogCommand(super.firestore);
+class LogCommand {
+  final FirestoreService firestore;
+  LogCommand(this.firestore);
 
   static const domains = ['sports', 'study', 'work', 'coding', 'nutrition', 'spiritual', 'custom'];
 
-  @override
   Future<void> execute(ArgResults args) async {
     final domain = args.rest.firstOrNull?.toLowerCase();
     final duration = args['duration'] as String?;
     final notes = args['notes'] as String?;
 
     if (domain == null || !domains.contains(domain)) {
-      print('❌ Invalid domain. Valid: ${domains.join(", ")}');
+      stderr.writeln('❌ Invalid domain. Valid: ${domains.join(", ")}');
       return;
     }
 
@@ -22,13 +22,13 @@ class LogCommand extends BaseCommand {
     if (duration != null) {
       minutes = _parseDuration(duration);
       if (minutes <= 0) {
-        print('❌ Invalid duration. Use formats like: 30m, 1h, 1h 30m');
+        stderr.writeln('❌ Invalid duration. Use formats like: 30m, 1h, 1h 30m');
         return;
       }
     }
 
     await firestore.logDomainSession(domain, minutes, notes ?? '');
-    print('✅ Logged $domain${minutes > 0 ? " for ${minutes}m" : ""}');
+    stdout.writeln('✅ Logged $domain${minutes > 0 ? " for ${minutes}m" : ""}');
   }
 
   int _parseDuration(String input) {

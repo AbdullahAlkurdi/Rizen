@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:rizen_cli/rizen_cli.dart' as cli;
 import 'package:rizen_cli/auth/auth_service.dart';
+import 'package:rizen_cli/services/firestore_service.dart';
 import 'package:rizen_cli/commands/status_command.dart';
 import 'package:rizen_cli/commands/log_command.dart';
 import 'package:rizen_cli/commands/habit_command.dart';
@@ -38,7 +39,7 @@ void main(List<String> arguments) async {
 
   if (protected.contains(command.name)) {
     if (!await authService.isAuthenticated()) {
-      print('Please run: rizen login');
+      stdout.writeln('Please run: rizen login');
       exit(1);
     }
   }
@@ -73,12 +74,12 @@ void main(List<String> arguments) async {
         printHelp();
     }
   } catch (e) {
-    print('❌ Error: $e');
+    stderr.writeln('❌ Error: $e');
   }
 }
 
 void printHelp() {
-  print('''
+  stdout.writeln('''
 RizenOS CLI — AI-powered Life Operating System
 
 COMMANDS:

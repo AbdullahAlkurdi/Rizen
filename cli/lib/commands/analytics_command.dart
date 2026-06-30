@@ -1,11 +1,12 @@
+import 'dart:io';
 import 'package:args/args.dart';
 import 'package:rizen_cli/services/firestore_service.dart';
 import 'package:rizen_cli/services/table_formatter.dart';
 
-class AnalyticsCommand extends BaseCommand {
-  AnalyticsCommand(super.firestore);
+class AnalyticsCommand {
+  final FirestoreService firestore;
+  AnalyticsCommand(this.firestore);
 
-  @override
   Future<void> execute(ArgResults args) async {
     final sub = args.command?.name;
 
@@ -17,32 +18,32 @@ class AnalyticsCommand extends BaseCommand {
         await _week();
         break;
       default:
-        print('Usage: analytics growth | analytics week');
+        stdout.writeln('Usage: analytics growth | analytics week');
     }
   }
 
   Future<void> _growth() async {
     final growth = await firestore.getGrowthIndex();
     if (growth == null) {
-      print('📭 No growth data available.');
+      stdout.writeln('📭 No growth data available.');
       return;
     }
     final score = growth['score'] ?? 0;
     final burnout = growth['burnoutRisk'] ?? 'low';
-    print('\n📈 Growth Index');
+    stdout.writeln('\n📈 Growth Index');
     final kv = <String, dynamic>{
       'Score': '$score/100',
       'Burnout Risk': burnout,
       'Domain Balance': '${growth['domainBalance'] ?? 'N/A'}',
     };
-    print(TableFormatter.formatAnalytics(kv));
+    stdout.writeln(TableFormatter.formatAnalytics(kv));
   }
 
   Future<void> _week() async {
     final stats = await firestore.getTodayDomainStats();
-    print('\n📊 Weekly Summary');
+    stdout.writeln('\n📊 Weekly Summary');
     for (final domain in stats.keys) {
-      print('  ${domain.toUpperCase()}: ${stats[domain]}m');
+      stdout.writeln('  ${domain.toUpperCase()}: ${stats[domain]}m');
     }
   }
 }

@@ -7,26 +7,28 @@ class FirestoreService {
 
   String? get _uid => _auth.currentUser?.uid;
 
-  Future<List<QueryDocumentSnapshot>> getTodayHabits() async {
+  Future<List<Map<String, dynamic>>> getTodayHabits() async {
     if (_uid == null) throw Exception('Not authenticated');
     final snapshot = await _db.collection('users').doc(_uid).collection('habits').get();
-    return snapshot.docs;
+    return snapshot.docs.map((doc) => {'id': doc.id, ...doc.data()}).toList();
   }
 
-  Future<QueryDocumentSnapshot?> getTodayRoutine() async {
+  Future<Map<String, dynamic>?> getTodayRoutine() async {
     if (_uid == null) throw Exception('Not authenticated');
     final now = DateTime.now();
     final day = '${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}';
     final snapshot = await _db.collection('users').doc(_uid).collection('routines').where('date', isEqualTo: day).limit(1).get();
     if (snapshot.docs.isEmpty) return null;
-    return snapshot.docs.first;
+    final doc = snapshot.docs.first;
+    return {'id': doc.id, ...doc.data()};
   }
 
-  Future<QueryDocumentSnapshot?> getLastSleepLog() async {
+  Future<Map<String, dynamic>?> getLastSleepLog() async {
     if (_uid == null) throw Exception('Not authenticated');
     final snapshot = await _db.collection('users').doc(_uid).collection('sleep').orderBy('date', descending: true).limit(1).get();
     if (snapshot.docs.isEmpty) return null;
-    return snapshot.docs.first;
+    final doc = snapshot.docs.first;
+    return {'id': doc.id, ...doc.data()};
   }
 
   Future<Map<String, dynamic>?> getGrowthIndex() async {
@@ -46,21 +48,22 @@ class FirestoreService {
     });
   }
 
-  Future<List<QueryDocumentSnapshot>> getTodoItems(String habitId) async {
+  Future<List<Map<String, dynamic>>> getTodoItems(String habitId) async {
     if (_uid == null) throw Exception('Not authenticated');
     final snapshot = await _db.collection('users').doc(_uid).collection('habits').doc(habitId).collection('todos').get();
-    return snapshot.docs;
+    return snapshot.docs.map((doc) => {'id': doc.id, ...doc.data()}).toList();
   }
 
   Future<Map<String, int>> getTodayDomainStats() async {
     if (_uid == null) throw Exception('Not authenticated');
     final now = DateTime.now();
-    final day = '${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}';
-    final snapshot = await _db.collection('users').doc(_uid).collection('domain_logs').where('timestamp', isGreaterThanOrEqualTo: DateTime(now.year, now.month, now.day)).get();
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final snapshot = await _db.collection('users').doc(_uid).collection('domain_logs').where('timestamp', isGreaterThanOrEqualTo: startOfDay).get();
     final stats = <String, int>{};
     for (final doc in snapshot.docs) {
-      final domain = doc.data()['domain'] ?? 'unknown';
-      final minutes = doc.data()['minutes'] ?? 0;
+      final data = doc.data();
+      final domain = data['domain'] ?? 'unknown';
+      final minutes = (data['minutes'] ?? 0) as int;
       stats[domain] = (stats[domain] ?? 0) + minutes;
     }
     return stats;

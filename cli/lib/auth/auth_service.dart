@@ -1,8 +1,5 @@
 import 'dart:io';
-import 'package:path/path.dart' as path;
-import 'package:file/file.dart' as file;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -23,14 +20,14 @@ class AuthService {
   }
   
   Future<void> login() async {
-    print('🔐 RizenOS CLI Login');
-    print('====================');
-    print('Choose login method:');
-    print('  1. Email/Password');
-    print('  2. Google (requires browser)');
-    print('');
+    stdout.writeln('🔐 RizenOS CLI Login');
+    stdout.writeln('====================');
+    stdout.writeln('Choose login method:');
+    stdout.writeln('  1. Email/Password');
+    stdout.writeln('  2. Google (requires browser)');
+    stdout.writeln('');
     
-    print('📧 Email login:');
+    stdout.writeln('📧 Email login:');
     stdout.write('Email: ');
     final email = stdin.readLineSync() ?? '';
     stdout.write('Password: ');
@@ -43,29 +40,25 @@ class AuthService {
       );
       if (userCredential.user != null) {
         await _saveCredentials();
-        print('✅ Login successful!');
-        print('   User: ${userCredential.user!.email}');
+        stdout.writeln('✅ Login successful!');
+        stdout.writeln('   User: ${userCredential.user!.email}');
       }
     } catch (e) {
-      print('❌ Login failed: $e');
+      stderr.writeln('❌ Login failed: $e');
     }
   }
   
   Future<void> logout() async {
     await _auth.signOut();
     await _deleteCredentials();
-    print('✅ Logged out successfully');
+    stdout.writeln('✅ Logged out successfully');
   }
   
   Future<Map<String, dynamic>?> _loadCredentials() async {
     final file = File(_credentialPath);
     if (await file.exists()) {
-      try {
-        final content = await file.readAsString();
-        return {'token': 'stored'};
-      } catch (e) {
-        return null;
-      }
+      await file.readAsString();
+      return {'token': 'stored'};
     }
     return null;
   }
