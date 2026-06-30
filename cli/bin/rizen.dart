@@ -80,7 +80,7 @@ void main(List<String> arguments) async {
 
 void printHelp() {
   stdout.writeln('''
-RizenOS CLI — AI-powered Life Operating System
+Rizen CLI — AI-powered Life Operating System
 
 COMMANDS:
   login                     Authenticate with Firebase

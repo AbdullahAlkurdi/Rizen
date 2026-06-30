@@ -12,7 +12,7 @@ import 'package:rizen/generated/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:rizen/core/services/app_lifecycle_observer.dart';
 
-/// Main entry point for RizenOS.
+/// Main entry point for Rizen.
 ///
 /// AppLifecycleObserver is attached here to capture the first app resume after midnight
 /// as a wake-up event for sleep tracking. This is the v1 implementation using the
@@ -79,7 +79,7 @@ class RizenAppView extends StatelessWidget {
           builder: (context, themeState) {
             final themeMode = themeState is ThemeLoaded ? themeState.mode : ThemeMode.system;
             return MaterialApp.router(
-              title: 'RizenOS',
+              title: 'Rizen',
               debugShowCheckedModeBanner: false,
               theme: AppTheme.light(isArabic: isArabic),
               darkTheme: AppTheme.dark(isArabic: isArabic),

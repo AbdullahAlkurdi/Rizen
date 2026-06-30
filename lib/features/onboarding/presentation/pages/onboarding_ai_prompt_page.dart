@@ -75,7 +75,7 @@ class _OnboardingAiPromptPageState extends State<OnboardingAiPromptPage> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Describe your life in your own words. Gemini will build your initial RizenOS.',
+              'Describe your life in your own words. Gemini will build your initial Rizen.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
             ),
             const SizedBox(height: 24),
@@ -161,7 +161,7 @@ class _OnboardingAiPromptPageState extends State<OnboardingAiPromptPage> {
             ],
             const SizedBox(height: 24),
             RizenButton(
-              label: 'Launch RizenOS',
+              label: 'Launch Rizen',
               icon: PhosphorIconsBold.rocketLaunch,
               onPressed: _showAiResponse
                   ? () => context.go(AppRoutes.home)

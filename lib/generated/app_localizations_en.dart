@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'RizenOS';
+  String get appTitle => 'Rizen';
 
   @override
   String get settings => 'Settings';
@@ -110,7 +110,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get continueDiscipline =>
-      'Continue your discipline journey with RizenOS.';
+      'Continue your discipline journey with Rizen.';
 
   @override
   String get email => 'Email';
@@ -183,7 +183,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get arabicFirstLayouts =>
-      'RizenOS supports Arabic-first layouts with full RTL support.';
+      'Rizen supports Arabic-first layouts with full RTL support.';
 
   @override
   String get region => 'Region';
@@ -224,7 +224,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analyze => 'Analyze';
 
   @override
-  String get launchRizenOS => 'Launch RizenOS';
+  String get launchRizen => 'Launch Rizen';
 
   @override
   String get habits => 'Habits';
@@ -594,7 +594,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get more => 'More';
 
   @override
-  String get exploreRizenOS => 'Explore RizenOS';
+  String get exploreRizen => 'Explore Rizen';
 
   @override
   String get helpAndCommunity => 'Help & Community';
@@ -609,7 +609,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openSourceAttributions => 'Open Source Attributions';
 
   @override
-  String get rizenOSVersion => 'RizenOS v1.0.0';
+  String get rizenVersion => 'Rizen v1.0.0';
 
   @override
   String get builtWithFlutter => 'Built with Flutter ❤️';

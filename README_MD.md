@@ -1,18 +1,18 @@
-RizenOS
+Rizen
 
-«RizenOS — A Life Operating System for Sustainable Discipline, Balance, and Growth»
+«Rizen — A Life Operating System for Sustainable Discipline, Balance, and Growth»
 
 ---
 
 Vision
 
-RizenOS is not a habit tracker.
+Rizen is not a habit tracker.
 
 It is a complete Life Operating System designed to help people consistently execute what they already know they should do.
 
 The platform combines behavioral psychology, adaptive productivity systems, spiritual alignment, AI coaching, habit engineering, and predictive analytics into a unified ecosystem that evolves with the user over time.
 
-RizenOS exists to solve one fundamental problem:
+Rizen exists to solve one fundamental problem:
 
 «Humans rarely fail because they lack knowledge.
 They fail because they lack a system capable of transforming intentions into consistent action.»
@@ -36,7 +36,7 @@ To create the world's most intelligent and adaptive discipline platform that hel
 
 Core Philosophy
 
-RizenOS is built upon three foundational principles.
+Rizen is built upon three foundational principles.
 
 Balance
 
@@ -68,7 +68,7 @@ Product Identity
 
 Item| Value
 Product Name| Rizen
-System Name| RizenOS
+System Name| Rizen
 Product Category| Life Operating System
 Primary Platform| Mobile First
 Secondary Platforms| Web Dashboard & CLI
@@ -94,11 +94,11 @@ Modern productivity applications suffer from several critical weaknesses:
 
 Users often abandon these systems because they create additional work rather than reducing it.
 
-RizenOS solves this by creating an adaptive system that evolves automatically based on behavior.
+Rizen solves this by creating an adaptive system that evolves automatically based on behavior.
 
 ---
 
-The RizenOS Framework
+The Rizen Framework
 
 The platform operates through seven interconnected layers.
 
@@ -519,7 +519,7 @@ Every screen must:
 
 Security Principles
 
-RizenOS follows a privacy-first philosophy.
+Rizen follows a privacy-first philosophy.
 
 Features include:
 
@@ -671,7 +671,7 @@ Launch
 
 Long-Term Goal
 
-RizenOS aims to become the operating system for personal growth.
+Rizen aims to become the operating system for personal growth.
 
 A platform where discipline, productivity, wellbeing, spirituality, and self-improvement coexist within one adaptive ecosystem.
 
@@ -681,6 +681,6 @@ The objective is helping users become the person they aspire to be.
 
 ---
 
-RizenOS
+Rizen
 
 Discipline without burnout. Growth without imbalance. Consistency without friction.

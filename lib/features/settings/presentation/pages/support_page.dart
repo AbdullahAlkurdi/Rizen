@@ -61,7 +61,7 @@ class SupportPage extends StatelessWidget {
                     Icon(PhosphorIconsBold.info, color: AppColors.accent),
                     const SizedBox(width: 10),
                     Text(
-                      'RizenOS v1.0.0',
+                       'Rizen v1.0.0',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],

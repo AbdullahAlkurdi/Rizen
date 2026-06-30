@@ -41,7 +41,7 @@ class CliAccessPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Generate API credentials to use RizenOS directly from your terminal.',
+                  'Generate API credentials to use Rizen directly from your terminal.',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 16),

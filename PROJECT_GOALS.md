@@ -1,4 +1,4 @@
-Building RizenOS, an AI-powered Life Operating System focused on discipline, routines, habit formation, burnout prevention, behavioral analytics, spiritual integration, and adaptive daily planning.
+Building Rizen, an AI-powered Life Operating System focused on discipline, routines, habit formation, burnout prevention, behavioral analytics, spiritual integration, and adaptive daily planning.
 
 The platform includes:
 - Dynamic routine generation

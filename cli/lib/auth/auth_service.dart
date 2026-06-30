@@ -20,7 +20,7 @@ class AuthService {
   }
   
   Future<void> login() async {
-    stdout.writeln('🔐 RizenOS CLI Login');
+    stdout.writeln('🔐 Rizen CLI Login');
     stdout.writeln('====================');
     stdout.writeln('Choose login method:');
     stdout.writeln('  1. Email/Password');

@@ -18,7 +18,7 @@ class MoreHubPage extends StatelessWidget {
       body: ListView(
         children: [
           const PageHeader(
-            title: 'Explore RizenOS',
+            title: 'Explore Rizen',
             subtitle: 'All layers of your Life Operating System.',
           ),
           const SizedBox(height: 20),

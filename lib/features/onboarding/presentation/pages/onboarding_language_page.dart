@@ -86,7 +86,7 @@ class _OnboardingLanguagePageState extends State<OnboardingLanguagePage> {
             ),
             const SizedBox(height: 8),
             Text(
-              'RizenOS supports Arabic-first layouts with full RTL support.',
+              'Rizen supports Arabic-first layouts with full RTL support.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
             ),
             const SizedBox(height: 28),

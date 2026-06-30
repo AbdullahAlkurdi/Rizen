@@ -1,6 +1,6 @@
-# RizenOS CLI
+# Rizen CLI
 
-Terminal interface for RizenOS — an AI-powered Life Operating System for discipline, productivity, burnout prevention, and spiritual consistency.
+Terminal interface for Rizen — an AI-powered Life Operating System for discipline, productivity, burnout prevention, and spiritual consistency.
 
 ## Installation
 

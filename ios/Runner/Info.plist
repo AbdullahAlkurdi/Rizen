@@ -80,15 +80,15 @@
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>NSLocationWhenInUseUsageDescription</key>
-		<string>RizenOS uses location for prayer time calculation</string>
+		<string>Rizen uses location for prayer time calculation</string>
 		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-		<string>RizenOS uses location for prayer time calculation</string>
+		<string>Rizen uses location for prayer time calculation</string>
 		<key>NSMicrophoneUsageDescription</key>
-		<string>RizenOS needs microphone access to log voice notes</string>
+		<string>Rizen needs microphone access to log voice notes</string>
 		<key>NSUserNotificationUsageDescription</key>
-		<string>RizenOS sends reminders for habits and routines</string>
+		<string>Rizen sends reminders for habits and routines</string>
 		<key>NSSpeechRecognitionUsageDescription</key>
-		<string>RizenOS transcribes your voice notes to update your habits and domain logs automatically.</string>
+		<string>Rizen transcribes your voice notes to update your habits and domain logs automatically.</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
 	</dict>

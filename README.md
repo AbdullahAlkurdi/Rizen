@@ -1,4 +1,4 @@
-# RizenOS
+# Rizen
 
 > An AI-powered Life Operating System for discipline, productivity, burnout prevention, and spiritual consistency.
 
@@ -31,7 +31,7 @@
 
 ## Overview
 
-**RizenOS** is not a habit tracker. It is an adaptive operating system for human life — built to help users execute what they already know they should do, without decision fatigue, without guilt, and without burnout.
+**Rizen** is not a habit tracker. It is an adaptive operating system for human life — built to help users execute what they already know they should do, without decision fatigue, without guilt, and without burnout.
 
 The system integrates worldly productivity (study, work, coding, fitness) with spiritual consistency (prayer-relative scheduling, Quran tracking) into a single AI-coached daily loop.
 
@@ -152,7 +152,7 @@ Full 73-screen specification lives in [`MASTER_PRODUCT_SPEC.md`](./MASTER_PRODUC
 
 ## Project Status
 
-All phases complete. RizenOS is prepared for beta release across all platforms.
+All phases complete. Rizen is prepared for beta release across all platforms.
 
 | Phase | Status |
 |-------|--------|
@@ -170,7 +170,7 @@ All phases complete. RizenOS is prepared for beta release across all platforms.
 ## Repository Structure
 
 ```
-RizenOS/
+Rizen/
 ├── lib/
 │   ├── core/
 │   │   ├── constants/
@@ -237,8 +237,8 @@ This repo is developed in parallel by multiple AI coding agents (Claude Code, An
 
 ```bash
 # 1. Clone
-git clone https://github.com/<your-org>/RizenOS.git
-cd RizenOS
+git clone https://github.com/<your-org>/Rizen.git
+cd Rizen
 
 # 2. Install dependencies (lockfile-enforced — mandatory)
 flutter pub get --enforce-lockfile
@@ -279,7 +279,7 @@ GoogleService-Info.plist
 
 ## Web Deployment
 
-Live preview: [https://rizenos.app](https://rizenos.app)
+Live preview: [https://rizen.app](https://rizen.app)
 
 Hosted on Firebase Hosting with automatic preview deployments on pull requests.
 
@@ -300,14 +300,26 @@ dart run rizen log coding --duration 2h --notes "Completed API layer"
 
 Full CLI documentation: [`cli/README.md`](./cli/README.md).
 
+---
+
+## Security
+
+Please report security vulnerabilities to:
+**security@rizen.app**
+
+See [SECURITY.md](SECURITY.md) for full security policy.
+
+## Privacy
+
+We take your data seriously.
+See [PRIVACY.md](PRIVACY.md) for privacy policy.
+
 ## License
 
-**Proprietary — All Rights Reserved.**
-This repository and its contents are private and intended for commercial release. No license is granted for use, reproduction, or distribution without explicit written permission.
+This project is proprietary software.
+See [LICENSE](LICENSE) for full license agreement.
 
-*Exception:* the Developer CLI component (Phase 7) is planned for open-source release under a separate license at launch.
-
----
+Enterprise licenses available upon request.
 
 ## Known Open Items
 
@@ -317,4 +329,4 @@ This repository and its contents are private and intended for commercial release
 
 ---
 
-*RizenOS — a Life Operating System for sustainable discipline, balance, resilience, and long-term growth.*
+*Rizen — a Life Operating System for sustainable discipline, balance, resilience, and long-term growth.*

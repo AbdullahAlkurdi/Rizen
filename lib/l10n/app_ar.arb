@@ -133,7 +133,7 @@
   "@welcomeBack": {
     "description": "Greeting on the login screen."
   },
-  "continueDiscipline": "تواصل رحلة الانضباط مع RizenOS.",
+  "continueDiscipline": "تواصل رحلة الانضباط مع Rizen.",
   "@continueDiscipline": {
     "description": "Subtitle on the login screen."
   },
@@ -230,7 +230,7 @@
   "@languageAndRegion": {
     "description": "Section title on onboarding language page."
   },
-  "arabicFirstLayouts": "يدعم RizenOS تخطيطات عربية أولاً مع دعم كامل لـ RTL.",
+  "arabicFirstLayouts": "يدعم Rizen تخطيطات عربية أولاً مع دعم كامل لـ RTL.",
   "@arabicFirstLayouts": {
     "description": "Description text about Arabic support."
   },
@@ -284,8 +284,8 @@
   "@analyze": {
     "description": "Button label to submit AI analysis."
   },
-  "launchRizenOS": "تشغيل RizenOS",
-  "@launchRizenOS": {
+  "launchRizen": "تشغيل Rizen",
+  "@launchRizen": {
     "description": "Final onboarding button text."
   },
 
@@ -785,8 +785,8 @@
   "@more": {
     "description": "Navigation label for more tab."
   },
-  "exploreRizenOS": "استكشف RizenOS",
-  "@exploreRizenOS": {
+  "exploreRizen": "استكشف Rizen",
+  "@exploreRizen": {
     "description": "Section title on more hub page."
   },
   "helpAndCommunity": "المساعدة والمجتمع",
@@ -805,8 +805,8 @@
   "@openSourceAttributions": {
     "description": "Menu item label for open source attributions."
   },
-  "rizenOSVersion": "RizenOS v1.0.0",
-  "@rizenOSVersion": {
+  "rizenVersion": "Rizen v1.0.0",
+  "@rizenVersion": {
     "description": "App version string."
   },
   "builtWithFlutter": "مبني بتقنية Flutter ❤️",

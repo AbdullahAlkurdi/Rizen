@@ -1,7 +1,7 @@
 Project Knowledge
 Project Overview
-RizenOS is an AI-powered Life Operating System designed to help users build discipline, maintain balance, improve productivity, strengthen spiritual consistency, and prevent burnout.
-Unlike traditional habit trackers, RizenOS functions as an adaptive operating system for human life.
+Rizen is an AI-powered Life Operating System designed to help users build discipline, maintain balance, improve productivity, strengthen spiritual consistency, and prevent burnout.
+Unlike traditional habit trackers, Rizen functions as an adaptive operating system for human life.
 Core Mission
 Help people execute what they already know they should do.
 The system should:

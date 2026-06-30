@@ -1,6 +1,6 @@
-﻿# RizenOS Agent Coordination and Technical Standards
+﻿# Rizen Agent Coordination and Technical Standards
 
-Welcome to the RizenOS workspace! This document serves as the absolute authority on team collaboration guidelines, technological choices, and structural conventions for all AI developers, sub-agents, and automated systems participating in the development of RizenOS.
+Welcome to the Rizen workspace! This document serves as the absolute authority on team collaboration guidelines, technological choices, and structural conventions for all AI developers, sub-agents, and automated systems participating in the development of Rizen.
 
 ---
 

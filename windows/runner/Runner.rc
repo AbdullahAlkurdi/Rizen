@@ -89,8 +89,8 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "RizenOS" "\0"
-            VALUE "FileDescription", "RizenOS" "\0"
+            VALUE "CompanyName", "Rizen" "\0"
+            VALUE "FileDescription", "Rizen" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "rizen" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"

@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// Application title shown in the app bar and system.
   ///
   /// In en, this message translates to:
-  /// **'RizenOS'**
+   /// **'Rizen'**
   String get appTitle;
 
   /// Page title for the Settings screen.
@@ -299,7 +299,7 @@ abstract class AppLocalizations {
   /// Subtitle on the login screen.
   ///
   /// In en, this message translates to:
-  /// **'Continue your discipline journey with RizenOS.'**
+   /// **'Continue your discipline journey with Rizen.'**
   String get continueDiscipline;
 
   /// Form field label for email.
@@ -443,7 +443,7 @@ abstract class AppLocalizations {
   /// Description text about Arabic support.
   ///
   /// In en, this message translates to:
-  /// **'RizenOS supports Arabic-first layouts with full RTL support.'**
+   /// **'Rizen supports Arabic-first layouts with full RTL support.'**
   String get arabicFirstLayouts;
 
   /// Section title for region selection.
@@ -521,8 +521,8 @@ abstract class AppLocalizations {
   /// Final onboarding button text.
   ///
   /// In en, this message translates to:
-  /// **'Launch RizenOS'**
-  String get launchRizenOS;
+   /// **'Launch Rizen'**
+   String get launchRizen;
 
   /// Title for the habits hub.
   ///
@@ -1259,8 +1259,8 @@ abstract class AppLocalizations {
   /// Section title on more hub page.
   ///
   /// In en, this message translates to:
-  /// **'Explore RizenOS'**
-  String get exploreRizenOS;
+   /// **'Explore Rizen'**
+   String get exploreRizen;
 
   /// Section title on support page.
   ///
@@ -1289,8 +1289,8 @@ abstract class AppLocalizations {
   /// App version string.
   ///
   /// In en, this message translates to:
-  /// **'RizenOS v1.0.0'**
-  String get rizenOSVersion;
+   /// **'Rizen v1.0.0'**
+  String get rizenVersion;
 
   /// Credits text.
   ///

@@ -7,7 +7,7 @@ class DioClient {
 
   DioClient() {
     _dio = Dio(BaseOptions(
-      baseUrl: dotenv.env['API_BASE_URL'] ?? 'https://api.rizenos.com',
+      baseUrl: dotenv.env['API_BASE_URL'] ?? 'https://api.rizen.app',
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       headers: {'Content-Type': 'application/json'},

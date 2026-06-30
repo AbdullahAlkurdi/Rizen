@@ -22,7 +22,7 @@ class RizenApp extends StatelessWidget {
             builder: (context, themeState) {
               final themeMode = themeState is ThemeLoaded ? themeState.mode : ThemeMode.system;
               return MaterialApp.router(
-                title: 'RizenOS',
+                title: 'Rizen',
                 debugShowCheckedModeBanner: false,
                 theme: AppTheme.light(isArabic: isArabic),
                 darkTheme: AppTheme.dark(isArabic: isArabic),

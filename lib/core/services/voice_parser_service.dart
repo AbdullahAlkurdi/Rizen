@@ -15,7 +15,7 @@ class VoiceParserService {
 
   static const _systemPrompt = '''
 You are a life data extraction assistant
-for a productivity app called RizenOS.
+for a productivity app called Rizen.
 
 The user has just spoken a voice note
 describing their day or activities.

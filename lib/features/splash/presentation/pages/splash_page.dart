@@ -95,7 +95,7 @@ class _SplashPageState extends State<SplashPage>
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'RizenOS',
+                    'Rizen',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: AppColors.textMuted,
                       letterSpacing: 4,

@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "RizenOS",
+  "appTitle": "Rizen",
   "@appTitle": {
     "description": "Application title shown in the app bar and system."
   },
@@ -133,7 +133,7 @@
   "@welcomeBack": {
     "description": "Greeting on the login screen."
   },
-  "continueDiscipline": "Continue your discipline journey with RizenOS.",
+  "continueDiscipline": "Continue your discipline journey with Rizen.",
   "@continueDiscipline": {
     "description": "Subtitle on the login screen."
   },
@@ -230,7 +230,7 @@
   "@languageAndRegion": {
     "description": "Section title on onboarding language page."
   },
-  "arabicFirstLayouts": "RizenOS supports Arabic-first layouts with full RTL support.",
+  "arabicFirstLayouts": "Rizen supports Arabic-first layouts with full RTL support.",
   "@arabicFirstLayouts": {
     "description": "Description text about Arabic support."
   },
@@ -284,8 +284,8 @@
   "@analyze": {
     "description": "Button label to submit AI analysis."
   },
-  "launchRizenOS": "Launch RizenOS",
-  "@launchRizenOS": {
+  "launchRizen": "Launch Rizen",
+  "@launchRizen": {
     "description": "Final onboarding button text."
   },
 
@@ -785,8 +785,8 @@
   "@more": {
     "description": "Navigation label for more tab."
   },
-  "exploreRizenOS": "Explore RizenOS",
-  "@exploreRizenOS": {
+  "exploreRizen": "Explore Rizen",
+  "@exploreRizen": {
     "description": "Section title on more hub page."
   },
   "helpAndCommunity": "Help & Community",
@@ -805,8 +805,8 @@
   "@openSourceAttributions": {
     "description": "Menu item label for open source attributions."
   },
-  "rizenOSVersion": "RizenOS v1.0.0",
-  "@rizenOSVersion": {
+  "rizenVersion": "Rizen v1.0.0",
+  "@rizenVersion": {
     "description": "App version string."
   },
   "builtWithFlutter": "Built with Flutter ❤️",

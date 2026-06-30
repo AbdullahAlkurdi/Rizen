@@ -109,7 +109,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get welcomeBack => 'مرحباً بعودتك';
 
   @override
-  String get continueDiscipline => 'تواصل رحلة الانضباط مع RizenOS.';
+  String get continueDiscipline => 'تواصل رحلة الانضباط مع Rizen.';
 
   @override
   String get email => 'البريد الإلكتروني';
@@ -182,7 +182,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get arabicFirstLayouts =>
-      'يدعم RizenOS تخطيطات عربية أولاً مع دعم كامل لـ RTL.';
+      'يدعم Rizen تخطيطات عربية أولاً مع دعم كامل لـ RTL.';
 
   @override
   String get region => 'المنطقة';
@@ -222,7 +222,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get analyze => 'تحليل';
 
   @override
-  String get launchRizenOS => 'تشغيل RizenOS';
+  String get launchRizen => 'تشغيل Rizen';
 
   @override
   String get habits => 'العادات';
@@ -592,7 +592,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get more => 'المزيد';
 
   @override
-  String get exploreRizenOS => 'استكشف RizenOS';
+  String get exploreRizen => 'استكشف Rizen';
 
   @override
   String get helpAndCommunity => 'المساعدة والمجتمع';
@@ -607,7 +607,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get openSourceAttributions => 'اعتمادات المصدر المفتوح';
 
   @override
-  String get rizenOSVersion => 'RizenOS v1.0.0';
+  String get rizenVersion => 'Rizen v1.0.0';
 
   @override
   String get builtWithFlutter => 'مبني بتقنية Flutter ❤️';
