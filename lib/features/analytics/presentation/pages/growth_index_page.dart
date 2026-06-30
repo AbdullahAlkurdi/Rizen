@@ -41,25 +41,27 @@ class GrowthIndexPage extends StatelessWidget {
               const SizedBox(height: 20),
               _CircularGauge(score: growth.overallScore),
               const SizedBox(height: 20),
-              GlassCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Score Breakdown',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 16),
-                    _ScoreRow(label: 'Habit Score', value: growth.habitScore, color: AppColors.success),
-                    const SizedBox(height: 12),
-                    _ScoreRow(label: 'Domain Score', value: growth.domainScore, color: AppColors.cardBackground),
-                    const SizedBox(height: 12),
-                    _ScoreRow(label: 'Todo Score', value: growth.todoScore, color: AppColors.warning),
-                    const SizedBox(height: 12),
-                    _ScoreRow(label: 'Shadow Penalty', value: growth.shadowPenalty, color: AppColors.accent, isPenalty: true),
-                  ],
-                ),
-              ),
+GlassCard(
+             child: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 const Text(
+                   'Score Breakdown',
+                   style: TextStyle(fontWeight: FontWeight.w600),
+                 ),
+                 const SizedBox(height: 16),
+                 _ScoreRow(label: 'Habit Score', value: growth.habitScore, color: AppColors.success),
+                 const SizedBox(height: 12),
+                 _ScoreRow(label: 'Domain Score', value: growth.domainScore, color: AppColors.cardBackground),
+                 const SizedBox(height: 12),
+                 _ScoreRow(label: 'Todo Score', value: growth.todoScore, color: AppColors.warning),
+                 const SizedBox(height: 12),
+                 _ScoreRow(label: 'Notes Score', value: growth.notesScore, color: const Color(0xFF4CAF50)),
+                 const SizedBox(height: 12),
+                 _ScoreRow(label: 'Shadow Penalty', value: growth.shadowPenalty, color: AppColors.accent, isPenalty: true),
+               ],
+             ),
+           ),
               const SizedBox(height: 20),
               GlassCard(
                 child: Column(

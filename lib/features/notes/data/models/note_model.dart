@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../domain/entities/note_category.dart';
+
 part 'note_model.freezed.dart';
 part 'note_model.g.dart';
 
@@ -19,6 +21,10 @@ class Note with _$Note {
     required String mood,
     required DateTime loggedAt,
     DateTime? updatedAt,
+    NoteCategory? category,
+    @Default(false) bool isPinned,
+    DateTime? reminderAt,
+    @Default([]) List<DateTime> editHistory,
   }) = _Note;
 
   factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
@@ -36,6 +42,18 @@ class Note with _$Note {
           (data['createdAt'] as Timestamp?)?.toDate() ??
           DateTime.now(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate(),
+      category: data['category'] == null
+          ? null
+          : NoteCategory.values.firstWhere(
+              (e) => e.name == data['category'],
+              orElse: () => NoteCategory.custom,
+            ),
+      isPinned: data['isPinned'] as bool? ?? false,
+      reminderAt: (data['reminderAt'] as Timestamp?)?.toDate(),
+      editHistory: (data['editHistory'] as List<dynamic>?)
+              ?.map((e) => (e as Timestamp).toDate())
+              .toList() ??
+          [],
     );
   }
 
@@ -47,5 +65,9 @@ class Note with _$Note {
         'mood': mood,
         'loggedAt': Timestamp.fromDate(loggedAt),
         if (updatedAt != null) 'updatedAt': Timestamp.fromDate(updatedAt!),
+        if (category != null) 'category': category!.name,
+        'isPinned': isPinned,
+        if (reminderAt != null) 'reminderAt': Timestamp.fromDate(reminderAt!),
+        'editHistory': editHistory.map((e) => Timestamp.fromDate(e)).toList(),
       };
 }

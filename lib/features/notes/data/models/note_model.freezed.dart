@@ -29,6 +29,10 @@ mixin _$Note {
   String get mood => throw _privateConstructorUsedError;
   DateTime get loggedAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
+  NoteCategory? get category => throw _privateConstructorUsedError;
+  bool get isPinned => throw _privateConstructorUsedError;
+  DateTime? get reminderAt => throw _privateConstructorUsedError;
+  List<DateTime> get editHistory => throw _privateConstructorUsedError;
 
   /// Serializes this Note to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,6 +57,10 @@ abstract class $NoteCopyWith<$Res> {
     String mood,
     DateTime loggedAt,
     DateTime? updatedAt,
+    NoteCategory? category,
+    bool isPinned,
+    DateTime? reminderAt,
+    List<DateTime> editHistory,
   });
 }
 
@@ -79,6 +87,10 @@ class _$NoteCopyWithImpl<$Res, $Val extends Note>
     Object? mood = null,
     Object? loggedAt = null,
     Object? updatedAt = freezed,
+    Object? category = freezed,
+    Object? isPinned = null,
+    Object? reminderAt = freezed,
+    Object? editHistory = null,
   }) {
     return _then(
       _value.copyWith(
@@ -114,6 +126,22 @@ class _$NoteCopyWithImpl<$Res, $Val extends Note>
                 ? _value.updatedAt
                 : updatedAt // ignore: cast_nullable_to_non_nullable
                       as DateTime?,
+            category: freezed == category
+                ? _value.category
+                : category // ignore: cast_nullable_to_non_nullable
+                      as NoteCategory?,
+            isPinned: null == isPinned
+                ? _value.isPinned
+                : isPinned // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            reminderAt: freezed == reminderAt
+                ? _value.reminderAt
+                : reminderAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            editHistory: null == editHistory
+                ? _value.editHistory
+                : editHistory // ignore: cast_nullable_to_non_nullable
+                      as List<DateTime>,
           )
           as $Val,
     );
@@ -137,6 +165,10 @@ abstract class _$$NoteImplCopyWith<$Res> implements $NoteCopyWith<$Res> {
     String mood,
     DateTime loggedAt,
     DateTime? updatedAt,
+    NoteCategory? category,
+    bool isPinned,
+    DateTime? reminderAt,
+    List<DateTime> editHistory,
   });
 }
 
@@ -160,6 +192,10 @@ class __$$NoteImplCopyWithImpl<$Res>
     Object? mood = null,
     Object? loggedAt = null,
     Object? updatedAt = freezed,
+    Object? category = freezed,
+    Object? isPinned = null,
+    Object? reminderAt = freezed,
+    Object? editHistory = null,
   }) {
     return _then(
       _$NoteImpl(
@@ -195,6 +231,22 @@ class __$$NoteImplCopyWithImpl<$Res>
             ? _value.updatedAt
             : updatedAt // ignore: cast_nullable_to_non_nullable
                   as DateTime?,
+        category: freezed == category
+            ? _value.category
+            : category // ignore: cast_nullable_to_non_nullable
+                  as NoteCategory?,
+        isPinned: null == isPinned
+            ? _value.isPinned
+            : isPinned // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        reminderAt: freezed == reminderAt
+            ? _value.reminderAt
+            : reminderAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        editHistory: null == editHistory
+            ? _value._editHistory
+            : editHistory // ignore: cast_nullable_to_non_nullable
+                  as List<DateTime>,
       ),
     );
   }
@@ -212,7 +264,12 @@ class _$NoteImpl extends _Note {
     required this.mood,
     required this.loggedAt,
     this.updatedAt,
+    this.category,
+    this.isPinned = false,
+    this.reminderAt,
+    final List<DateTime> editHistory = const [],
   }) : _tags = tags,
+       _editHistory = editHistory,
        super._();
 
   factory _$NoteImpl.fromJson(Map<String, dynamic> json) =>
@@ -241,10 +298,25 @@ class _$NoteImpl extends _Note {
   final DateTime loggedAt;
   @override
   final DateTime? updatedAt;
+  @override
+  final NoteCategory? category;
+  @override
+  @JsonKey()
+  final bool isPinned;
+  @override
+  final DateTime? reminderAt;
+  final List<DateTime> _editHistory;
+  @override
+  @JsonKey()
+  List<DateTime> get editHistory {
+    if (_editHistory is EqualUnmodifiableListView) return _editHistory;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_editHistory);
+  }
 
   @override
   String toString() {
-    return 'Note(id: $id, uid: $uid, title: $title, content: $content, tags: $tags, mood: $mood, loggedAt: $loggedAt, updatedAt: $updatedAt)';
+    return 'Note(id: $id, uid: $uid, title: $title, content: $content, tags: $tags, mood: $mood, loggedAt: $loggedAt, updatedAt: $updatedAt, category: $category, isPinned: $isPinned, reminderAt: $reminderAt, editHistory: $editHistory)';
   }
 
   @override
@@ -261,7 +333,17 @@ class _$NoteImpl extends _Note {
             (identical(other.loggedAt, loggedAt) ||
                 other.loggedAt == loggedAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.category, category) ||
+                other.category == category) &&
+            (identical(other.isPinned, isPinned) ||
+                other.isPinned == isPinned) &&
+            (identical(other.reminderAt, reminderAt) ||
+                other.reminderAt == reminderAt) &&
+            const DeepCollectionEquality().equals(
+              other._editHistory,
+              _editHistory,
+            ));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -276,6 +358,10 @@ class _$NoteImpl extends _Note {
     mood,
     loggedAt,
     updatedAt,
+    category,
+    isPinned,
+    reminderAt,
+    const DeepCollectionEquality().hash(_editHistory),
   );
 
   /// Create a copy of Note
@@ -302,6 +388,10 @@ abstract class _Note extends Note {
     required final String mood,
     required final DateTime loggedAt,
     final DateTime? updatedAt,
+    final NoteCategory? category,
+    final bool isPinned,
+    final DateTime? reminderAt,
+    final List<DateTime> editHistory,
   }) = _$NoteImpl;
   const _Note._() : super._();
 
@@ -323,6 +413,14 @@ abstract class _Note extends Note {
   DateTime get loggedAt;
   @override
   DateTime? get updatedAt;
+  @override
+  NoteCategory? get category;
+  @override
+  bool get isPinned;
+  @override
+  DateTime? get reminderAt;
+  @override
+  List<DateTime> get editHistory;
 
   /// Create a copy of Note
   /// with the given fields replaced by the non-null parameter values.

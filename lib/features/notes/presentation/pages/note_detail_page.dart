@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
 import '../../../../core/widgets/skeleton_loader.dart';
+import '../../domain/entities/note_category.dart';
 import '../cubit/notes_cubit.dart';
 
 class NoteDetailPage extends StatefulWidget {
@@ -182,6 +184,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         title: const Text('Note Detail'),
         actions: [
           IconButton(
+            onPressed: () => SharePlus.instance.share(
+              ShareParams(text: '${note.title}\n\n${note.content}'),
+            ),
+            icon: const Icon(PhosphorIconsBold.shareNetwork),
+          ),
+          IconButton(
             onPressed: () => context.push(AppRoutes.noteEdit(note.id)),
             icon: const Icon(PhosphorIconsBold.pencilSimple),
           ),
@@ -195,6 +203,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         padding: const EdgeInsets.symmetric(vertical: 12),
         children: [
           Text(note.title, style: Theme.of(context).textTheme.headlineSmall),
+          if (note.category != null) ...[
+            const SizedBox(height: 8),
+            _buildCategoryChip(note.category!),
+          ],
           if (note.tags.isNotEmpty) ...[
             const SizedBox(height: 12),
             Wrap(
@@ -238,6 +250,14 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               ).textTheme.labelSmall?.copyWith(color: AppColors.textMuted),
             ),
           ],
+          if (note.editHistory.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            TextButton.icon(
+              onPressed: () => _showEditHistory(context, note.editHistory),
+              icon: const Icon(PhosphorIconsBold.clock, size: 16),
+              label: Text('${note.editHistory.length} edits'),
+            ),
+          ],
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(16),
@@ -251,6 +271,52 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryChip(NoteCategory category) {
+    final colors = {
+      NoteCategory.reflection: const Color(0xFF4CAF50),
+      NoteCategory.gratitude: const Color(0xFFFFB300),
+      NoteCategory.brainDump: const Color(0xFF42A5F5),
+      NoteCategory.insight: const Color(0xFFAB47BC),
+      NoteCategory.custom: const Color(0xFF78909C),
+    };
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: colors[category]!.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colors[category]!),
+      ),
+      child: Text(
+        category.name,
+        style: TextStyle(
+          fontSize: 12,
+          color: colors[category],
+        ),
+      ),
+    );
+  }
+
+  void _showEditHistory(BuildContext context, List<DateTime> history) {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          const Text(
+            'Edit History',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          ...history.map((date) => ListTile(
+                leading: const Icon(PhosphorIconsBold.clock),
+                title: Text(_formatDate(date)),
+              )),
         ],
       ),
     );

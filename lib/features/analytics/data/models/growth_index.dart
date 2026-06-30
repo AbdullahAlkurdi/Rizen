@@ -6,6 +6,7 @@ class GrowthIndex {
     required this.habitScore,
     required this.domainScore,
     required this.todoScore,
+    required this.notesScore,
     required this.shadowPenalty,
     required this.burnoutRisk,
     required this.burnoutReason,
@@ -16,6 +17,7 @@ class GrowthIndex {
   final double habitScore;
   final double domainScore;
   final double todoScore;
+  final double notesScore;
   final double shadowPenalty;
   final BurnoutRisk burnoutRisk;
   final String burnoutReason;
@@ -26,6 +28,7 @@ class GrowthIndex {
     habitScore: (json['habitScore'] as num).toDouble(),
     domainScore: (json['domainScore'] as num).toDouble(),
     todoScore: (json['todoScore'] as num).toDouble(),
+    notesScore: (json['notesScore'] as num?)?.toDouble() ?? 0.0,
     shadowPenalty: (json['shadowPenalty'] as num).toDouble(),
     burnoutRisk: BurnoutRisk.values.firstWhere(
       (e) => e.name == json['burnoutRisk'],
@@ -40,6 +43,7 @@ class GrowthIndex {
     'habitScore': habitScore,
     'domainScore': domainScore,
     'todoScore': todoScore,
+    'notesScore': notesScore,
     'shadowPenalty': shadowPenalty,
     'burnoutRisk': burnoutRisk.name,
     'burnoutReason': burnoutReason,
@@ -51,6 +55,7 @@ class GrowthIndex {
     double? habitScore,
     double? domainScore,
     double? todoScore,
+    double? notesScore,
     double? shadowPenalty,
     BurnoutRisk? burnoutRisk,
     String? burnoutReason,
@@ -61,6 +66,7 @@ class GrowthIndex {
       habitScore: habitScore ?? this.habitScore,
       domainScore: domainScore ?? this.domainScore,
       todoScore: todoScore ?? this.todoScore,
+      notesScore: notesScore ?? this.notesScore,
       shadowPenalty: shadowPenalty ?? this.shadowPenalty,
       burnoutRisk: burnoutRisk ?? this.burnoutRisk,
       burnoutReason: burnoutReason ?? this.burnoutReason,
@@ -77,6 +83,7 @@ class GrowthIndex {
           habitScore == other.habitScore &&
           domainScore == other.domainScore &&
           todoScore == other.todoScore &&
+          notesScore == other.notesScore &&
           shadowPenalty == other.shadowPenalty &&
           burnoutRisk == other.burnoutRisk &&
           burnoutReason == other.burnoutReason &&
@@ -88,6 +95,7 @@ class GrowthIndex {
       habitScore.hashCode ^
       domainScore.hashCode ^
       todoScore.hashCode ^
+      notesScore.hashCode ^
       shadowPenalty.hashCode ^
       burnoutRisk.hashCode ^
       burnoutReason.hashCode ^

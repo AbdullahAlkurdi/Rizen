@@ -5,12 +5,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../habits/data/models/habit_model.dart';
 import '../../../habits/data/models/habit_log_model.dart';
+import '../../../notes/data/models/note_model.dart';
 import '../../../todo/data/models/todo_list_model.dart';
 import '../models/analytics_period.dart';
 import '../models/correlation_insight.dart';
 import '../models/domain_score_point.dart';
 import '../models/growth_index.dart';
 import '../models/habit_trend_point.dart';
+import '../models/notes_analytics_summary.dart';
+import '../../../notes/domain/entities/note_category.dart';
 
 class AnalyticsRepository {
   AnalyticsRepository({
@@ -35,6 +38,65 @@ class AnalyticsRepository {
 
   CollectionReference<Map<String, dynamic>> get _shadowLogsRef =>
       firestore.collection('users').doc(uid).collection('shadow_logs');
+
+  CollectionReference<Map<String, dynamic>> get _notesRef =>
+      firestore.collection('notes');
+
+  Future<NotesAnalyticsSummary> getNotesAnalytics() async {
+    final now = DateTime.now();
+    final thirtyDaysAgo = now.subtract(const Duration(days: 30));
+    final sevenDaysAgo = now.subtract(const Duration(days: 7));
+
+    final notesSnapshot = await _notesRef
+        .where('uid', isEqualTo: uid)
+        .where('loggedAt', isGreaterThanOrEqualTo: thirtyDaysAgo)
+        .get();
+
+    final notes = notesSnapshot.docs.map((doc) => Note.fromFirestore(doc)).toList();
+
+    final totalNotes = notes.length;
+    final notesThisWeek = notes.where((n) => n.loggedAt.isAfter(sevenDaysAgo)).length;
+
+    final notesByCategory = <NoteCategory, int>{};
+    for (final note in notes) {
+      final cat = note.category ?? NoteCategory.custom;
+      notesByCategory[cat] = (notesByCategory[cat] ?? 0) + 1;
+    }
+
+    final tagCounts = <String, int>{};
+    for (final note in notes) {
+      for (final tag in note.tags) {
+        tagCounts[tag] = (tagCounts[tag] ?? 0) + 1;
+      }
+    }
+    final topTags = Map.fromEntries(
+        tagCounts.entries.toList()..sort((a, b) => b.value.compareTo(a.value)));
+
+    final notesByDay = <DateTime, int>{};
+    for (final note in notes) {
+      final day = DateTime(note.loggedAt.year, note.loggedAt.month, note.loggedAt.day);
+      notesByDay[day] = (notesByDay[day] ?? 0) + 1;
+    }
+
+    final totalLength = notes.fold<int>(0, (acc, n) => acc + n.content.length);
+    final averageNoteLength = notes.isEmpty ? 0.0 : totalLength / notes.length;
+
+    final streakDates = <DateTime>{};
+    for (final note in notes) {
+      final day = DateTime(note.loggedAt.year, note.loggedAt.month, note.loggedAt.day);
+      streakDates.add(day);
+    }
+
+    return NotesAnalyticsSummary(
+      totalNotes: totalNotes,
+      notesThisWeek: notesThisWeek,
+      notesByCategory: notesByCategory,
+      topTags: topTags,
+      notesByDay: notesByDay,
+      averageNoteLength: averageNoteLength,
+      streakDates: streakDates.toList()..sort(),
+    );
+  }
 
   Future<List<DomainScorePoint>> getDomainScores(AnalyticsPeriod period) async {
     final now = DateTime.now();
@@ -173,6 +235,11 @@ class AnalyticsRepository {
         .where('date', isGreaterThanOrEqualTo: _dateStr(thirtyDaysAgo))
         .get();
 
+    final notesSnapshot = await _notesRef
+        .where('uid', isEqualTo: uid)
+        .where('loggedAt', isGreaterThanOrEqualTo: thirtyDaysAgo)
+        .get();
+
     final habitLogs = habitLogsSnapshot.docs
         .map((doc) => HabitLog.fromFirestore(doc))
         .toList();
@@ -185,6 +252,7 @@ class AnalyticsRepository {
     final shadowLogs = shadowSnapshot.docs
         .map((doc) => ShadowLog.fromJson(doc.data()))
         .toList();
+    final notes = notesSnapshot.docs.map((doc) => Note.fromFirestore(doc)).toList();
 
     final habitScore = habitLogs.isNotEmpty
         ? habitLogs.map((l) => l.completionPct).reduce((a, b) => a + b) /
@@ -202,12 +270,16 @@ class AnalyticsRepository {
             todoLists.length
         : 0.0;
 
+    final notesThisWeek = notes.where((n) => n.loggedAt.isAfter(now.subtract(const Duration(days: 7)))).length;
+    final notesScore = min((notesThisWeek / 7) * 100, 100.0);
+
     final totalShadow = shadowLogs.fold<double>(0.0, (acc, l) => acc + l.shadowImpact);
     final shadowPenalty = (totalShadow / 30 * 10).clamp(0.0, 20.0);
 
-    final overallScore = ((habitScore * 0.35) +
-            (domainScore * 0.30) +
-            (todoScore * 0.25) -
+    final overallScore = ((habitScore * 0.30) +
+            (domainScore * 0.25) +
+            (todoScore * 0.20) +
+            (notesScore * 0.15) -
             (shadowPenalty * 0.10))
         .clamp(0.0, 100.0);
 
@@ -226,6 +298,8 @@ class AnalyticsRepository {
           _dateFromStr(t.id).isBefore(dayEnd)).toList();
       final dayShadows = shadowLogs.where((l) =>
           l.date.isAfter(dayStart) && l.date.isBefore(dayEnd)).toList();
+      final dayNotes = notes.where((n) =>
+          n.loggedAt.isAfter(dayStart) && n.loggedAt.isBefore(dayEnd)).toList();
 
       final hScore = dayHabitLogs.isNotEmpty
           ? dayHabitLogs.map((l) => l.completionPct).reduce((a, b) => a + b) /
@@ -239,10 +313,12 @@ class AnalyticsRepository {
       final sPenalty = dayShadows.isNotEmpty
           ? dayShadows.map((s) => s.shadowImpact).reduce((a, b) => a + b) * 10
           : 0.0;
+      final nScore = min(dayNotes.length / 1 * 100, 100.0);
 
-      dailyScores[dayStart] = ((hScore * 0.35) +
-              (dScore * 0.30) +
-              (tScore * 0.25) -
+      dailyScores[dayStart] = ((hScore * 0.30) +
+              (dScore * 0.25) +
+              (tScore * 0.20) +
+              (nScore * 0.15) -
               (sPenalty * 0.10))
           .clamp(0.0, 100.0);
     }
@@ -273,6 +349,7 @@ class AnalyticsRepository {
       habitScore: habitScore,
       domainScore: domainScore,
       todoScore: todoScore,
+      notesScore: notesScore,
       shadowPenalty: shadowPenalty,
       burnoutRisk: risk,
       burnoutReason: reason,

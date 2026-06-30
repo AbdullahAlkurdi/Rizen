@@ -11,6 +11,7 @@ import '../../data/models/correlation_insight.dart';
 import '../../data/models/domain_score_point.dart';
 import '../../data/models/growth_index.dart';
 import '../../data/models/habit_trend_point.dart';
+import '../../data/models/notes_analytics_summary.dart';
 import '../../data/repositories/analytics_repository.dart';
 import 'analytics_state.dart';
 
@@ -34,6 +35,7 @@ class AnalyticsCubit extends Cubit<AnalyticsState> {
         _repository.getHabitTrends(period),
         _repository.getGrowthIndex(),
         _repository.getCorrelationInsights(),
+        _repository.getNotesAnalytics(),
       ]);
 
       emit(AnalyticsLoaded(
@@ -41,6 +43,7 @@ class AnalyticsCubit extends Cubit<AnalyticsState> {
         habitTrends: results[1] as List<HabitTrendPoint>,
         growthIndex: results[2] as GrowthIndex,
         correlations: results[3] as List<CorrelationInsight>,
+        notesAnalytics: results[4] as NotesAnalyticsSummary,
         selectedPeriod: period,
       ));
     } catch (e) {

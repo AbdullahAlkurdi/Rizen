@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +9,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/rizen_button.dart';
 import '../../../../core/widgets/rizen_scaffold.dart';
 import '../../../../core/widgets/skeleton_loader.dart';
+import '../../domain/entities/note_category.dart';
 import '../cubit/notes_cubit.dart';
 import '../../data/models/note_model.dart';
 
@@ -24,9 +27,14 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
   final _contentController = TextEditingController();
   final _tagsController = TextEditingController();
   final _moodController = TextEditingController();
+
   bool _isSaving = false;
   bool _showPreview = false;
   bool _populated = false;
+  bool _isPinned = false;
+  DateTime? _reminderAt;
+  NoteCategory? _selectedCategory;
+  Timer? _autoSaveTimer;
 
   @override
   void initState() {
@@ -34,6 +42,7 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
     if (widget.noteId != null) {
       context.read<NotesCubit>().loadNote(widget.noteId!);
     }
+    _contentController.addListener(_onContentChanged);
   }
 
   @override
@@ -42,7 +51,19 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
     _contentController.dispose();
     _tagsController.dispose();
     _moodController.dispose();
+    _autoSaveTimer?.cancel();
     super.dispose();
+  }
+
+  void _onContentChanged() {
+    _autoSaveTimer?.cancel();
+    if (widget.noteId != null && !_isSaving) {
+      _autoSaveTimer = Timer(const Duration(seconds: 10), () {
+        if (_titleController.text.isNotEmpty || _contentController.text.isNotEmpty) {
+          _save(autoSave: true);
+        }
+      });
+    }
   }
 
   void _populateFromNote(Note note) {
@@ -52,14 +73,19 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
     _contentController.text = note.content;
     _tagsController.text = note.tags.join(', ');
     _moodController.text = note.mood;
+    _isPinned = note.isPinned;
+    _reminderAt = note.reminderAt;
+    _selectedCategory = note.category;
   }
 
-  Future<void> _save() async {
+  Future<void> _save({bool autoSave = false}) async {
     final title = _titleController.text.trim();
     final content = _contentController.text.trim();
     if (title.isEmpty && content.isEmpty) return;
 
-    setState(() => _isSaving = true);
+    if (!autoSave) {
+      setState(() => _isSaving = true);
+    }
 
     final tags = _tagsController.text
         .split(',')
@@ -67,8 +93,10 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
         .where((t) => t.isNotEmpty)
         .toList();
 
-final moodText = _moodController.text.trim();
+    final moodText = _moodController.text.trim();
     final mood = moodText.isEmpty ? 'neutral' : moodText;
+
+    final now = DateTime.now();
 
     if (widget.noteId != null) {
       await context.read<NotesCubit>().updateNote(
@@ -79,8 +107,12 @@ final moodText = _moodController.text.trim();
               content: content,
               tags: tags,
               mood: mood,
-              loggedAt: DateTime.now(),
-              updatedAt: DateTime.now(),
+              loggedAt: now,
+              updatedAt: now,
+              category: _selectedCategory,
+              isPinned: _isPinned,
+              reminderAt: _reminderAt,
+              editHistory: [DateTime.now()],
             ),
           );
     } else {
@@ -92,7 +124,10 @@ final moodText = _moodController.text.trim();
               content: content,
               tags: tags,
               mood: mood,
-              loggedAt: DateTime.now(),
+              loggedAt: now,
+              category: _selectedCategory,
+              isPinned: _isPinned,
+              reminderAt: _reminderAt,
             ),
           );
     }
@@ -100,9 +135,7 @@ final moodText = _moodController.text.trim();
     if (!mounted) return;
 
     final state = context.read<NotesCubit>().state;
-    if (state is NotesError) {
-      setState(() => _isSaving = false);
-    } else {
+    if (!autoSave && state is! NotesError) {
       context.pop();
     }
   }
@@ -140,6 +173,13 @@ final moodText = _moodController.text.trim();
 
     return buffer.toString();
   }
+
+  int get _wordCount {
+    final words = _contentController.text.trim().split(RegExp(r'\s+'));
+    return words.isEmpty ? 0 : words.length;
+  }
+
+  int get _charCount => _contentController.text.length;
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +263,7 @@ final moodText = _moodController.text.trim();
             onPressed: () => setState(() => _showPreview = !_showPreview),
           ),
           TextButton(
-            onPressed: _isSaving ? null : _save,
+            onPressed: _isSaving ? null : () => _save(),
             child: _isSaving
                 ? const SizedBox(
                     width: 18,
@@ -235,6 +275,7 @@ final moodText = _moodController.text.trim();
         ],
       ),
       body: ListView(
+        padding: const EdgeInsets.all(16),
         children: [
           TextField(
             controller: _titleController,
@@ -245,6 +286,21 @@ final moodText = _moodController.text.trim();
             ),
           ),
           const SizedBox(height: 16),
+          DropdownButtonFormField<NoteCategory>(
+            initialValue: _selectedCategory,
+            decoration: const InputDecoration(
+              labelText: 'Category',
+              prefixIcon: Icon(PhosphorIconsBold.folder),
+            ),
+            items: NoteCategory.values.map((cat) {
+              return DropdownMenuItem(
+                value: cat,
+                child: Text(cat.name),
+              );
+            }).toList(),
+            onChanged: (cat) => setState(() => _selectedCategory = cat),
+          ),
+          const SizedBox(height: 16),
           TextField(
             controller: _tagsController,
             decoration: const InputDecoration(
@@ -252,6 +308,55 @@ final moodText = _moodController.text.trim();
               hintText: 'comma, separated, tags',
               prefixIcon: Icon(PhosphorIconsBold.tag),
             ),
+          ),
+          const SizedBox(height: 16),
+          SwitchListTile(
+            title: const Text('Pinned'),
+            subtitle: const Text('Show at top of notes list'),
+            value: _isPinned,
+            onChanged: (val) => setState(() => _isPinned = val),
+            secondary: const Icon(PhosphorIconsBold.pushPin),
+          ),
+          const SizedBox(height: 16),
+          ListTile(
+            leading: const Icon(PhosphorIconsBold.bell),
+            title: Text(
+              _reminderAt == null
+                  ? 'Set Reminder'
+                  : 'Reminder: ${_formatTime(_reminderAt!)}',
+            ),
+            onTap: () async {
+              final date = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime.now().add(const Duration(days: 365)),
+              );
+              if (date == null) return;
+              // ignore: use_build_context_synchronously
+              final time = await showTimePicker(
+                // ignore: use_build_context_synchronously
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+              if (time == null) return;
+              if (!mounted) return;
+              setState(() {
+                _reminderAt = DateTime(
+                  date.year,
+                  date.month,
+                  date.day,
+                  time.hour,
+                  time.minute,
+                );
+              });
+            },
+            trailing: _reminderAt != null
+                ? IconButton(
+                    icon: const Icon(PhosphorIconsBold.x),
+                    onPressed: () => setState(() => _reminderAt = null),
+                  )
+                : null,
           ),
           const SizedBox(height: 16),
           TextField(
@@ -286,24 +391,34 @@ final moodText = _moodController.text.trim();
                 border: OutlineInputBorder(),
               ),
             ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                '$_wordCount words • $_charCount characters',
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: AppColors.textMuted,
+                    ),
+              ),
+            ],
+          ),
           const SizedBox(height: 20),
           RizenButton(
             label: widget.noteId != null ? 'Save Changes' : 'Save Note',
             icon: PhosphorIconsBold.check,
             isLoading: _isSaving,
-            onPressed: _isSaving ? null : _save,
-          ),
-          const SizedBox(height: 12),
-          RizenButton(
-            label: _showPreview ? 'Back to Editor' : 'Preview Markdown',
-            icon: _showPreview
-                ? PhosphorIconsBold.pencilSimple
-                : PhosphorIconsBold.eye,
-            variant: RizenButtonVariant.secondary,
-            onPressed: () => setState(() => _showPreview = !_showPreview),
+            onPressed: _isSaving ? null : () => _save(),
           ),
         ],
       ),
     );
+  }
+
+  String _formatTime(DateTime date) {
+    final hour = date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
+    final amPm = date.hour >= 12 ? 'PM' : 'AM';
+    final minute = date.minute.toString().padLeft(2, '0');
+    return '$hour:$minute $amPm';
   }
 }

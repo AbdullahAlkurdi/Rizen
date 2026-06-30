@@ -13,6 +13,8 @@ import '../../data/models/analytics_period.dart';
 import '../../data/models/domain_score_point.dart';
 import '../../data/models/growth_index.dart';
 import '../../data/models/habit_trend_point.dart';
+import '../../data/models/notes_analytics_summary.dart';
+import '../../../notes/domain/entities/note_category.dart';
 
 class AnalyticsHubPage extends StatelessWidget {
   const AnalyticsHubPage({super.key});
@@ -321,6 +323,8 @@ class _AnalyticsLoadedView extends StatelessWidget {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
+        _NotesConsistencySection(notesAnalytics: state.notesAnalytics),
+        const SizedBox(height: 24),
         if (correlations.isEmpty)
           GlassCard(
             child: Center(
@@ -432,9 +436,9 @@ class _GrowthIndexCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
 Text(
-                          score.toStringAsFixed(0),
-                          style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-                        ),
+                      score.toStringAsFixed(0),
+                      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                    ),
                       const Text(
                         'Growth Index',
                         style: TextStyle(fontSize: 14, color: AppColors.textMuted),
@@ -454,6 +458,8 @@ Text(
               _SubScoreChip(label: 'Domains', value: growthIndex.domainScore),
               const SizedBox(width: 8),
               _SubScoreChip(label: 'Todos', value: growthIndex.todoScore),
+              const SizedBox(width: 8),
+              _SubScoreChip(label: 'Notes', value: growthIndex.notesScore),
             ],
           ),
           const SizedBox(height: 12),
@@ -545,5 +551,109 @@ class _BurnoutBadge extends StatelessWidget {
     }
 
     return badge;
+  }
+}
+
+class _NotesConsistencySection extends StatelessWidget {
+  const _NotesConsistencySection({required this.notesAnalytics});
+
+  final NotesAnalyticsSummary notesAnalytics;
+
+  static final Map<NoteCategory, Color> _categoryColors = {
+    NoteCategory.reflection: const Color(0xFF4CAF50),
+    NoteCategory.gratitude: const Color(0xFFFFB300),
+    NoteCategory.brainDump: const Color(0xFF42A5F5),
+    NoteCategory.insight: const Color(0xFFAB47BC),
+    NoteCategory.custom: const Color(0xFF78909C),
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Journaling',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Streak: ${notesAnalytics.streakDates.isEmpty ? 0 : _calculateCurrentStreak(notesAnalytics.streakDates)} days',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Notes this week: ${notesAnalytics.notesThisWeek}',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppColors.textMuted,
+                ),
+          ),
+          const SizedBox(height: 12),
+          if (notesAnalytics.notesByCategory.isNotEmpty) ...[
+            const Text(
+              'Categories',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: notesAnalytics.notesByCategory.entries.map((entry) {
+                final color = _categoryColors[entry.key]!;
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: color),
+                  ),
+                  child: Text(
+                    '${entry.key.name}: ${entry.value}',
+                    style: TextStyle(fontSize: 11, color: color),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+          if (notesAnalytics.topTags.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            const Text(
+              'Top Tags',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: notesAnalytics.topTags.entries.take(5).map((entry) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0F3460).withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    entry.key,
+                    style: const TextStyle(fontSize: 10),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  int _calculateCurrentStreak(List<DateTime> dates) {
+    if (dates.isEmpty) return 0;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    int streak = 0;
+    DateTime current = today;
+    while (dates.contains(current)) {
+      streak++;
+      current = DateTime(current.year, current.month, current.day - 1);
+    }
+    return streak;
   }
 }

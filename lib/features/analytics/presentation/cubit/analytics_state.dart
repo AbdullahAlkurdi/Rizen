@@ -5,6 +5,7 @@ import '../../data/models/correlation_insight.dart';
 import '../../data/models/domain_score_point.dart';
 import '../../data/models/growth_index.dart';
 import '../../data/models/habit_trend_point.dart';
+import '../../data/models/notes_analytics_summary.dart';
 
 sealed class AnalyticsState {
   const AnalyticsState();
@@ -24,6 +25,7 @@ final class AnalyticsLoaded extends AnalyticsState {
     required this.habitTrends,
     required this.growthIndex,
     required this.correlations,
+    required this.notesAnalytics,
     required this.selectedPeriod,
   });
 
@@ -31,6 +33,7 @@ final class AnalyticsLoaded extends AnalyticsState {
   final List<HabitTrendPoint> habitTrends;
   final GrowthIndex growthIndex;
   final List<CorrelationInsight> correlations;
+  final NotesAnalyticsSummary notesAnalytics;
   final AnalyticsPeriod selectedPeriod;
 }
 
