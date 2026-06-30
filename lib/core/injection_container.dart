@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'network/dio_client.dart';
 import 'network/network_info.dart';
 import 'interfaces/habit_service_interface.dart';
@@ -26,6 +27,8 @@ import '../features/finance/data/repositories/finance_repository.dart';
 import '../features/notes/data/repositories/notes_repository.dart';
 import '../features/domains/data/repositories/domain_logs_repository.dart';
 import '../features/islamic/data/repositories/prayer_times_repository.dart';
+import '../features/home/data/services/sleep_tracking_service.dart';
+import '../features/home/presentation/cubit/sleep_cubit.dart';
 import '../features/todo/data/datasources/todo_remote_datasource.dart';
 import '../features/todo/data/repositories/todo_repository_impl.dart';
 import '../features/todo/domain/repositories/todo_repository_interface.dart';
@@ -41,7 +44,6 @@ import '../features/habits/presentation/cubit/habits_cubit.dart';
 import '../features/habits/presentation/cubit/shadow_tracker_cubit.dart';
 import '../features/home/data/repositories/sleep_repository.dart';
 import '../features/home/data/services/sleep_detector_service.dart';
-import '../features/home/presentation/cubit/sleep_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -116,9 +118,16 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => SleepDetectorService(sl<SleepLogRepository>()));
 
+  sl.registerLazySingleton(() => SleepTrackingService(
+    firestore: FirebaseFirestore.instance,
+    firebaseAuth: FirebaseAuth.instance,
+    repository: sl<SleepLogRepository>(),
+  ));
+
   sl.registerFactory(() => SleepCubit(
     repository: sl<SleepLogRepository>(),
     sleepDetectorService: sl<SleepDetectorService>(),
+    sleepTrackingService: sl<SleepTrackingService>(),
   ));
 
   sl.registerLazySingleton(() => TutorialService());

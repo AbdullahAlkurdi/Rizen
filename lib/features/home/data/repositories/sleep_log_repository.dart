@@ -157,6 +157,33 @@ class SleepLogRepository {
     await _firestore.collection('sleep_logs').doc(logId).update(updates);
   }
 
+  Future<void> updateTodaySleepLog({
+    DateTime? sleepStart,
+    DateTime? sleepEnd,
+    double? bedResistanceMetric,
+    bool? isAnalysisReady,
+  }) async {
+    final todayLog = await getTodaySleepLog();
+    if (todayLog == null) return;
+
+    final updates = <String, dynamic>{};
+    if (sleepStart != null) {
+      updates['sleepStart'] = Timestamp.fromDate(sleepStart);
+    }
+    if (sleepEnd != null) {
+      updates['sleepEnd'] = Timestamp.fromDate(sleepEnd);
+    }
+    if (bedResistanceMetric != null) {
+      updates['bedResistanceMetric'] = bedResistanceMetric;
+    }
+    if (isAnalysisReady != null) {
+      updates['isAnalysisReady'] = isAnalysisReady;
+    }
+    if (updates.isEmpty) return;
+
+    await _firestore.collection('sleep_logs').doc(todayLog.id).update(updates);
+  }
+
   Future<void> deleteSleepLog(String logId) async {
     await _firestore.collection('sleep_logs').doc(logId).delete();
   }

@@ -27,6 +27,7 @@ import '../../../routines/presentation/bloc/routines_bloc.dart';
 import '../../../routines/data/models/routine_model.dart';
 import '../../data/repositories/sleep_log_repository.dart';
 import '../../data/services/sleep_detector_service.dart';
+import '../../data/services/sleep_tracking_service.dart';
 import '../cubit/sleep_cubit.dart';
 import '../cubit/sleep_state.dart';
 
@@ -198,13 +199,14 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> with TutorialMixi
                                ),
                              ),
                            const SizedBox(height: 20),
-                           BlocProvider(
-                             create: (_) => SleepCubit(
-                               repository: sl<SleepLogRepository>(),
-                               sleepDetectorService: SleepDetectorService(sl<SleepLogRepository>()),
+                            BlocProvider(
+                              create: (_) => SleepCubit(
+                                repository: sl<SleepLogRepository>(),
+                                sleepDetectorService: SleepDetectorService(sl<SleepLogRepository>()),
+                                sleepTrackingService: sl<SleepTrackingService>(),
+                              ),
+                               child: _SleepCard(),
                              ),
-                              child: _SleepCard(),
-                            ),
                            const SizedBox(height: 20),
                            Container(
                              key: _tutorialKeys['checklists'] as Key,
@@ -216,43 +218,49 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> with TutorialMixi
                              style: Theme.of(context).textTheme.titleLarge,
                            ),
                            const SizedBox(height: 12),
-                           Container(
-                             key: _tutorialKeys['quickactions'] as Key,
-                             child: GridView.count(
-                               crossAxisCount: 2,
-                               shrinkWrap: true,
-                               physics: const NeverScrollableScrollPhysics(),
-                               mainAxisSpacing: 12,
-                               crossAxisSpacing: 12,
-                               childAspectRatio: 1.6,
-                               children: const [
-                                 _QuickActionTile(
-                                   label: 'Log Activity',
-                                   icon: PhosphorIconsBold.plusCircle,
-                                   color: Color(0xFFE94560),
-                                   route: AppRoutes.domains,
-                                 ),
-                                 _QuickActionTile(
-                                   label: 'Check Habits',
-                                   icon: PhosphorIconsBold.checkCircle,
-                                   color: Color(0xFF4ADE80),
-                                   route: AppRoutes.habits,
-                                 ),
-                                 _QuickActionTile(
-                                   label: 'Burnout Mode',
-                                   icon: PhosphorIconsBold.firstAid,
-                                   color: Color(0xFFFBBF24),
-                                   route: AppRoutes.habitsRecovery,
-                                 ),
-                                 _QuickActionTile(
-                                   label: 'AI Coach',
-                                   icon: PhosphorIconsBold.robot,
-                                   color: Color(0xFF9333EA),
-                                   route: AppRoutes.coachHome,
-                                 ),
-                               ],
-                             ),
-                           ),
+                            Container(
+                              key: _tutorialKeys['quickactions'] as Key,
+                              child: GridView.count(
+                                crossAxisCount: 2,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                mainAxisSpacing: 12,
+                                crossAxisSpacing: 12,
+                                childAspectRatio: 1.6,
+                                children: const [
+                                  _QuickActionTile(
+                                    label: 'Log Activity',
+                                    icon: PhosphorIconsBold.plusCircle,
+                                    color: Color(0xFFE94560),
+                                    route: AppRoutes.domains,
+                                  ),
+                                  _QuickActionTile(
+                                    label: 'Check Habits',
+                                    icon: PhosphorIconsBold.checkCircle,
+                                    color: Color(0xFF4ADE80),
+                                    route: AppRoutes.habits,
+                                  ),
+                                  _QuickActionTile(
+                                    label: 'Burnout Mode',
+                                    icon: PhosphorIconsBold.firstAid,
+                                    color: Color(0xFFFBBF24),
+                                    route: AppRoutes.habitsRecovery,
+                                  ),
+                                  _QuickActionTile(
+                                    label: 'AI Coach',
+                                    icon: PhosphorIconsBold.robot,
+                                    color: Color(0xFF9333EA),
+                                    route: AppRoutes.coachHome,
+                                  ),
+                                  _QuickActionTile(
+                                    label: 'Sleep',
+                                    icon: PhosphorIconsBold.moon,
+                                    color: Color(0xFF0F3460),
+                                    route: AppRoutes.sleepAnalytics,
+                                  ),
+                                ],
+                              ),
+                            ),
                            const SizedBox(height: 24),
                            Row(
                              children: [

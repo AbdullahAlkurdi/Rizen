@@ -74,10 +74,15 @@ import '../../features/home/presentation/pages/monthly_calendar_page.dart';
 import '../../features/home/presentation/pages/notifications_page.dart';
 import '../../features/home/presentation/pages/sleep_analytics_page.dart';
 import '../../features/home/presentation/pages/weekly_overview_page.dart';
+import '../../features/home/data/repositories/sleep_log_repository.dart';
+import '../../features/home/data/services/sleep_detector_service.dart';
+import '../../features/home/data/services/sleep_tracking_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../features/home/presentation/cubit/sleep_cubit.dart';
 import '../../features/routines/data/repositories/routine_repository.dart';
 import '../../features/habits/data/repositories/habits_repository.dart';
 import '../../features/domains/data/repositories/domain_logs_repository.dart';
-import '../../features/home/data/repositories/sleep_log_repository.dart';
 import '../../features/more/presentation/pages/more_hub_page.dart';
 import '../../features/notes/presentation/cubit/notes_cubit.dart';
 import '../../features/notes/presentation/pages/notes_list_page.dart';
@@ -259,12 +264,15 @@ final appRouter = GoRouter(
         GoRoute(
           path: AppRoutes.sleepAnalytics,
           builder: (context, state) => BlocProvider(
-            create: (_) => HomeCubit(
-              routineRepository: RoutineRepository(),
-              habitsRepository: HabitsRepository(),
-              domainLogsRepository: DomainLogsRepository(),
-              sleepLogRepository: SleepLogRepository(),
-            )..loadHome(),
+            create: (_) => SleepCubit(
+              repository: SleepLogRepository(),
+              sleepDetectorService: SleepDetectorService(SleepLogRepository()),
+              sleepTrackingService: SleepTrackingService(
+                firestore: FirebaseFirestore.instance,
+                firebaseAuth: FirebaseAuth.instance,
+                repository: SleepLogRepository(),
+              ),
+            )..loadTodaySleepData(),
             child: const SleepAnalyticsPage(),
           ),
         ),
