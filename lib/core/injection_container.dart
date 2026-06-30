@@ -18,6 +18,7 @@ import 'services/gemini_service.dart';
 import '../features/voice/presentation/cubit/voice_cubit.dart';
 import '../features/analytics/data/repositories/analytics_repository.dart';
 import '../features/analytics/presentation/cubit/analytics_cubit.dart';
+import '../features/coach/presentation/cubit/voice_cubit.dart';
 import '../features/coach/data/repositories/coach_repository.dart';
 import '../features/habits/data/repositories/habits_repository.dart';
 import '../features/habits/data/repositories/shadow_tracker_repository.dart';
@@ -158,14 +159,18 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton(() => GeminiService());
+
+  sl.registerFactory(
+    () => CoachVoiceCubit(geminiService: sl<GeminiService>()),
+  );
+
   sl.registerFactory(
     () => VoiceCubit(
       parserService: sl<VoiceParserService>(),
       orchestrator: sl<VoiceLogOrchestrator>(),
     ),
   );
-
-  sl.registerLazySingleton(() => GeminiService());
 
   sl.registerFactory(
     () => AnalyticsCubit(

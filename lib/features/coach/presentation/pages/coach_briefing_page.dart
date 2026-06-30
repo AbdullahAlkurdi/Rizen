@@ -62,14 +62,20 @@ class _CoachBriefingPageState extends State<CoachBriefingPage> with TutorialMixi
       subtitle: isMorning
           ? 'Your adaptive roadmap for today.'
           : 'Evening diagnostic and reflection.',
-      actions: [
-        IconButton(
-          onPressed: showTutorialNow,
-          icon: const Icon(PhosphorIconsBold.question),
-          color: const Color(0xFF9CA3AF),
-          tooltip: 'Help',
-        ),
-      ],
+actions: [
+         IconButton(
+           onPressed: showTutorialNow,
+           icon: const Icon(PhosphorIconsBold.question),
+           color: const Color(0xFF9CA3AF),
+           tooltip: 'Help',
+         ),
+         IconButton(
+           onPressed: () => context.push(AppRoutes.coachVoiceLog),
+           icon: const Icon(PhosphorIconsBold.microphone),
+           color: const Color(0xFFE94560),
+           tooltip: 'Voice Log',
+         ),
+       ],
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
         icon: Icon(PhosphorIconsBold.arrowClockwise),

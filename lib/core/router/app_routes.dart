@@ -73,6 +73,7 @@ abstract final class AppRoutes {
   static const coachSuggestions = '/coach/suggestions';
   static const coachMicroGoals = '/coach/micro-goals';
   static const coachInsights = '/coach/insights';
+  static const coachVoiceLog = '/coach/voice-log';
 
   static const notes = '/notes';
   static const noteCreate = '/notes/create';

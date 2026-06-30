@@ -32,6 +32,7 @@ import '../../features/coach/presentation/pages/coach_briefing_page.dart';
 import '../../features/coach/presentation/pages/coach_chat_page.dart';
 import '../../features/coach/presentation/pages/coach_hub_page.dart';
 import '../../features/coach/presentation/pages/coach_insights_page.dart';
+import '../../features/coach/presentation/pages/voice_log_page.dart';
 import '../../features/coach/presentation/pages/coach_micro_goals_page.dart';
 import '../../features/coach/presentation/pages/coach_suggestions_page.dart';
 import '../../features/coach/presentation/pages/coach_weekly_page.dart';
@@ -116,6 +117,8 @@ import '../../features/settings/presentation/pages/support_page.dart';
 import '../../features/todo/presentation/screens/todo_editor_screen.dart';
 import '../../features/shell/presentation/pages/main_shell_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
+import '../../core/services/gemini_service.dart';
+import '../../features/coach/presentation/cubit/voice_cubit.dart';
 import 'app_routes.dart';
 
 AuthState _getAuthState(BuildContext context) {
@@ -606,13 +609,22 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.coachInsights,
-           builder: (context, state) => BlocProvider(
-             create: (_) => CoachCubit()..loadHistory(),
-             child: const CoachInsightsPage(),
-           ),
-         ),
-         GoRoute(
-           path: AppRoutes.notes,
+          builder: (context, state) => BlocProvider(
+            create: (_) => CoachCubit()..loadHistory(),
+            child: const CoachInsightsPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.coachVoiceLog,
+          builder: (context, state) => BlocProvider(
+            create: (_) => CoachVoiceCubit(
+              geminiService: sl<GeminiService>(),
+            ),
+            child: const VoiceLogPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.notes,
           builder: (context, state) => BlocProvider(
             create: (_) => NotesCubit()..loadNotes(),
             child: const NotesListPage(),
