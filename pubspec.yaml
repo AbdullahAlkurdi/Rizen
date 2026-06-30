@@ -40,6 +40,9 @@ dependencies:
   shimmer: ^3.0.0
   tutorial_coach_mark: ^1.2.8
   share_plus: 13.2.0
+  device_info_plus: ^13.2.0
+  package_info_plus: ^10.0.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +53,7 @@ dev_dependencies:
   freezed: ^2.5.7
   json_serializable: ^6.9.4
   flutter_native_splash: ^2.4.1
+  flutter_launcher_icons: ^0.14.0
   mocktail: ^1.0.0
 
 flutter:
@@ -59,3 +63,26 @@ flutter:
     - assets/images/
     - assets/data/adhkar.json
     - assets/data/dua_library.json
+
+flutter_launcher_icons:
+  android:
+    generate: true
+    image_path: "assets/icon/icon.png"
+  ios:
+    generate: true
+    image_path: "assets/icon/icon.png"
+  macos:
+    generate: true
+    image_path: "assets/icon/icon.png"
+  windows:
+    generate: true
+    image_path: "assets/icon/icon.png"
+  linux:
+    generate: true
+    image_path: "assets/icon/icon.png"
+  web:
+    generate: true
+    image_path: "assets/icon/icon.png"
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#1A1A2E"
+  adaptive_icon_foreground: "assets/icon/icon-foreground.png"
