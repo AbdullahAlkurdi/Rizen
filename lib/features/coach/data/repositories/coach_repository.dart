@@ -17,6 +17,8 @@ import '../models/coach_message_model.dart';
 import '../../domain/models/todo_coach_summary.dart';
 import '../../../todo/domain/usecases/get_missed_items_usecase.dart';
 import '../../../todo/domain/repositories/todo_repository_interface.dart';
+import '../../../../core/services/voice_parse_result.dart';
+import '../../../../core/services/voice_log_orchestrator.dart';
 
 class CoachRepository {
   CoachRepository({
@@ -31,6 +33,7 @@ class CoachRepository {
     required TodoRepositoryInterface todoRepository,
     required GetMissedItemsUseCase getMissedItemsUseCase,
     SleepLogRepository? sleepRepository,
+    required VoiceLogOrchestrator voiceLogOrchestrator,
   })  : _firestore = firestore ?? FirebaseFirestore.instance,
         _auth = auth ?? FirebaseAuth.instance,
         _dio = dio ?? Dio(),
@@ -41,7 +44,8 @@ class CoachRepository {
         _prayerTimesRepository = prayerTimesRepository,
         _todoRepository = todoRepository,
         _getMissedItemsUseCase = getMissedItemsUseCase,
-        _sleepRepository = sleepRepository ?? SleepLogRepository();
+        _sleepRepository = sleepRepository ?? SleepLogRepository(),
+        _voiceLogOrchestrator = voiceLogOrchestrator;
 
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
@@ -54,6 +58,7 @@ class CoachRepository {
   final TodoRepositoryInterface _todoRepository;
   final GetMissedItemsUseCase _getMissedItemsUseCase;
   final SleepLogRepository _sleepRepository;
+  final VoiceLogOrchestrator _voiceLogOrchestrator;
 
   CollectionReference get _sessionsCollection =>
       _firestore.collection('coach_sessions');
@@ -471,5 +476,9 @@ Always end with a conversational message to the user.''';
     if (weekLogs.isEmpty) return null;
     final lastLog = weekLogs.first;
     return GenerateSleepInsightUseCase().call(lastLog, weekLogs);
+  }
+
+  Future<VoiceLogSummary> applyVoiceLog(VoiceParseResult result) async {
+    return await _voiceLogOrchestrator.apply(result);
   }
 }

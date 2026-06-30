@@ -598,13 +598,13 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.coachInsights,
-          builder: (context, state) => BlocProvider(
-            create: (_) => CoachCubit()..loadHistory(),
-            child: const CoachInsightsPage(),
-          ),
-        ),
-        GoRoute(
-          path: AppRoutes.notes,
+           builder: (context, state) => BlocProvider(
+             create: (_) => CoachCubit()..loadHistory(),
+             child: const CoachInsightsPage(),
+           ),
+         ),
+         GoRoute(
+           path: AppRoutes.notes,
           builder: (context, state) => BlocProvider(
             create: (_) => NotesCubit()..loadNotes(),
             child: const NotesListPage(),

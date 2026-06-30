@@ -5,6 +5,7 @@ import '../../domain/models/todo_coach_summary.dart';
 import '../../domain/entities/sleep_insight.dart';
 import '../../data/repositories/coach_repository.dart';
 import '../../../../core/injection_container.dart';
+import '../../../../core/services/voice_log_orchestrator.dart';
 import '../../../../core/interfaces/habit_service_interface.dart';
 import '../../../../core/interfaces/finance_service_interface.dart';
 import '../../../../core/interfaces/note_service_interface.dart';
@@ -64,6 +65,7 @@ class CoachCubit extends Cubit<CoachState> {
           prayerTimesRepository: sl<IslamicServiceInterface>(),
           todoRepository: sl<TodoRepositoryInterface>(),
           getMissedItemsUseCase: sl<GetMissedItemsUseCase>(),
+          voiceLogOrchestrator: sl<VoiceLogOrchestrator>(),
         ),
         super(CoachInitial());
 

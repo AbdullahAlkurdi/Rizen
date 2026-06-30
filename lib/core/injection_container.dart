@@ -13,6 +13,7 @@ import 'services/tutorial_service.dart';
 import 'config/app_config.dart';
 import 'services/voice_parser_service.dart';
 import 'services/voice_log_orchestrator.dart';
+import 'services/gemini_service.dart';
 import '../features/voice/presentation/cubit/voice_cubit.dart';
 import '../features/analytics/data/repositories/analytics_repository.dart';
 import '../features/analytics/presentation/cubit/analytics_cubit.dart';
@@ -75,6 +76,7 @@ Future<void> init() async {
     prayerTimesRepository: sl<IslamicServiceInterface>(),
     todoRepository: sl<TodoRepositoryInterface>(),
     getMissedItemsUseCase: sl<GetMissedItemsUseCase>(),
+    voiceLogOrchestrator: sl<VoiceLogOrchestrator>(),
   ));
 
   sl.registerLazySingleton<ShadowTrackerRepositoryInterface>(
@@ -153,6 +155,8 @@ Future<void> init() async {
       orchestrator: sl<VoiceLogOrchestrator>(),
     ),
   );
+
+  sl.registerLazySingleton(() => GeminiService());
 
   sl.registerFactory(
     () => AnalyticsCubit(
